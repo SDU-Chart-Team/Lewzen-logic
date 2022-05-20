@@ -1,0 +1,17 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory 'c:/Users/cyk/Desktop/tmpCode/components'
+cd comp && make
+cd comp_module && make
+cd comp_custom && make
+cd utils && make
+g++ -w -c register.cpp
+ 
+g++ -w -c canvas.cpp
+g++ -w -c comp_factory.cpp
+g++ -w -c comp.cpp
+g++ -w -c comp_module.cpp
+g++ -w -c utils.cpp
+ 
+g++ -w -o test main.cpp c:\Users\cyk\Desktop\tmpCode\components\canvas.o c:\Users\cyk\Desktop\tmpCode\components\comp.o c:\Users\cyk\Desktop\tmpCode\components\comp_factory.o c:\Users\cyk\Desktop\tmpCode\components\comp_module.o c:\Users\cyk\Desktop\tmpCode\components\register.o c:\Users\cyk\Desktop\tmpCode\components\utils.o c:\Users\cyk\Desktop\tmpCode\components\comp\line.o c:\Users\cyk\Desktop\tmpCode\components\comp\rectangle.o c:\Users\cyk\Desktop\tmpCode\components\comp_custom\isometric_cube.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_abstract.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_basics.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_flippable.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_rotatable.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_scalable.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_stylized.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\comp_writable.o c:\Users\cyk\Desktop\tmpCode\components\comp_module\core_point.o c:\Users\cyk\Desktop\tmpCode\components\utils\uuid.o release/lewzen-core.lib
+make.exe: Leaving directory 'c:/Users/cyk/Desktop/tmpCode/components'
+ 

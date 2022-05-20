@@ -1,0 +1,8 @@
+#include "comp_module/core_point.h"
+#include "comp_module/comp_abstract.h"
+#include "comp_module/comp_basics.h"
+#include "comp_module/comp_rotatable.h"
+#include "comp_module/comp_scalable.h"
+#include "comp_module/comp_flippable.h"
+#include "comp_module/comp_writable.h"
+#include "comp_module/comp_stylized.h"
