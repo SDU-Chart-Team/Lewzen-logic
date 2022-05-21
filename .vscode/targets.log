@@ -8,7 +8,7 @@ make.exe: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 20 17:20:29 2022
+# Make data base, printed on Sat May 21 13:58:07 2022
 
 # Variables
 
@@ -35,7 +35,7 @@ HOMEDRIVE = C:
 # automatic
 ^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
-CURDIR := c:/Users/cyk/Desktop/tmpCode/components
+CURDIR := c:/Users/cyk/Desktop/tmpCode/Lewzen-server
 # default
 SHELL := sh.exe
 # environment
@@ -51,8 +51,6 @@ MAKEFILE_LIST :=  Makefile
 # environment
 ALI213_XQG_V2 = 658154,428
 # environment
-FPS_BROWSER_USER_PROFILE_STRING = Default
-# environment
 TMP = C:\Users\cyk\AppData\Local\Temp
 # environment
 VSCODE_VERBOSE_LOGGING = true
@@ -61,9 +59,9 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7e894678-ab4f-48f9-bda1-b3f41199b72f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-dbde5a5f-a77f-4357-98a6-e163544723bc-sock
 # environment
-VSCODE_CWD = D:\Microsoft VS Code
+VSCODE_CWD = C:\Users\cyk\Desktop\tmpCode
 # default
 MAKE_HOST := x86_64-w64-mingw32
 # environment
@@ -95,7 +93,7 @@ objs = register.o canvas.o comp_factory.o comp.o comp_module.o utils.o
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19212_DQTXWDVPVPURSPEW
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_15584_MTIZDJBZKTIQTCIO
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -209,13 +207,11 @@ LANG = C
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
-# environment
-VSCODE_PID = 19212
+VSCODE_PID = 15584
 # environment
 USERDOMAIN_ROAMINGPROFILE = LAPTOP-PRGDUASN
 # variable set hash-table stats:
-# Load=101/1024=10%, Rehash=0, Collisions=15/124=12%
+# Load=99/1024=10%, Rehash=0, Collisions=15/122=12%
 
 # Pattern-specific Variable Values
 
@@ -223,9 +219,9 @@ USERDOMAIN_ROAMINGPROFILE = LAPTOP-PRGDUASN
 
 # Directories
 
-# . (key c:/Users/cyk/Desktop/tmpCode/components, mtime 1652950369): 30 files, no impossibilities.
+# . (key c:/Users/cyk/Desktop/tmpCode/Lewzen-server, mtime 1653112651): 31 files, no impossibilities.
 
-# 30 files, no impossibilities in 1 directories.
+# 31 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -276,7 +272,7 @@ utils.h:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-18 00:18:20
+#  Last modified 2022-05-21 13:57:31
 #  File has been updated.
 #  Successfully updated.
 
@@ -400,12 +396,12 @@ register.cpp:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 36 / storage = 341 B / avg = 9 B
-# current buf: size = 8162 B / used = 341 B / count = 36 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 37 / storage = 346 B / avg = 9 B
+# current buf: size = 8162 B / used = 346 B / count = 37 / avg = 9 B
 
-# strcache performance: lookups = 73 / hit rate = 50%
+# strcache performance: lookups = 74 / hit rate = 50%
 # hash-table stats:
-# Load=36/8192=0%, Rehash=0, Collisions=1/73=1%
-# Finished Make data base on Fri May 20 17:20:29 2022
+# Load=37/8192=0%, Rehash=0, Collisions=1/74=1%
+# Finished Make data base on Sat May 21 13:58:07 2022
 
  
