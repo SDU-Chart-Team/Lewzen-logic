@@ -8,7 +8,8 @@
 #include "../comp_module.h"
 #include <map>
 #include <set>
-namespace LewzenServer{
+
+namespace LewzenServer {
     class Line : virtual public ComponentRotatable,
                  virtual public ComponentScalable,
                  virtual public ComponentFlippable,
@@ -22,14 +23,19 @@ namespace LewzenServer{
 
         // 注册接口
         void registering();
+
         // SVGI
         std::shared_ptr<Lewzen::SVGIPath> SVGILine;
         std::shared_ptr<Lewzen::SVGIPath> SVGICurve;
         std::shared_ptr<Lewzen::SVGIPath> SVGIVerticalLine;
         std::shared_ptr<Lewzen::SVGIPath> SVGIHorizontalLine;
+        std::shared_ptr<Lewzen::SVGIPath> SVGICurveTwo;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIHallowLine;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIComplexLine;
+
 
         // 关键点序列,顺序
-        std::vector< std::shared_ptr<CorePoint> >pointList;
+        std::vector<std::shared_ptr<CorePoint> > pointList;
 
         //线条起点
         std::shared_ptr<CorePoint> startPoint;
@@ -38,15 +44,25 @@ namespace LewzenServer{
 
         std::shared_ptr<CorePoint> midPoint;
 
-        std::string startArrow = "null",endArrow="null";
+        std::shared_ptr<CorePoint> midCPoint;
+        std::shared_ptr<CorePoint> arrowPoint;
+        std::shared_ptr<CorePoint> arrowCPoint;
+
+
+        std::string startArrow = "null", endArrow = "null";
 
         std::string straightLine = "straight_line";
         std::string verticalLine = "vertical_line";
         std::string curve = "curve";
         std::string horizontalLine = "horizontal_line";
+        std::string curveTwo = "curve_two";
+        std::string hallowLine = "hallow_line";
+        std::string complexLine = "complex_line";
 
+        double offset = 0;
 
-        std::map<std::string, std::shared_ptr<Lewzen::SVGIMarker>>arrows;
+        std::map<std::string, std::shared_ptr<Lewzen::SVGIMarker>> arrows;
+
 
     protected:
         std::shared_ptr<Lewzen::SVGIMarker> end_arrow;
@@ -56,19 +72,44 @@ namespace LewzenServer{
         std::shared_ptr<Lewzen::SVGIMarker> start_arrow_circle;
         std::shared_ptr<Lewzen::SVGIMarker> end_arrow_circle;
 
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_tri;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_tri;
+
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_line;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_line;
+
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_tri_h;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_tri_h;
+
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_vline;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_vline;
+
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_tri_half;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_tri_half;
+
+        std::shared_ptr<Lewzen::SVGIMarker> end_arrow_two_tri;
+        std::shared_ptr<Lewzen::SVGIMarker> start_arrow_two_tri;
+
+        std::shared_ptr<Lewzen::SVGIMarker> hallow_line_arrow;
+
+
         int ndSize = 0;
 
 
     public:
 
         Line();
+
         //// 通用虚接口
         // 非构造初始化
         virtual void init() override;
+
         // 拷贝
         virtual ComponentAbstract &operator=(const ComponentAbstract &comp) override;
+
         // 序列化，并记录已操作的
         virtual void serialize(json &j, std::vector<std::string> &processed) override;
+
         // 反序列化
         virtual ComponentAbstract &operator=(const json &j) override;
 
@@ -108,12 +149,32 @@ namespace LewzenServer{
         virtual void setEndArrow(const std::string &endArrow);
 
         std::string getCurveD();
+
         std::string getVerticalLineD();
+
         std::string getHorizontalLineD();
 
+        std::string getCurveTwoD();
+
+        std::string getHallowLineD();
+
+        std::string getComplexLineD();
+
+        Lewzen::Point2D getFlipPoint(Lewzen::Point2D p);
+
+        void calcComplexPoint(double ew,double eh,double eh1,double sw,double sh,double sh1);
+
+        std::vector<Lewzen::Point2D> offsetCoords(std::vector<Lewzen::Point2D> coords, double offset);
+
+        void onOffset();
+
+        double dist2d(Lewzen::Point2D coord1, Lewzen::Point2D coord2);
+
+        void onSameSide();//将midC,arrowC调整到线段(start,end)同侧
+
+        void setDotLine(std::string dotType);
     };
 }
-
 
 
 #endif //WEBSOCKETSERVER_LINE_H
