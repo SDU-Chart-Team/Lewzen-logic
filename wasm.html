@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <script>
+    var Module = {
+      onRuntimeInitialized: function() {
+        console.log('init result: ' + Module.server_init());
+        console.log('run result: ' + Module.server_run("{\"command\": \"add\", \"type\": \"rectangle\"}"));
+      }
+    };
+  </script>
+  <script src="wasm.js"></script>
+</html>

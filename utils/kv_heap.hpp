@@ -1,5 +1,6 @@
 #ifndef __LEWZENSERVER_KV_HEAP__
 #define __LEWZENSERVER_KV_HEAP__
+#include <string>
 #include <map>
 #include <set>
 
