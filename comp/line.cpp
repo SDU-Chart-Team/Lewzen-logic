@@ -366,24 +366,28 @@ namespace LewzenServer {
         std::cout<<"line()\n";
 
         // 初始化关键点表
-        startPoint = createCorePoint("start", 200, 200);
-        endPoint = createCorePoint("end", 100, 100);
+        startPoint = createCorePoint("start", 100, 100);
+        endPoint = createCorePoint("end", 200, 200);
         startPoint->setVirtual(0);
         endPoint->setVirtual(0);
         std::string id = "mid";
-        ndSize++;
         midPoint = createCorePoint(id,
                                    (startPoint->getX() + endPoint->getX()) / 2,
                                    (startPoint->getY() + endPoint->getY()) / 2);
-        midPoint->setVirtual(1);
+
+
+        midPoint->setVirtual(0);
 
         midCPoint = createCorePoint("midC", startPoint->getX(), startPoint->getY());
         arrowPoint = createCorePoint("arrow", startPoint->getX(), startPoint->getY());
         arrowCPoint = createCorePoint("arrowC", startPoint->getX(), startPoint->getY());
 
+        auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                    (startPoint->getY() + endPoint->getY()) / 2);
+        mid0->setVirtual(1);
 
         pointList.push_back(startPoint);
-        pointList.push_back(midPoint);
+        pointList.push_back(mid0);
         pointList.push_back(endPoint);
         // 注册关键点
         setCorePoints(pointList);
@@ -587,32 +591,65 @@ namespace LewzenServer {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
-            for (auto &t: pointList) {
-                *t = *corePoints[t->getId()];
+            std::vector<double>tmp;
+            for(auto t:corePoints){
+                double val;
+                if(t.first == "start")val=0;
+                else if(t.first == "end")val = 1;
+                else val = std::stod(t.first);
+                tmp.push_back(val);
+            }
+
+            sort(tmp.begin(),tmp.end());
+            for(auto t:tmp){
+                std::string val;
+                if(t == 0){
+                    val = "start";
+                }
+                else if(t == 1)val = "end";
+                else{
+                    val = std::to_string(t);
+                }
+                pointList.push_back(corePoints[val]);
             }
         } else if (type == curve) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == verticalLine) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == horizontalLine) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == curveTwo) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
             midCPoint = corePoints["midC"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(midCPoint);
+            pointList.push_back(endPoint);
         } else if (type == hallowLine) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
+            pointList.push_back(startPoint);
+            pointList.push_back(endPoint);
         } else if (type == complexLine) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -620,6 +657,12 @@ namespace LewzenServer {
             midCPoint = corePoints["midC"];
             arrowPoint = corePoints["arrow"];
             arrowCPoint = corePoints["arrowC"];
+            pointList.push_back(startPoint);
+            pointList.push_back(arrowCPoint);
+            pointList.push_back(arrowPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(midCPoint);
+            pointList.push_back(endPoint);
         }
         else if(type == flexableLine){
             startPoint = corePoints["start"];
@@ -629,8 +672,27 @@ namespace LewzenServer {
             arrowPoint = corePoints["arrow"];
             arrowCPoint = corePoints["arrowC"];
 
-            for (auto &t: pointList) {
-                *t = *corePoints[t->getId()];
+            std::vector<double>tmp;
+            for(auto t:corePoints){
+                if(t.first=="mid"||t.first=="midC"||t.first=="arrow"||t.first=="arrowC")continue;
+                double val;
+                if(t.first == "start")val=0;
+                else if(t.first == "end")val = 1;
+                else val = std::stod(t.first);
+                tmp.push_back(val);
+            }
+
+            sort(tmp.begin(),tmp.end());
+            for(auto t:tmp){
+                std::string val;
+                if(t == 0){
+                    val = "start";
+                }
+                else if(t == 1)val = "end";
+                else{
+                    val = std::to_string(t);
+                }
+                pointList.push_back(corePoints[val]);
             }
         }
     }
@@ -697,8 +759,22 @@ namespace LewzenServer {
 
                 auto nextP = pointList[realId + 1];
                 auto preP = pointList[realId - 1];
-                std::string name1 = "mid" + std::to_string(ndSize++);
-                std::string name2 = "mid" + std::to_string(ndSize++);
+                double n,nextN,preN;
+                if(nextP->getId() == "end"){
+                    nextN = 1;
+                }
+                else{
+                    nextN = stod(nextP->getId());
+                }
+                if(preP->getId() == "start"){
+                    preN = 0;
+                }
+                else{
+                    preN = stod(preP->getId());
+                }
+                n = std::stod(now->getId());
+                std::string name1 = std::to_string((n + preN)/2.0);//"mid" + std::to_string(ndSize++);
+                std::string name2 = std::to_string((n+nextN)/2.0);//"mid" + std::to_string(ndSize++);
 
                 auto m1 = createCorePoint(name1, (now->getX() + preP->getX()) / 2, (now->getY() + preP->getY()) / 2);
                 auto m2 = createCorePoint(name2, (now->getX() + nextP->getX()) / 2, (now->getY() + nextP->getY()) / 2);
@@ -709,6 +785,7 @@ namespace LewzenServer {
                 pointList.insert(pointList.begin() + realId, m1);
 
             }
+
             //        setCorePoints(pointList);
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
@@ -1185,8 +1262,23 @@ namespace LewzenServer {
 
                     auto nextP = pointList[realId + 1];
                     auto preP = pointList[realId - 1];
-                    std::string name1 = "mid" + std::to_string(ndSize++);
-                    std::string name2 = "mid" + std::to_string(ndSize++);
+                    double n,nextN,preN;
+                    if(nextP->getId() == "end"){
+                        nextN = 1;
+                    }
+                    else{
+                        nextN = stod(nextP->getId());
+                    }
+                    if(preP->getId() == "start"){
+                        preN = 0;
+                    }
+                    else{
+                        preN = stod(preP->getId());
+                    }
+                    n = std::stod(now->getId());
+                    std::string name1 = std::to_string((n + preN)/2.0);//"mid" + std::to_string(ndSize++);
+                    std::string name2 = std::to_string((n+nextN)/2.0);//"mid" + std::to_string(ndSize++);
+
 
                     auto m1 = createCorePoint(name1, (now->getX() + preP->getX()) / 2, (now->getY() + preP->getY()) / 2);
                     auto m2 = createCorePoint(name2, (now->getX() + nextP->getX()) / 2, (now->getY() + nextP->getY()) / 2);
@@ -1199,6 +1291,8 @@ namespace LewzenServer {
                 }
 
                 calcFlexablePoint(ew,eh,eh1,sw,sh,sh1);
+                std::cout<<"finish\n\n\n\n\n";
+
             }
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
@@ -1299,11 +1393,12 @@ namespace LewzenServer {
         pointList.clear();
 
         if (lineType == straightLine) {
-            midPoint->setX((startPoint->getX() + endPoint->getX()) / 2);
-            midPoint->setY((startPoint->getY() + endPoint->getY()) / 2);
-            midPoint->setVirtual(1);
+
+            auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                        (startPoint->getY() + endPoint->getY()) / 2);
+            mid0->setVirtual(1);
             pointList.push_back(startPoint);
-            pointList.push_back(midPoint);
+            pointList.push_back(mid0);
             pointList.push_back(endPoint);
             setCorePoints(pointList);
             if (endArrow != "null") {
@@ -1410,9 +1505,8 @@ namespace LewzenServer {
         }
         else if(lineType == flexableLine){
             calcComplexPoint(30,6,12,30,6,12);
-            auto mid0 = createCorePoint("mid0",(startPoint->getX()+endPoint->getX())/2,
-                                        (startPoint->getY()+endPoint->getY())/2);
-            ndSize=1;
+            auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                        (startPoint->getY() + endPoint->getY()) / 2);
             midPoint->setVirtual(0);
             midCPoint->setVirtual(0);
             arrowPoint->setVirtual(0);
