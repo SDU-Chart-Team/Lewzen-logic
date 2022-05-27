@@ -32,7 +32,18 @@ namespace LewzenServer {
         std::shared_ptr<Lewzen::SVGIPath> SVGICurveTwo;
         std::shared_ptr<Lewzen::SVGIPath> SVGIHallowLine;
         std::shared_ptr<Lewzen::SVGIPath> SVGIComplexLine;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIFlexableLine;
 
+        //hidden SVGI
+
+        std::shared_ptr<Lewzen::SVGIPath> SVGILineHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGICurveHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIVerticalLineHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIHorizontalLineHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGICurveTwoHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIHallowLineHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIComplexLineHide;
+        std::shared_ptr<Lewzen::SVGIPath> SVGIFlexableLineHide;
 
         // 关键点序列,顺序
         std::vector<std::shared_ptr<CorePoint> > pointList;
@@ -58,6 +69,7 @@ namespace LewzenServer {
         std::string curveTwo = "curve_two";
         std::string hallowLine = "hallow_line";
         std::string complexLine = "complex_line";
+        std::string flexableLine = "flexible_line";
 
         double offset = 0;
 
@@ -128,7 +140,7 @@ namespace LewzenServer {
         //// 线条接口
         const CorePoint &getStartPoint() const;
 
-        int setLineType(std::string lineType);
+        void setLineType(std::string lineType);
 
         void setStartPoint(const CorePoint &startPoint);
 
@@ -160,17 +172,28 @@ namespace LewzenServer {
 
         std::string getComplexLineD();
 
+        std::string getFlexableLineD();
+
         Lewzen::Point2D getFlipPoint(Lewzen::Point2D p);
+
+        Lewzen::Point2D getFlipP(Lewzen::Point2D p,Lewzen::Point2D s,Lewzen::Point2D e);
 
         void calcComplexPoint(double ew,double eh,double eh1,double sw,double sh,double sh1);
 
+        void calcFlexablePoint(double ew,double eh,double eh1,double sw,double sh,double sh1);
+
         std::vector<Lewzen::Point2D> offsetCoords(std::vector<Lewzen::Point2D> coords, double offset);
 
+
         void onOffset();
+
+        void closeOffset();
 
         double dist2d(Lewzen::Point2D coord1, Lewzen::Point2D coord2);
 
         void onSameSide();//将midC,arrowC调整到线段(start,end)同侧
+
+        void onSameSideF();
 
         void setDotLine(std::string dotType);
     };

@@ -288,6 +288,25 @@ namespace LewzenServer {
             param["status"] = SUCCEED;
             return param;
         });
+
+        Register::addEvent("close_offset", [&](json &param) {
+            // 切换器
+            //std::cout<<"lt "<<lt<<std::endl;
+            Register::switchBoth(param, module_type,
+                                 [&](std::shared_ptr<ComponentAbstract> &cursor) {
+                                     auto comp = std::dynamic_pointer_cast<Line>(cursor); // 动态类型转换
+                                     comp->closeOffset();
+                                 },
+                                 [&](std::vector<std::shared_ptr<ComponentAbstract>> &cursors) {
+                                     for (auto cursor: cursors) {
+                                         auto comp = std::dynamic_pointer_cast<Line>(cursor); // 动态类型转换
+                                         comp->closeOffset();
+                                     }
+                                 });
+            param["status"] = SUCCEED;
+            return param;
+        });
+
         Register::addEvent("set_dotted_line", [&](json &param) {
             // 切换器
             //std::cout<<"lt "<<lt<<std::endl;
@@ -310,7 +329,7 @@ namespace LewzenServer {
     }
 
     Line::Line() {
-        //std::cout<<"line()\n";
+        std::cout<<"line()\n";
         if (!registered) registering(); // 注册
         addModuleTypes(module_type); // 添加模块类型
         initArrow();
@@ -319,6 +338,7 @@ namespace LewzenServer {
     //// 通用虚接口
     // 非构造初始化，初始化组件在(x, y)
     void Line::init() {
+        std::cout<<"ll\n";
         // 设置类型
         setType(straightLine);
         // 父类初始化
@@ -332,57 +352,103 @@ namespace LewzenServer {
         SVGICurveTwo = std::make_shared<Lewzen::SVGIPath>();
         SVGIHallowLine = std::make_shared<Lewzen::SVGIPath>();
         SVGIComplexLine = std::make_shared<Lewzen::SVGIPath>();
+        SVGIFlexableLine = std::make_shared<Lewzen::SVGIPath>();
 
-        SVGIG->add(SVGILine);
+        SVGILineHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGICurveHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGIVerticalLineHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGIHorizontalLineHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGICurveTwoHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGIHallowLineHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGIComplexLineHide = std::make_shared<Lewzen::SVGIPath>();
+        SVGIFlexableLineHide = std::make_shared<Lewzen::SVGIPath>();
+
+        std::cout<<"line()\n";
+
         // 初始化关键点表
-        startPoint = createCorePoint("start", 200, 200);
-        endPoint = createCorePoint("end", 100, 100);
+        startPoint = createCorePoint("start", 100, 100);
+        endPoint = createCorePoint("end", 200, 200);
         startPoint->setVirtual(0);
         endPoint->setVirtual(0);
         std::string id = "mid";
-        ndSize++;
         midPoint = createCorePoint(id,
                                    (startPoint->getX() + endPoint->getX()) / 2,
                                    (startPoint->getY() + endPoint->getY()) / 2);
-        midPoint->setVirtual(1);
+
+
+        midPoint->setVirtual(0);
 
         midCPoint = createCorePoint("midC", startPoint->getX(), startPoint->getY());
         arrowPoint = createCorePoint("arrow", startPoint->getX(), startPoint->getY());
         arrowCPoint = createCorePoint("arrowC", startPoint->getX(), startPoint->getY());
 
+        auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                    (startPoint->getY() + endPoint->getY()) / 2);
+        mid0->setVirtual(1);
+
         pointList.push_back(startPoint);
-        pointList.push_back(midPoint);
+        pointList.push_back(mid0);
         pointList.push_back(endPoint);
         // 注册关键点
         setCorePoints(pointList);
-
+        // 默认样式
+        setStyle("stroke: black; fill: none; stroke-width: 1px;");
         // 绑定属性
         std::function<std::string()> _getD = std::bind(&Line::getD, this);
         SVGILine->D.bind(_getD);
-
-        // 默认样式
-        setStyle("stroke: black; fill: none; stroke-width: 1px;");
-//
+        SVGILineHide->D.bind(_getD);
+        SVGILineHide->Visibility="hidden";
+        SVGILineHide->StrokeWidth=10;
+        SVGIG->add(SVGILine);
+        SVGIG->add(SVGILineHide);
 
 
 
         std::function<std::string()> _getCurveD = std::bind(&Line::getCurveD, this);
         SVGICurve->D.bind(_getCurveD);
+        SVGICurveHide->D.bind(_getCurveD);
+        SVGICurveHide->Visibility="hidden";
+        SVGICurveHide->StrokeWidth=10;
+
 
         std::function<std::string()> _getVD = std::bind(&Line::getVerticalLineD, this);
         SVGIVerticalLine->D.bind(_getVD);
+        SVGIVerticalLineHide->D.bind(_getVD);
+        SVGIVerticalLineHide->Visibility="hidden";
+        SVGIVerticalLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getHD = std::bind(&Line::getHorizontalLineD, this);
         SVGIHorizontalLine->D.bind(_getHD);
+        SVGIHorizontalLineHide->D.bind(_getHD);
+        SVGIHorizontalLineHide->Visibility="hidden";
+        SVGIHorizontalLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getCTD = std::bind(&Line::getCurveTwoD, this);
         SVGICurveTwo->D.bind(_getCTD);
+        SVGICurveTwoHide->D.bind(_getCTD);
+
+        SVGICurveTwoHide->Visibility="hidden";
+        SVGICurveTwoHide->StrokeWidth=10;
 
         std::function<std::string()> _getHalD = std::bind(&Line::getHallowLineD, this);
         SVGIHallowLine->D.bind(_getHalD);
+        SVGIHallowLineHide->D.bind(_getHalD);
+
+        SVGIHallowLineHide->Visibility="hidden";
+        SVGIHallowLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getComD = std::bind(&Line::getComplexLineD, this);
         SVGIComplexLine->D.bind(_getComD);
+        SVGIComplexLineHide->D.bind(_getComD);
+        SVGIComplexLineHide->Visibility="hidden";
+        SVGIComplexLineHide->StrokeWidth=10;
+
+        std::function<std::string()> _getFlD = std::bind(&Line::getFlexableLineD, this);
+        SVGIFlexableLine->D.bind(_getFlD);
+        SVGIFlexableLineHide->D.bind(_getFlD);
+        SVGIFlexableLineHide->Visibility="hidden";
+        SVGIFlexableLineHide->StrokeWidth=10;
+
 
         std::function<std::string()> _getEA = [&]() {
             return "url(#" + getEndArrow() + ")";
@@ -393,8 +459,7 @@ namespace LewzenServer {
 
         endArrow = "end_arrow";
         SVGILine->MarkerEnd = "url(#" + endArrow + ")";
-        std::vector<int> tmp;
-        SVGIG->StrokeDasharray = tmp;
+
 //        scale(2.0,2.0);
 //        flip(0,1,-200);
     }
@@ -482,6 +547,28 @@ namespace LewzenServer {
             *midCPoint = *(p.midCPoint);
 
         }
+        else if(type == flexableLine){
+            ComponentRotatable::operator=(comp);
+
+            auto &p = dynamic_cast<const Line &>(comp);
+
+            // 拷贝关键点位置
+            *startPoint = *(p.startPoint);
+            *endPoint = *(p.endPoint);
+
+            *arrowPoint = *(p.arrowPoint);
+            *arrowCPoint = *(p.arrowCPoint);
+
+
+            *midPoint = *(p.midPoint);
+            *midCPoint = *(p.midCPoint);
+            for (int i = 0; i < (int) p.pointList.size(); i++) {
+                if (pointList.size() <= i) {
+                    pointList.push_back(createCorePoint("tmp", 0, 0));
+                }
+                *pointList[i] = *(p.pointList[i]);
+            }
+        }
 
     }
 
@@ -489,13 +576,14 @@ namespace LewzenServer {
     void Line::serialize(json &j, std::vector<std::string> &processed) {
         // 父类序列化
         ComponentRotatable::serialize(j, processed);
-
+        ComponentStylized::serialize(j, processed);
         // (无额外私有内容)
     }
 
     // 反序列化
     ComponentAbstract &Line::operator=(const json &j) {
         // 父类反序列化
+        ComponentStylized::operator=(j);
         ComponentRotatable::operator=(j);
 
         std::string type = getType();
@@ -503,32 +591,65 @@ namespace LewzenServer {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
-            for (auto &t: pointList) {
-                *t = *corePoints[t->getId()];
+            std::vector<double>tmp;
+            for(auto t:corePoints){
+                double val;
+                if(t.first == "start")val=0;
+                else if(t.first == "end")val = 1;
+                else val = std::stod(t.first);
+                tmp.push_back(val);
+            }
+
+            sort(tmp.begin(),tmp.end());
+            for(auto t:tmp){
+                std::string val;
+                if(t == 0){
+                    val = "start";
+                }
+                else if(t == 1)val = "end";
+                else{
+                    val = std::to_string(t);
+                }
+                pointList.push_back(corePoints[val]);
             }
         } else if (type == curve) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == verticalLine) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == horizontalLine) {
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(endPoint);
         } else if (type == curveTwo) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
             midCPoint = corePoints["midC"];
+            pointList.push_back(startPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(midCPoint);
+            pointList.push_back(endPoint);
         } else if (type == hallowLine) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
+            pointList.push_back(startPoint);
+            pointList.push_back(endPoint);
         } else if (type == complexLine) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -536,6 +657,43 @@ namespace LewzenServer {
             midCPoint = corePoints["midC"];
             arrowPoint = corePoints["arrow"];
             arrowCPoint = corePoints["arrowC"];
+            pointList.push_back(startPoint);
+            pointList.push_back(arrowCPoint);
+            pointList.push_back(arrowPoint);
+            pointList.push_back(midPoint);
+            pointList.push_back(midCPoint);
+            pointList.push_back(endPoint);
+        }
+        else if(type == flexableLine){
+            startPoint = corePoints["start"];
+            endPoint = corePoints["end"];
+            midPoint = corePoints["mid"];
+            midCPoint = corePoints["midC"];
+            arrowPoint = corePoints["arrow"];
+            arrowCPoint = corePoints["arrowC"];
+
+            std::vector<double>tmp;
+            for(auto t:corePoints){
+                if(t.first=="mid"||t.first=="midC"||t.first=="arrow"||t.first=="arrowC")continue;
+                double val;
+                if(t.first == "start")val=0;
+                else if(t.first == "end")val = 1;
+                else val = std::stod(t.first);
+                tmp.push_back(val);
+            }
+
+            sort(tmp.begin(),tmp.end());
+            for(auto t:tmp){
+                std::string val;
+                if(t == 0){
+                    val = "start";
+                }
+                else if(t == 1)val = "end";
+                else{
+                    val = std::to_string(t);
+                }
+                pointList.push_back(corePoints[val]);
+            }
         }
     }
 
@@ -601,8 +759,22 @@ namespace LewzenServer {
 
                 auto nextP = pointList[realId + 1];
                 auto preP = pointList[realId - 1];
-                std::string name1 = "mid" + std::to_string(ndSize++);
-                std::string name2 = "mid" + std::to_string(ndSize++);
+                double n,nextN,preN;
+                if(nextP->getId() == "end"){
+                    nextN = 1;
+                }
+                else{
+                    nextN = stod(nextP->getId());
+                }
+                if(preP->getId() == "start"){
+                    preN = 0;
+                }
+                else{
+                    preN = stod(preP->getId());
+                }
+                n = std::stod(now->getId());
+                std::string name1 = std::to_string((n + preN)/2.0);//"mid" + std::to_string(ndSize++);
+                std::string name2 = std::to_string((n+nextN)/2.0);//"mid" + std::to_string(ndSize++);
 
                 auto m1 = createCorePoint(name1, (now->getX() + preP->getX()) / 2, (now->getY() + preP->getY()) / 2);
                 auto m2 = createCorePoint(name2, (now->getX() + nextP->getX()) / 2, (now->getY() + nextP->getY()) / 2);
@@ -613,10 +785,12 @@ namespace LewzenServer {
                 pointList.insert(pointList.begin() + realId, m1);
 
             }
+
             //        setCorePoints(pointList);
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == curve) {
+        }
+        else if (type == curve) {
             if (id == "mid") {
                 *midPoint += createPoint(dx, dy);
             } else if (id == "start") {
@@ -627,7 +801,8 @@ namespace LewzenServer {
 
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == verticalLine) {
+        }
+        else if (type == verticalLine) {
             if (id == "mid") {
                 *midPoint += createPoint(dx, 0);
             } else if (id == "start") {
@@ -641,7 +816,8 @@ namespace LewzenServer {
 
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == horizontalLine) {
+        }
+        else if (type == horizontalLine) {
             if (id == "mid") {
                 *midPoint += createPoint(0, dy);
             } else if (id == "start") {
@@ -655,7 +831,8 @@ namespace LewzenServer {
 
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == curveTwo) {
+        }
+        else if (type == curveTwo) {
             if (id == "mid") {
                 *midPoint += createPoint(dx, dy);
             } else if (id == "start") {
@@ -668,7 +845,8 @@ namespace LewzenServer {
 
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == hallowLine) {
+        }
+        else if (type == hallowLine) {
 
             if (id == "start") {
                 *startPoint += createPoint(dx, dy);
@@ -678,7 +856,8 @@ namespace LewzenServer {
 
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
-        } else if (type == complexLine) {
+        }
+        else if (type == complexLine) {
             if (id == "start") {
                 double ew,eh,eh1,sw,sh,sh1;
                 double x1 = startPoint->getX(), y1 = startPoint->getY(), x2 = endPoint->getX(), y2 = endPoint->getY();
@@ -852,6 +1031,272 @@ namespace LewzenServer {
             onRotateCenterChanged(); // 旋转中心变化响应
             onChanged(); // 更新事件
         }
+        else if(type == flexableLine){
+            if (id == "midC") {
+                *midCPoint += createPoint(dx, dy);
+                int sz = pointList.size()-1;
+                auto s = pointList[sz-2];
+                double x1 = s->getX(), y1 = s->getY(), x2 = endPoint->getX(), y2 = endPoint->getY();
+                double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                double m = midCPoint->getX(), n = midCPoint->getY();
+                Lewzen::Point2D tmpMidc(m, n);
+                Lewzen::Point2D tmpM(midPoint->getX(), midPoint->getY());
+                Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                   (a * a * n - a * b * m - b * c) / (a * a + b * b));
+
+                double lmc = dist2d(cz, tmpMidc);
+                double lm = fabs(a*tmpM.get_x()+b*tmpM.get_y()+c)/sqrt(a*a+b*b);
+                double rate = lm / lmc;
+                double nx = rate * (m - cz.get_x()) + cz.get_x();
+                double ny = rate * (n - cz.get_y()) + cz.get_y();
+                midPoint->setX(nx);
+                midPoint->setY(ny);
+            }
+            else if (id == "arrowC") {
+                *arrowCPoint += createPoint(dx, dy);
+                auto e = pointList[2];
+                double x1 = startPoint->getX(), y1 = startPoint->getY(),
+                x2 = e->getX(), y2 = e->getY();
+
+                double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                double m = arrowCPoint->getX(), n = arrowCPoint->getY();
+                Lewzen::Point2D tmpMidc(m, n);
+                Lewzen::Point2D tmpM(arrowPoint->getX(), arrowPoint->getY());
+                Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                   (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                double lmc = dist2d(cz, tmpMidc);
+                double lm = fabs(a*tmpM.get_x()+b*tmpM.get_y()+c)/sqrt(a*a+b*b);
+                double rate = lm / lmc;
+                double nx = rate * (m - cz.get_x()) + cz.get_x();
+                double ny = rate * (n - cz.get_y()) + cz.get_y();
+                arrowPoint->setX(nx);
+                arrowPoint->setY(ny);
+            }
+            else if (id == "mid") {
+                double m = midPoint->getX(), n = midPoint->getY();
+                std::cout<<"before "<<midPoint->getX()<<" "<<midPoint->getY()<<std::endl;
+                Lewzen::Point2D tmpM(m, n);
+                Lewzen::Point2D tmpMidc(midCPoint->getX(), midCPoint->getY());
+                double lm_mc = dist2d(tmpM, tmpMidc);
+
+                *midPoint += createPoint(dx, dy);
+                std::cout<<"after "<<midPoint->getX()<<" "<<midPoint->getY()<<std::endl;
+
+                auto startE = pointList[2];
+                int sz = pointList.size()-1;
+                auto endS = pointList[sz-2];
+
+                double x1 = endS->getX(), y1 = endS->getY(),
+                x2 = endPoint->getX(), y2 = endPoint->getY();
+
+                double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                m = midPoint->getX(), n = midPoint->getY();
+                Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                   (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                double lm_cz = dist2d(Lewzen::Point2D(midPoint->getX(), midPoint->getY()), cz);
+                double lmc_cz = lm_mc + lm_cz;
+                double rate = lm_mc / lmc_cz;
+                double nx = (midPoint->getX() - rate * cz.get_x()) / (1 - rate);
+                double ny = (midPoint->getY() - rate * cz.get_y()) / (1 - rate);
+                midCPoint->setX(nx);
+                midCPoint->setY(ny);
+                std::cout<<"after C "<<midCPoint->getX()<<" "<<midCPoint->getY()<<std::endl;
+
+                m = arrowPoint->getX();
+                n = arrowPoint->getY();
+
+                x1 = startPoint->getX(), y1 = startPoint->getY(),
+                x2 = startE->getX(), y2 = startE->getY();
+
+                a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                Lewzen::Point2D z((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                  (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                double la_z = dist2d(Lewzen::Point2D(arrowPoint->getX(), arrowPoint->getY()), z);
+                double la_ac = dist2d(Lewzen::Point2D(arrowPoint->getX(), arrowPoint->getY()),
+                                      Lewzen::Point2D(arrowCPoint->getX(), arrowCPoint->getY()));
+
+                rate = lm_cz / la_z;
+                nx = rate * (arrowPoint->getX() - z.get_x()) + z.get_x();
+                ny = rate * (arrowPoint->getY() - z.get_y()) + z.get_y();
+                arrowPoint->setX(nx);
+                arrowPoint->setY(ny);
+                std::cout<<"after a "<<arrowPoint->getX()<<" "<<arrowPoint->getY()<<std::endl;
+                double lac_z = la_ac + dist2d(Lewzen::Point2D(arrowPoint->getX(), arrowPoint->getY()), z);
+                rate = la_ac / lac_z;
+                nx = (arrowPoint->getX() - rate * z.get_x()) / (1 - rate);
+                ny = (arrowPoint->getY() - rate * z.get_y()) / (1 - rate);
+                arrowCPoint->setX(nx);
+                arrowCPoint->setY(ny);
+                std::cout<<"after ac "<<arrowCPoint->getX()<<" "<<arrowCPoint->getY()<<std::endl;
+
+            }
+            else if (id == "arrow") {
+                double m = arrowPoint->getX(), n = arrowPoint->getY();
+                Lewzen::Point2D tmpM(m, n);
+                Lewzen::Point2D tmpMidc(arrowCPoint->getX(), arrowCPoint->getY());
+                double lm_mc = dist2d(tmpM, tmpMidc);
+
+                *arrowPoint += createPoint(dx, dy);
+
+//                double x1 = startPoint->getX(), y1 = startPoint->getY(), x2 = endPoint->getX(), y2 = endPoint->getY();
+                auto startE = pointList[2];
+                int sz = pointList.size()-1;
+                auto endS = pointList[sz-2];
+
+                double x1 = startPoint->getX(), y1 = startPoint->getY(),
+                x2 = startE->getX(), y2 = startE->getY();
+
+                double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                m = arrowPoint->getX(), n = arrowPoint->getY();
+                Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                   (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                double lm_cz = dist2d(Lewzen::Point2D(arrowPoint->getX(), arrowPoint->getY()), cz);
+                double lmc_cz = lm_mc + lm_cz;
+                double rate = lm_mc / lmc_cz;
+                double nx = (arrowPoint->getX() - rate * cz.get_x()) / (1 - rate);
+                double ny = (arrowPoint->getY() - rate * cz.get_y()) / (1 - rate);
+                arrowCPoint->setX(nx);
+                arrowCPoint->setY(ny);
+
+                m = midPoint->getX();
+                n = midPoint->getY();
+                x1 = endS->getX(), y1 = endS->getY(),
+                x2 = endPoint->getX(), y2 = endPoint->getY();
+                a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+
+                Lewzen::Point2D z((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                  (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                double la_z = dist2d(Lewzen::Point2D(midPoint->getX(), midPoint->getY()), z);
+                double la_ac = dist2d(Lewzen::Point2D(midPoint->getX(), midPoint->getY()),
+                                      Lewzen::Point2D(midCPoint->getX(), midCPoint->getY()));
+
+                rate = lm_cz / la_z;
+                nx = rate * (midPoint->getX() - z.get_x()) + z.get_x();
+                ny = rate * (midPoint->getY() - z.get_y()) + z.get_y();
+                midPoint->setX(nx);
+                midPoint->setY(ny);
+                double lac_z = la_ac + dist2d(Lewzen::Point2D(midPoint->getX(), midPoint->getY()), z);
+                rate = la_ac / lac_z;
+                nx = (midPoint->getX() - rate * z.get_x()) / (1 - rate);
+                ny = (midPoint->getY() - rate * z.get_y()) / (1 - rate);
+                midCPoint->setX(nx);
+                midCPoint->setY(ny);
+            }
+            else {
+                double ew,eh,eh1,sw,sh,sh1;
+                int sz = pointList.size()-1;
+
+//                auto endPoint = pointList[2];
+                auto sP = pointList[sz-2];
+                double x1 = sP->getX(), y1 = sP->getY(), x2 = endPoint->getX(), y2 = endPoint->getY();
+                double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                double m = midPoint->getX(), n = midPoint->getY();
+                Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                   (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                ew = dist2d(cz,Lewzen::Point2D(endPoint->getX(),endPoint->getY()));
+                eh = dist2d(cz,Lewzen::Point2D(midPoint->getX(),midPoint->getY()));
+                eh1 = dist2d(cz,Lewzen::Point2D(midCPoint->getX(),midCPoint->getY()));
+
+
+                auto eP = pointList[2];
+                x1 = startPoint->getX(), y1 = startPoint->getY(),
+                x2 = eP->getX(), y2 = eP->getY();
+                a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+                m = arrowPoint->getX();n = arrowPoint->getY();
+                Lewzen::Point2D z((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                                  (a * a * n - a * b * m - b * c) / (a * a + b * b));
+                sw = dist2d(z,Lewzen::Point2D(startPoint->getX(),startPoint->getY()));
+                sh = dist2d(z,Lewzen::Point2D(arrowPoint->getX(),arrowPoint->getY()));
+                sh1 = dist2d(z,Lewzen::Point2D(arrowCPoint->getX(),arrowCPoint->getY()));
+                int realId = -1;
+                for (int i = 0; i < (int) pointList.size(); i++) {
+                    if (pointList[i]->getId() == id) {
+                        realId = i;
+                        break;
+                    }
+                }
+                if (realId == -1) {
+                    //std::cout << "id wrong" << std::endl;
+                    return;
+                }
+                auto now = pointList[realId];
+
+                if (now->getVirtual() == 0) {
+                    //不透明关键点
+
+                    *now += createPoint(dx, dy);
+                    if (now->getId() != "start" && now->getId() != "end") {
+                        auto nextP = pointList[realId + 2];
+                        auto preP = pointList[realId - 2];
+                        Lewzen::Point2D a = *preP, b = *now, c = *nextP;
+                        if ((b.get_x() - a.get_x()) * (c.get_y() - a.get_y()) -
+                            (c.get_x() - a.get_x()) * (b.get_y() - a.get_y()) == 0) {
+                            //共线，删除
+                            ComponentRotatable::removeCorePoint(pointList[realId + 1]->getId());
+                            ComponentRotatable::removeCorePoint(pointList[realId - 1]->getId());
+
+                            pointList.erase(pointList.begin() + realId + 1);
+                            pointList.erase(pointList.begin() + realId - 1);
+                            now->setVirtual(1);
+                        } else {
+                            //不共线，修改,透明关键点
+                            pointList[realId + 1]->setX((now->getX() + nextP->getX()) / 2);
+                            pointList[realId + 1]->setY((now->getY() + nextP->getY()) / 2);
+
+                            pointList[realId - 1]->setX((now->getX() + preP->getX()) / 2);
+                            pointList[realId - 1]->setY((now->getY() + preP->getY()) / 2);
+                        }
+                    } else if (now->getId() == "start") {
+                        auto nextP = pointList[realId + 2];
+                        pointList[realId + 1]->setX((now->getX() + nextP->getX()) / 2);
+                        pointList[realId + 1]->setY((now->getY() + nextP->getY()) / 2);
+                    } else if (now->getId() == "end") {
+                        auto preP = pointList[realId - 2];
+                        pointList[realId - 1]->setX((now->getX() + preP->getX()) / 2);
+                        pointList[realId - 1]->setY((now->getY() + preP->getY()) / 2);
+                    }
+                } else {
+                    //透明关键点
+                    *now += createPoint(dx, dy);
+                    now->setVirtual(0);
+
+                    auto nextP = pointList[realId + 1];
+                    auto preP = pointList[realId - 1];
+                    double n,nextN,preN;
+                    if(nextP->getId() == "end"){
+                        nextN = 1;
+                    }
+                    else{
+                        nextN = stod(nextP->getId());
+                    }
+                    if(preP->getId() == "start"){
+                        preN = 0;
+                    }
+                    else{
+                        preN = stod(preP->getId());
+                    }
+                    n = std::stod(now->getId());
+                    std::string name1 = std::to_string((n + preN)/2.0);//"mid" + std::to_string(ndSize++);
+                    std::string name2 = std::to_string((n+nextN)/2.0);//"mid" + std::to_string(ndSize++);
+
+
+                    auto m1 = createCorePoint(name1, (now->getX() + preP->getX()) / 2, (now->getY() + preP->getY()) / 2);
+                    auto m2 = createCorePoint(name2, (now->getX() + nextP->getX()) / 2, (now->getY() + nextP->getY()) / 2);
+                    m1->setVirtual(1);
+                    m2->setVirtual(1);
+                    setCorePoints({m1, m2});
+                    pointList.insert(pointList.begin() + realId + 1, m2);
+                    pointList.insert(pointList.begin() + realId, m1);
+
+                }
+
+                calcFlexablePoint(ew,eh,eh1,sw,sh,sh1);
+                std::cout<<"finish\n\n\n\n\n";
+
+            }
+            onRotateCenterChanged(); // 旋转中心变化响应
+            onChanged(); // 更新事件
+        }
 
     }
 
@@ -909,32 +1354,51 @@ namespace LewzenServer {
 
     //// 线条接口
 
-    int Line::setLineType(std::string lineType) {
+    void Line::setLineType(std::string lineType) {
         if (getType() == straightLine) {
             SVGIG->remove(SVGILine);
-        } else if (getType() == curve) {
+            SVGIG->remove(SVGILineHide);
+        }
+        else if (getType() == curve) {
             SVGIG->remove(SVGICurve);
-        } else if (getType() == verticalLine) {
+            SVGIG->remove(SVGICurveHide);
+        }
+        else if (getType() == verticalLine) {
             SVGIG->remove(SVGIVerticalLine);
-        } else if (getType() == horizontalLine) {
+            SVGIG->remove(SVGIVerticalLineHide);
+
+        }
+        else if (getType() == horizontalLine) {
             SVGIG->remove(SVGIHorizontalLine);
-        } else if (getType() == curveTwo) {
+            SVGIG->remove(SVGIHorizontalLineHide);
+        }
+        else if (getType() == curveTwo) {
             SVGIG->remove(SVGICurveTwo);
-        } else if (getType() == hallowLine) {
+            SVGIG->remove(SVGICurveTwoHide);
+        }
+        else if (getType() == hallowLine) {
             SVGIG->remove(SVGIHallowLine);
-        } else if (getType() == complexLine) {
+            SVGIG->remove(SVGIHallowLineHide);
+        }
+        else if (getType() == complexLine) {
             SVGIG->remove(SVGIComplexLine);
+            SVGIG->remove(SVGIComplexLineHide);
+        }
+        else if(getType() == flexableLine){
+            SVGIG->remove(SVGIFlexableLine);
+            SVGIG->remove(SVGIFlexableLineHide);
         }
         setType(lineType);
         corePoints.clear();
         pointList.clear();
 
         if (lineType == straightLine) {
-            midPoint->setX((startPoint->getX() + endPoint->getX()) / 2);
-            midPoint->setY((startPoint->getY() + endPoint->getY()) / 2);
-            midPoint->setVirtual(1);
+
+            auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                        (startPoint->getY() + endPoint->getY()) / 2);
+            mid0->setVirtual(1);
             pointList.push_back(startPoint);
-            pointList.push_back(midPoint);
+            pointList.push_back(mid0);
             pointList.push_back(endPoint);
             setCorePoints(pointList);
             if (endArrow != "null") {
@@ -944,6 +1408,7 @@ namespace LewzenServer {
                 SVGILine->MarkerStart = "url(#" + startArrow + ")";
             }
             SVGIG->add(SVGILine);
+            SVGIG->add(SVGILineHide);
         } else if (lineType == curve) {
             midPoint->setX(endPoint->getX());
             midPoint->setY(startPoint->getY());
@@ -959,6 +1424,8 @@ namespace LewzenServer {
                 SVGICurve->MarkerStart = "url(#" + startArrow + ")";
             }
             SVGIG->add(SVGICurve);
+            SVGIG->add(SVGICurveHide);
+
         } else if (lineType == verticalLine) {
             midPoint->setX((startPoint->getX() + endPoint->getX()) / 2);
             midPoint->setY((startPoint->getY() + endPoint->getY()) / 2);
@@ -974,6 +1441,7 @@ namespace LewzenServer {
                 SVGIVerticalLine->MarkerStart = "url(#" + startArrow + ")";
             }
             SVGIG->add(SVGIVerticalLine);
+            SVGIG->add(SVGIVerticalLineHide);
         } else if (lineType == horizontalLine) {
             midPoint->setX((startPoint->getX() + endPoint->getX()) / 2);
             midPoint->setY((startPoint->getY() + endPoint->getY()) / 2);
@@ -989,6 +1457,7 @@ namespace LewzenServer {
                 SVGIHorizontalLine->MarkerStart = "url(#" + startArrow + ")";
             }
             SVGIG->add(SVGIHorizontalLine);
+            SVGIG->add(SVGIHorizontalLineHide);
         } else if (lineType == curveTwo) {
             midPoint->setX(startPoint->getX());
             midPoint->setY((startPoint->getY() + endPoint->getY()) / 2);
@@ -1010,11 +1479,13 @@ namespace LewzenServer {
                 SVGICurveTwo->MarkerStart = "url(#" + startArrow + ")";
             }
             SVGIG->add(SVGICurveTwo);
+            SVGIG->add(SVGICurveTwoHide);
         } else if (lineType == hallowLine) {
             pointList.push_back(startPoint);
             pointList.push_back(endPoint);
             setCorePoints(pointList);
             SVGIG->add(SVGIHallowLine);
+            SVGIG->add(SVGIHallowLineHide);
         } else if (lineType == complexLine) {
             calcComplexPoint(30,6,12,30,6,12);
             midPoint->setVirtual(0);
@@ -1028,14 +1499,29 @@ namespace LewzenServer {
             pointList.push_back(midPoint);
             pointList.push_back(midCPoint);
             pointList.push_back(endPoint);
-            for(auto p:pointList){
-                std::cout<<"polist "<<p->getX()<<" "<<p->getY()<<std::endl;
-            }
             setCorePoints(pointList);
             SVGIG->add(SVGIComplexLine);
+            SVGIG->add(SVGIComplexLineHide);
         }
+        else if(lineType == flexableLine){
+            calcComplexPoint(30,6,12,30,6,12);
+            auto mid0 = createCorePoint("0.5",(startPoint->getX() + endPoint->getX()) / 2,
+                                        (startPoint->getY() + endPoint->getY()) / 2);
+            midPoint->setVirtual(0);
+            midCPoint->setVirtual(0);
+            arrowPoint->setVirtual(0);
+            arrowCPoint->setVirtual(0);
+            mid0->setVirtual(1);
 
+            pointList.push_back(startPoint);
+            pointList.push_back(mid0);
+            pointList.push_back(endPoint);
 
+            setCorePoints(pointList);
+            setCorePoints({midPoint,midCPoint,arrowPoint,arrowCPoint});
+            SVGIG->add(SVGIFlexableLine);
+            SVGIG->add(SVGIFlexableLineHide);
+        }
     }
 
 
@@ -1115,13 +1601,8 @@ namespace LewzenServer {
             for (int i = 0; i < (int) pointList.size(); i += 2) {
                 coords.push_back(Lewzen::Point2D(pointList[i]->getX(), pointList[i]->getY()));
             }
-            std::cout << "pointLis size" << pointList.size() << std::endl;
-            std::cout << "coords size" << coords.size() << std::endl;
-            for (auto t: coords) {
-                std::cout << t.get_x() << " " << t.get_y() << std::endl;
-            }
+
             std::vector<Lewzen::Point2D> path = offsetCoords(coords, offset);
-            std::cout << "path size" << path.size() << std::endl;
             std::string res = "M " + std::to_string(path[0].get_x()) + " "
                               + std::to_string(path[0].get_y()) + " ";
             for (int i = 1; i < (int) path.size(); i += 1) {
@@ -1274,6 +1755,72 @@ namespace LewzenServer {
         return res;
     }
 
+    std::string Line::getFlexableLineD() {
+        std::stringstream ss;
+        auto s = createPoint(startPoint->getX(),startPoint->getY());
+        auto e = createPoint(pointList[2]->getX(),pointList[2]->getY());
+
+        auto fa = getFlipP(createPoint(arrowPoint->getX(),arrowPoint->getY()),
+                           s,e);
+        auto fac = getFlipP(createPoint(arrowCPoint->getX(),arrowCPoint->getY()),s,e);
+
+        ss<<"M"<< arrowPoint->getX()<<","<<arrowPoint->getY()<<" ";
+        ss<<"L"<<arrowCPoint->getX()<<","<<arrowCPoint->getY()<<" ";
+        ss<<"L"<<startPoint->getX()<<","<<startPoint->getY()<<" ";
+
+        ss<<"L"<<fac.get_x()<<","<<fac.get_y()<<" ";
+        ss<<"L"<<fa.get_x()<<","<<fa.get_y()<<" ";
+        int sz = pointList.size()-1;
+        auto s1 = createPoint(pointList[sz-2]->getX(),pointList[sz-2]->getY());
+        auto e1 = createPoint(endPoint->getX(),endPoint->getY());
+        auto fm = getFlipP(createPoint(midPoint->getX(),midPoint->getY()),
+                      s1,e1);
+        auto fmc = getFlipP(createPoint(midCPoint->getX(),midCPoint->getY()),s1,e1);
+
+        ss<<"M"<<midPoint->getX()<<","<<midPoint->getY()<<" ";
+        ss<<"L"<<midCPoint->getX()<<","<<midCPoint->getY()<<" ";
+        ss<<"L"<<endPoint->getX()<<","<<endPoint->getY()<<" ";
+
+        ss<<"L"<<fmc.get_x()<<","<<fmc.get_y()<<" ";
+        ss<<"L"<<fm.get_x()<<","<<fm.get_y()<<" ";
+
+        std::vector<Lewzen::Point2D>coords;
+
+        coords.push_back(Lewzen::Point2D((arrowPoint->getX()+fa.get_x())/2,(arrowPoint->getY()+fa.get_y())/2));
+
+        for(int i = 2;i<sz;i+=2){
+            coords.push_back(Lewzen::Point2D(pointList[i]->getX(),pointList[i]->getY()));
+        }
+        double len = dist2d(createPoint((arrowPoint->getX()+fa.get_x())/2,(arrowPoint->getY()+fa.get_y())/2),fa);
+
+        coords.push_back(Lewzen::Point2D((midPoint->getX()+fm.get_x())/2,(midPoint->getY()+fm.get_y())/2));
+
+
+        auto path = offsetCoords(coords,len);
+        ss<<"M"<<path[0].get_x()<<","<<path[0].get_y()<<" ";
+        for(int i=1;i<(int)path.size();i++){
+            ss<<"L"<<path[i].get_x()<<","<<path[i].get_y()<<" ";
+
+        }
+        path = offsetCoords(coords,-len);
+
+        ss<<"M"<<path[0].get_x()<<","<<path[0].get_y()<<" ";
+        for(int i=1;i<(int)path.size();i++){
+            ss<<"L"<<path[i].get_x()<<","<<path[i].get_y()<<" ";
+        }
+        return ss.str();
+
+    }
+
+    Lewzen::Point2D Line::getFlipP(Lewzen::Point2D p, Lewzen::Point2D s, Lewzen::Point2D e) {
+        double x1 = s.get_x(), y1 = s.get_y(), x2 = e.get_x(), y2 = e.get_y();
+        double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
+        double m = p.get_x(), n = p.get_y();
+        Lewzen::Point2D cz((b * b * m - a * b * n - a * c) / (a * a + b * b),
+                           (a * a * n - a * b * m - b * c) / (a * a + b * b));
+        return Lewzen::Point2D(2 * cz.get_x() - p.get_x(), 2 * cz.get_y() - p.get_y());
+    }
+
     Lewzen::Point2D Line::getFlipPoint(Lewzen::Point2D p) {
         double x1 = startPoint->getX(), y1 = startPoint->getY(), x2 = endPoint->getX(), y2 = endPoint->getY();
         double a = y2 - y1, b = x1 - x2, c = x2 * y1 - x1 * y2;
@@ -1319,6 +1866,48 @@ namespace LewzenServer {
 
     }
 
+
+    void Line::calcFlexablePoint(double ew, double eh, double eh1, double sw, double sh, double sh1) {
+        std::vector<Lewzen::Point2D> coords;
+        int sz = pointList.size()-1;
+        auto sP = pointList[sz-2];
+        coords.push_back(Lewzen::Point2D(sP->getX(), sP->getY()));
+        coords.push_back(Lewzen::Point2D(endPoint->getX(), endPoint->getY()));
+        double rate = ew / dist2d(coords[0], coords[1]);
+        Lewzen::Point2D tmp((coords[0].get_x() - coords[1].get_x()) * rate + coords[1].get_x(),
+                            (coords[0].get_y() - coords[1].get_y()) * rate + coords[1].get_y());
+        coords[0] = tmp;
+        std::vector<Lewzen::Point2D> path = offsetCoords(coords, eh);
+        midPoint->setX(path[0].get_x());
+        midPoint->setY(path[0].get_y());
+        path = offsetCoords(coords, eh1);
+        midCPoint->setX(path[0].get_x());
+        midCPoint->setY(path[0].get_y());
+
+        auto eP = pointList[2];
+
+        coords[0].set_x(startPoint->getX());
+        coords[0].set_y(startPoint->getY());
+        coords[1].set_x(eP->getX());
+        coords[1].set_y(eP->getY());
+
+        rate = sw / dist2d(coords[0],coords[1]);
+        Lewzen::Point2D tmp1((coords[1].get_x() - coords[0].get_x()) * rate + coords[0].get_x(),
+                             (coords[1].get_y() - coords[0].get_y()) * rate + coords[0].get_y());
+
+        coords[1] = tmp1;
+
+        path = offsetCoords(coords, sh);
+        arrowPoint->setX(path[1].get_x());
+        arrowPoint->setY(path[1].get_y());
+        path = offsetCoords(coords, sh1);
+        arrowCPoint->setX(path[1].get_x());
+        arrowCPoint->setY(path[1].get_y());
+
+        onSameSideF();
+
+    }
+
     void Line::onOffset() {
         offset = 4;
         std::string tmp = "null";
@@ -1329,15 +1918,20 @@ namespace LewzenServer {
 
     }
 
+    void Line::closeOffset(){
+        offset = 0;
+    };
+
     std::vector<Lewzen::Point2D> Line::offsetCoords(std::vector<Lewzen::Point2D> coords, double offset) {
         std::vector<Lewzen::Point2D> path;
-
         int N = coords.size() - 1;
         int max = N;
         double mi, mi1, li, li1, ri, ri1, si, si1, Xi1, Yi1;
         Lewzen::Point2D p0(0, 0), p1(0, 0), p2(0, 0);
         int isClosed = (coords[0].get_x() == coords[N].get_x() &&
                         coords[0].get_y() == coords[N].get_y());
+
+
         if (!isClosed) {
             p0 = coords[0];
             p1 = coords[1];
@@ -1353,8 +1947,20 @@ namespace LewzenServer {
             p0 = coords[i];
             p1 = coords[(i + 1) % N];
             p2 = coords[(i + 2) % N];
-            mi = (p1.get_y() - p0.get_y()) / (p1.get_x() - p0.get_x());
-            mi1 = (p2.get_y() - p1.get_y()) / (p2.get_x() - p1.get_x());
+            if(p1.get_x() == p0.get_x()){
+                mi = 1e9;
+            }
+            else {
+                mi = (p1.get_y() - p0.get_y()) / (p1.get_x() - p0.get_x());
+            }
+            if(p2.get_x() == p1.get_x()){
+                mi1 = 1e9;
+
+            }
+            else{
+                mi1 = (p2.get_y() - p1.get_y()) / (p2.get_x() - p1.get_x());
+            }
+
             // Prevent alignements
             if (fabs(mi - mi1) > 1e-10) {
 //            li = Math.sqrt((p1[0] - p0[0])*(p1[0] - p0[0])+(p1[1] - p0[1])*(p1[1] - p0[1]));
@@ -1369,11 +1975,23 @@ namespace LewzenServer {
                 Yi1 = (mi * mi1 * (ri1 - ri) + mi1 * si - mi * si1) / (mi1 - mi);
                 // Correction for vertical lines
                 if (p1.get_x() - p0.get_x() == 0) {
-                    Xi1 = p1.get_x() + offset * (p1.get_y() - p0.get_y()) / fabs(p1.get_y() - p0.get_y());
+                    if(p1.get_y() - p0.get_y() == 0){
+                        Xi1 = p1.get_x();
+                    }
+                    else{
+                        Xi1 = p1.get_x() + offset * (p1.get_y() - p0.get_y()) / fabs(p1.get_y() - p0.get_y());
+                    }
+
                     Yi1 = mi1 * Xi1 - mi1 * ri1 + si1;
                 }
                 if (p2.get_x() - p1.get_x() == 0) {
-                    Xi1 = p2.get_x() + offset * (p2.get_y() - p1.get_y()) / fabs(p2.get_y() - p1.get_y());
+                    if(p2.get_y() - p1.get_y() == 0){
+                        Xi1 = p2.get_x();
+                    }
+                    else{
+                        Xi1 = p2.get_x() + offset * (p2.get_y() - p1.get_y()) / fabs(p2.get_y() - p1.get_y());
+                    }
+
                     Yi1 = mi * Xi1 - mi * ri + si;
                 }
                 path.push_back(Lewzen::Point2D(Xi1, Yi1));
@@ -1413,18 +2031,45 @@ namespace LewzenServer {
         double x0 = arrowCPoint->getX(),y0 = arrowCPoint->getY();
         double x3 = midCPoint->getX(),y3 = midCPoint->getY();
         if(((x2-x1)*(y0-y1)-(y2-y1)*(x0-x1)) * ((x2-x1)*(y3-y1)-(y2-y1)*(x3-x1)) < 0) {
-            std::cout<<"yes\n";
-            std::cout<<"before "<<arrowCPoint->getX()<<" "<<arrowCPoint->getY()<<std::endl;
             auto t = getFlipPoint(Lewzen::Point2D(x0,y0));
             arrowCPoint->setX(t.get_x());
             arrowCPoint->setY(t.get_y());
-            std::cout<<"aft "<<arrowCPoint->getX()<<" "<<arrowCPoint->getY()<<std::endl;
-            std::cout<<"before "<<arrowPoint->getX()<<" "<<arrowPoint->getY()<<std::endl;
             t = getFlipPoint(Lewzen::Point2D(arrowPoint->getX(),arrowPoint->getY()));
             arrowPoint->setX(t.get_x());
             arrowPoint->setY(t.get_y());
-            std::cout<<"aft "<<arrowPoint->getX()<<" "<<arrowPoint->getY()<<std::endl;
 
+        }
+
+    }
+
+    void Line::onSameSideF() {
+        auto s = Lewzen::Point2D(startPoint->getX(),startPoint->getY());
+
+        auto e = Lewzen::Point2D(pointList[2]->getX(),pointList[2]->getY());
+
+        int sz = pointList.size()-1;
+        auto s1 = Lewzen::Point2D(pointList[sz-2]->getX(),pointList[sz-2]->getY());
+        auto e1 = Lewzen::Point2D(endPoint->getX(),endPoint->getY());
+
+        double x1 = s.get_x(), y1 = s.get_y(), x2 = e.get_x(), y2 = e.get_y();
+        double x0 = arrowCPoint->getX(),y0 = arrowCPoint->getY();
+        double flagS = (x2-x1)*(y0-y1)-(y2-y1)*(x0-x1);
+
+        x1 = s1.get_x();
+        y1 = s1.get_y();
+        x2 = e1.get_x();
+        y2 = e1.get_y();
+        x0 = midCPoint->getX();
+        y0 = midCPoint->getY();
+        double flagE = (x2-x1)*(y0-y1)-(y2-y1)*(x0-x1);
+        if(flagS*flagE < 0){
+            auto t = getFlipP(Lewzen::Point2D(arrowPoint->getX(),arrowPoint->getY()),s,e);
+            arrowPoint->setX(t.get_x());
+            arrowPoint->setY(t.get_y());
+
+            t = getFlipP(Lewzen::Point2D(arrowCPoint->getX(),arrowCPoint->getY()),s,e);
+            arrowCPoint->setX(t.get_x());
+            arrowCPoint->setY(t.get_y());
         }
 
     }
@@ -1687,14 +2332,12 @@ namespace LewzenServer {
         arrows["hallow_line_arrow"] = hallow_line_arrow;
         Defs.push_back(hallow_line_arrow);
 
+
         for (auto p: Defs) {
             auto pp = p.lock();
             pp->commit();
         }
     }
-
-
-
 
 
 }
