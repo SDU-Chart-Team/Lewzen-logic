@@ -242,7 +242,8 @@ namespace LewzenServer {
 
     //// Scalable接口
     void Rectangle::scale(const double &scaleX, const double &scaleY) {
-        auto delta = vectorToCanvas(createPoint(scaleX * (R->getX() - L->getX()), scaleY * (B->getY() - T->getY())));
+        double sx = (scaleX - 1) * (R->getX() - L->getX()), sy = (scaleY - 1) * (B->getY() - T->getY());
+        auto delta = vectorToCanvas(createPoint(sx, sy));
         moveCorePoint("RB", delta.get_x(), delta.get_y());
     }
 

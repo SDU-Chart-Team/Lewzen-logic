@@ -118,11 +118,19 @@ void test_rotate() {
     //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
     //std::cout << LewzenServer::Register::run(R"({"command": "flip", "a": 1, "b": 0, "c": -120})") << std::endl; // 翻转
     //std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    //std::cout << "-------" << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "enable_scale_bind"})") << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id3 + R"(", "pid": "RB", "dx": 400, "dy": 400})") << std::endl; // 移动关键点，进行缩放
-    //std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "disable_move_bind"})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "move", "dx": 100, "dy": 200})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "enable_move_bind"})") << std::endl;
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "enable_scale_bind"})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id3 + R"(", "pid": "RB", "dx": 400, "dy": 400})") << std::endl; // 移动关键点，进行缩放
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
     //std::cout << "-------" << std::endl;
     //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
     //std::cout << LewzenServer::Register::run(R"({"command": "set_rect", "rect":{"height":100.0,"width":60.0,"x":100.0,"y":20.0}})") << std::endl; // 设置矩形

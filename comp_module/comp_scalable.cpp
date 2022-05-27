@@ -133,9 +133,11 @@ namespace LewzenServer {
             if (cb->isScaleBinded()) {
                 auto delta = ((cb->getCenter())(getCoordinateSystem()) - lastCenter(getCoordinateSystem()));
                 delta.set_x(delta.get_x() * scaleX), delta.set_y(delta.get_y() * scaleY);
-                auto dest = ((cb->getCenter())(getCoordinateSystem()) + delta)(Lewzen::CanvasCoordinateSystem::canvas_coordinate_system); // 计算在画布上的最终维护
-                cb->moveTo(dest.get_x(), dest.get_y()); // 移动到指定位置
+                auto dest = ((getCenter())(getCoordinateSystem()) + delta)(Lewzen::CanvasCoordinateSystem::canvas_coordinate_system); // 计算在画布上的最终维护
                 cb->scale(scaleX, scaleY); // 进行缩放
+                auto p = cb->getCenter();
+                cb->moveTo(dest.get_x(), dest.get_y()); // 移动到指定位置
+                p = cb->getCenter();
             }
         }
     }

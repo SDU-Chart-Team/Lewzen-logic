@@ -1,5 +1,6 @@
-release/
+release*/
 .vscode/
 *.o
 wasm.js
 wasm.wasm
+test.exe

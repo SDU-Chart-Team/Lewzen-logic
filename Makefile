@@ -9,10 +9,10 @@ objs = register.o \
 	utils.o
 
 wasm: sub_all $(objs)
-	em++ $(flags) --bind -O3 -o wasm.js wasm.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
+	em++ $(flags) --bind -O3 -s ENVIRONMENT='web' -o wasm.js wasm.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
 
 test: sub_all $(objs)
-	$(cc) $(flags) -o test.exe test.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
+	$(cc) $(flags) -o test.exe main.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
 
 sub_all: $(objects)
 	cd comp && make
