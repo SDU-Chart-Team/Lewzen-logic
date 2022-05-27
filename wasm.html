@@ -84,6 +84,11 @@
       var cmd = ret["domcmd"];
       interpret(document.svg, cmd);
     }
+    var set_html = (comp_id, html) => {
+      var ret = JSON.parse(Module.server_run("{\"command\": \"set_html\", \"html\": \"" + html + "\"}"));
+      var cmd = ret["domcmd"];
+      interpret(document.svg, cmd);
+    }
 
     // WASM模块
     var Module = {
@@ -93,8 +98,17 @@
         document.svg = document.getElementById("svg-parent").childNodes[0];
 
         // 进行测试
+        console.time('add rectangle')
         add_component("rectangle");
+        console.timeEnd('add rectangle')
+
+        console.time('move rectangle')
         move_component(document.comp_ids[0], 100, 200);
+        console.timeEnd('move rectangle')
+
+        console.time('set html')
+        set_html(document.comp_ids[0], '<em>hel11111</em><em>111</em><u><em>111</em></u><u><em>1lo</em></u>');
+        console.timeEnd('set html')
       }
     };
   </script>
