@@ -112,36 +112,27 @@ void test_rotate() {
     std::cout << LewzenServer::Register::run(R"({"command": "set_html", "html": "<em>hel11111</em><em>111</em><u><em>111</em></u><u><em>1lo</em></u>"})") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "set_alignment", "alignment": {"horizental": 0, "vertical": 0}})") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "set_spacing", "spacing": {"left": -10, "right": 0, "top": 0, "bottom": 0, "global": 10}})") << std::endl; // 设置内容
-    std::cout << LewzenServer::Register::run(R"({"command": "set_html", "html": ""})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    //std::cout << "-------" << std::endl;
+    std::cout << "-------" << std::endl;
     //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
     //std::cout << LewzenServer::Register::run(R"({"command": "flip", "a": 1, "b": 0, "c": -120})") << std::endl; // 翻转
     //std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    std::cout << "-------" << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "disable_move_bind"})") << std::endl;
+    //std::cout << "-------" << std::endl;
+    //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
+    //std::cout << LewzenServer::Register::run(R"({"command": "enable_scale_bind"})") << std::endl;
+    //std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id3 + R"(", "pid": "RB", "dx": 400, "dy": 400})") << std::endl; // 移动关键点，进行缩放
+    //std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    //std::cout << "-------" << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "move", "dx": 100, "dy": 200})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "enable_move_bind"})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "set_rect", "rect":{"height":100.0,"width":60.0,"x":100.0,"y":20.0}})") << std::endl; // 设置矩形
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id2 + R"("})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "enable_scale_bind"})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id3 + R"(", "pid": "RB", "dx": 400, "dy": 400})") << std::endl; // 移动关键点，进行缩放
+    std::cout << LewzenServer::Register::run(R"({"command": "link", "id1": ")" + id1 + R"(", "id2": ")" + id3 + R"("})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cover_children"})") << std::endl; // 覆盖子组件
+    std::cout << LewzenServer::Register::run(R"({"command": "back"})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    //std::cout << "-------" << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id3 + R"("})") << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "set_rect", "rect":{"height":100.0,"width":60.0,"x":100.0,"y":20.0}})") << std::endl; // 设置矩形
-    //std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    //std::cout << "-------" << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "link", "id1": ")" + id1 + R"(", "id2": ")" + id3 + R"("})") << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "cover_children"})") << std::endl; // 覆盖子组件
-    //std::cout << LewzenServer::Register::run(R"({"command": "back"})") << std::endl;
-    //std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    //std::cout << "-------" << std::endl;
-    //std::cout << LewzenServer::Register::run(R"({"command": "save"})") << std::endl; // 保存
+    std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "save"})") << std::endl; // 保存
 }
 
 void test_sl() {
@@ -166,41 +157,169 @@ void test_sl() {
 void test_line() {
     std::cout << LewzenServer::Register::init() << std::endl;
     std::cout << "-------" << std::endl;
+    std::cout<<"linenn\n";
     std::cout << LewzenServer::Register::run(R"({"command": "add", "type": "line"})") << std::endl;
 
-
+    auto id1 = LewzenServer::Canvas::components.begin()->first;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id1 + R"("]})") << std::endl;
-//    std::cout << LewzenServer::Register::run(R"({"command": "set_end_arrow", "end_arrow": "end_arrow"})") << std::endl;
-//    std::cout << LewzenServer::Register::run(R"({"command": "set_start_arrow", "start_arrow": "start_arrow"})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid", "dx": 400, "dy": 400})") << std::endl; // 移动关键点
-    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
-    std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    std::cout << "-------" << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "curve"})") << std::endl;
-    std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    std::cout << "-------" << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "vertical_line"})") << std::endl;
-    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+
     std::cout << "-------" << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "horizontal_line"})") << std::endl;
-    std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    std::cout << "-------" << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "start", "dx": 400, "dy": 400})") << std::endl; // 移动关键点
     std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
-    std::cout << LewzenServer::Register::run(R"({"command": "set_end_arrow", "end_arrow": "end_arrow_circle"})") << std::endl;
+
+    std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid", "dx": 400, "dy": -50})") << std::endl; // 移动关键点
+
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//
+////    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "0.750000", "dx": 400, "dy": -50})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_start", "x":200 , "y":200 })" ) << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_end", "x":300 , "y":200 })" ) << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//        std::cout << LewzenServer::Register::run(R"({"command": "on_offset"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "close_offset"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "flexible_line"})") << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+
+
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "curve"})") << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_end", "x":300 , "y":500 })" ) << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid0", "dx": 400, "dy": -50})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid2", "dx": 40, "dy": 10})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid", "dx": 40, "dy": -10})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "mid -------" << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "midC", "dx": 40, "dy": -10})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "midC-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "arrow", "dx": 40, "dy": 10})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "arrow-------" << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "arrowC", "dx": 40, "dy": 10})") << std::endl; // 移动关键点
+//
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "arrowC-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_start", "x":300 , "y":400 })" ) << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "midC", "dx": -40, "dy": -10})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "arrowC", "dx": -40, "dy": 10})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid", "dx": -20, "dy": -10})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "arrow", "dx": -20, "dy": 10})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_dotted_line", "dot_type": "dashed"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_dotted_line", "dot_type": "solid"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_end_arrow", "end_arrow": "end_arrow_two_tri"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_start_arrow", "start_arrow": "start_arrow_two_tri"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+
+
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_end_arrow", "end_arrow": "end_arrow"})") << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_start_arrow", "start_arrow": "start_arrow"})") << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "mid", "dx": 40, "dy": 100})") << std::endl; // 移动关键点
+////    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "on_offset"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+////    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "curve"})") << std::endl;
+////    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+////    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "vertical_line"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "horizontal_line"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+
+    std::cout << "-------" << std::endl;
+
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_line_type", "line_type": "curve_two"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "start", "dx": 400, "dy": 400})") << std::endl; // 移动关键点
+//    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
+//    std::cout << LewzenServer::Register::run(R"({"command": "set_end_arrow", "end_arrow": "end_arrow_circle"})") << std::endl;
+//    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+//    std::cout << "-------" << std::endl;
+}
+
+void test_tra(){
+    std::cout << LewzenServer::Register::init() << std::endl;
+    std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "add", "type": "notched"})") << std::endl;
+    auto id1 = LewzenServer::Canvas::components.begin()->first;
+    std::cout << LewzenServer::Register::run(R"([{"command": "cursor", "id": ")" + id1 + R"("}, {"command": "get_points"}])") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "get_points"})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "ControlLeft", "dx": 20, "dy": 10})") << std::endl; // 移动关键点
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+
+    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "RB", "dx": 200, "dy": 200})") << std::endl; // 移动关键点
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+
+    std::cout << LewzenServer::Register::run(R"({"command": "move_point", "id": ")" + id1 + R"(", "pid": "ControlRight", "dx": 20, "dy": 100})") << std::endl; // 移动关键点
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+
 }
 
 int main () {
     //test_life();
     //test_basics();
-    test_rotate();
+    //test_rotate();
     //test_sl();
-    //test_line();
+    test_line();
+//    test_tra();
 
     return 0;
 }

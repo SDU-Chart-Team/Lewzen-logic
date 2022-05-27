@@ -7,6 +7,17 @@
 #include "comp/rectangle.h"
 #include "comp/line.h"
 #include "comp_custom/isometric_cube.h"
+#include "comp_custom/trapezoid.h"
+#include "comp_custom/parallelogram.h"
+#include "comp_custom/hexagon.h"
+#include "comp_custom/arrowRight.h"
+#include "comp_custom/arrowLeft.h"
+#include "comp_custom/arrowUp.h"
+#include "comp_custom/arrowDown.h"
+#include "comp_custom/chevron.h"
+#include "comp_custom/notched.h"
+
+
 
 namespace LewzenServer {
     class ComponentAbstract;
