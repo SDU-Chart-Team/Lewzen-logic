@@ -177,6 +177,8 @@ namespace LewzenServer {
         setHTML(p._HTML);
         _spacing = p._spacing;
         _alignment = p._alignment;
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void ComponentWritable::serialize(json &j, std::vector<std::string> &processed) {
@@ -192,6 +194,8 @@ namespace LewzenServer {
         setHTML(j["html"]);
         _spacing.top = j["spacing"]["top"], _spacing.left = j["spacing"]["left"], _spacing.bottom = j["spacing"]["bottom"], _spacing.right = j["spacing"]["right"], _spacing.global = j["spacing"]["global"];
         _alignment.horizental = j["alignment"]["horizental"], _alignment.vertical = j["alignment"]["vertical"];
+        
+        return *this;
     }
 
     //// Writable接口

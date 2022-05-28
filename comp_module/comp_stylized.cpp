@@ -65,6 +65,8 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const ComponentStylized &>(comp);     
         // 拷贝style
         _style = p._style;
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void ComponentStylized::serialize(json &j, std::vector<std::string> &processed) {
@@ -74,6 +76,8 @@ namespace LewzenServer {
     ComponentAbstract &ComponentStylized::operator=(const json &j) {
         // 反序列化style
         _style = j["style"];
+        
+        return *this;
     }
 
     //// Stylized接口

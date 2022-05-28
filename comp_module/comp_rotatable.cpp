@@ -165,7 +165,9 @@ namespace LewzenServer {
 
         auto &p = dynamic_cast<const ComponentRotatable &>(comp);     
         // 拷贝theta
-        set_theta(p.getTheta());
+        setTheta(p.getTheta());
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void ComponentRotatable::serialize(json &j, std::vector<std::string> &processed) {
@@ -189,6 +191,8 @@ namespace LewzenServer {
 
         // 反序列化theta
         setTheta(j["theta"]);
+
+        return *this;
     }
     // 事件
     // 父亲更换事件

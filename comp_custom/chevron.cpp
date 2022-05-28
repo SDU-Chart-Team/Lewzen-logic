@@ -68,6 +68,8 @@ namespace LewzenServer {
         // 拷贝关键点位置
         *ControlLeft = *(p.ControlLeft);
         *ControlRight = *(p.ControlRight);
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void Chevron::serialize(json &j, std::vector<std::string> &processed) {
@@ -82,6 +84,8 @@ namespace LewzenServer {
         // 注册关键点
         ControlLeft = corePoints["ControlLeft"];
         ControlRight = corePoints["ControlRight"];
+
+        return *this;
     }
 
     //// Basics虚接口

@@ -176,9 +176,10 @@ namespace LewzenServer {
     // 拷贝
     ComponentAbstract &Rectangle::operator=(const ComponentAbstract &comp) {
         // 拷贝父类
+        
         ComponentRotatable::operator=(comp);
-        ComponentRotatable::operator=(comp);
-        ComponentRotatable::operator=(comp);
+        ComponentWritable::operator=(comp);
+        ComponentStylized::operator=(comp);
         
         auto &p = dynamic_cast<const Rectangle &>(comp);        
         // 拷贝关键点位置
@@ -190,6 +191,8 @@ namespace LewzenServer {
         *R = *(p.R),
         *RT = *(p.RT),
         *T = *(p.T);
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void Rectangle::serialize(json &j, std::vector<std::string> &processed) {
@@ -216,6 +219,8 @@ namespace LewzenServer {
         R = corePoints["R"],
         RT = corePoints["RT"],
         T = corePoints["T"];
+
+        return *this;
     }
 
     //// Basics虚接口

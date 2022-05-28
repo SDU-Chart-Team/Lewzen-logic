@@ -570,6 +570,7 @@ namespace LewzenServer {
             }
         }
 
+        return *this;
     }
 
     // 序列化，并记录已操作的
@@ -695,6 +696,8 @@ namespace LewzenServer {
                 pointList.push_back(corePoints[val]);
             }
         }
+
+        return *this;
     }
 
 

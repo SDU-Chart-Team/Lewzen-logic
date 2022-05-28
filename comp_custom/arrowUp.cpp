@@ -67,6 +67,8 @@ namespace LewzenServer {
         // 拷贝关键点位置
         *ControlUp = *(p.ControlUp);
         *ControlDown = *(p.ControlDown);
+
+        return *this;
     }
     // 序列化，并记录已操作的
     void ArrowUp::serialize(json &j, std::vector<std::string> &processed) {
@@ -81,6 +83,8 @@ namespace LewzenServer {
         // 注册关键点
         ControlUp = corePoints["ControlUp"];
         ControlDown = corePoints["ControlDown"];
+
+        return *this;
     }
 
     //// Basics虚接口
