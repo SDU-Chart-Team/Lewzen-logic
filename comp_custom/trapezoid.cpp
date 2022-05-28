@@ -7,14 +7,14 @@ namespace LewzenServer {
     //// 通用虚接口
     // 非构造初始化
     void Trapezoid::init() {
-        // 设置类型
-        setType("trapezoid");
+
 
         // 父类初始化
         Rectangle::init();
-
+        // 设置类型
+        setType("trapezoid");
         // 维护图形SVG
-        SVGIG->remove(SVGIRect); // 移除旧的图形
+        SVGIG->children({}); // 移除旧的图形
 
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);

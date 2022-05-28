@@ -1358,39 +1358,40 @@ namespace LewzenServer {
     //// 线条接口
 
     void Line::setLineType(std::string lineType) {
-        if (getType() == straightLine) {
-            SVGIG->remove(SVGILine);
-            SVGIG->remove(SVGILineHide);
-        }
-        else if (getType() == curve) {
-            SVGIG->remove(SVGICurve);
-            SVGIG->remove(SVGICurveHide);
-        }
-        else if (getType() == verticalLine) {
-            SVGIG->remove(SVGIVerticalLine);
-            SVGIG->remove(SVGIVerticalLineHide);
-
-        }
-        else if (getType() == horizontalLine) {
-            SVGIG->remove(SVGIHorizontalLine);
-            SVGIG->remove(SVGIHorizontalLineHide);
-        }
-        else if (getType() == curveTwo) {
-            SVGIG->remove(SVGICurveTwo);
-            SVGIG->remove(SVGICurveTwoHide);
-        }
-        else if (getType() == hallowLine) {
-            SVGIG->remove(SVGIHallowLine);
-            SVGIG->remove(SVGIHallowLineHide);
-        }
-        else if (getType() == complexLine) {
-            SVGIG->remove(SVGIComplexLine);
-            SVGIG->remove(SVGIComplexLineHide);
-        }
-        else if(getType() == flexableLine){
-            SVGIG->remove(SVGIFlexableLine);
-            SVGIG->remove(SVGIFlexableLineHide);
-        }
+//        if (getType() == straightLine) {
+//            SVGIG->remove(SVGILine);
+//            SVGIG->remove(SVGILineHide);
+//        }
+//        else if (getType() == curve) {
+//            SVGIG->remove(SVGICurve);
+//            SVGIG->remove(SVGICurveHide);
+//        }
+//        else if (getType() == verticalLine) {
+//            SVGIG->remove(SVGIVerticalLine);
+//            SVGIG->remove(SVGIVerticalLineHide);
+//
+//        }
+//        else if (getType() == horizontalLine) {
+//            SVGIG->remove(SVGIHorizontalLine);
+//            SVGIG->remove(SVGIHorizontalLineHide);
+//        }
+//        else if (getType() == curveTwo) {
+//            SVGIG->remove(SVGICurveTwo);
+//            SVGIG->remove(SVGICurveTwoHide);
+//        }
+//        else if (getType() == hallowLine) {
+//            SVGIG->remove(SVGIHallowLine);
+//            SVGIG->remove(SVGIHallowLineHide);
+//        }
+//        else if (getType() == complexLine) {
+//            SVGIG->remove(SVGIComplexLine);
+//            SVGIG->remove(SVGIComplexLineHide);
+//        }
+//        else if(getType() == flexableLine){
+//            SVGIG->remove(SVGIFlexableLine);
+//            SVGIG->remove(SVGIFlexableLineHide);
+//        }
+        SVGIG->children({});
         setType(lineType);
         corePoints.clear();
         pointList.clear();
