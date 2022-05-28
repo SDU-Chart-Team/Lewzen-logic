@@ -329,7 +329,6 @@ namespace LewzenServer {
     }
 
     Line::Line() {
-        std::cout<<"line()\n";
         if (!registered) registering(); // 注册
         addModuleTypes(module_type); // 添加模块类型
         initArrow();
@@ -338,12 +337,14 @@ namespace LewzenServer {
     //// 通用虚接口
     // 非构造初始化，初始化组件在(x, y)
     void Line::init() {
-        std::cout<<"ll\n";
-        // 设置类型
-        setType(straightLine);
+
+        setType("line");
         // 父类初始化
         ComponentRotatable::init();
         ComponentStylized::init();
+        // 设置类型
+
+        set_line_type(straightLine);
         // 添加图形SVG
         SVGILine = std::make_shared<Lewzen::SVGIPath>();
         SVGICurve = std::make_shared<Lewzen::SVGIPath>();
@@ -363,7 +364,6 @@ namespace LewzenServer {
         SVGIComplexLineHide = std::make_shared<Lewzen::SVGIPath>();
         SVGIFlexableLineHide = std::make_shared<Lewzen::SVGIPath>();
 
-        std::cout<<"line()\n";
 
         // 初始化关键点表
         startPoint = createCorePoint("start", 100, 100);
@@ -466,12 +466,18 @@ namespace LewzenServer {
 
     // 拷贝
     ComponentAbstract &Line::operator=(const ComponentAbstract &comp) {
-        std::string type = getType();
+        ComponentRotatable::operator=(comp);
+        ComponentStylized::operator=(comp);
+        auto &p = dynamic_cast<const Line &>(comp);
+        setDotLine(p.getDotType());
+        std::string type = p.getLineType();
+        std::cout<<"copy linetype\n"<<type<<std::endl;
         if (type == straightLine) {
             // 拷贝父类
-            ComponentRotatable::operator=(comp);
-            auto &p = dynamic_cast<const Line &>(comp);
             // 拷贝关键点位置
+            setLineType(type);
+            setStartArrow(p.startArrow);
+            setEndArrow(p.endArrow);
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
 
@@ -481,59 +487,67 @@ namespace LewzenServer {
                 }
                 *pointList[i] = *(p.pointList[i]);
             }
+
+            if(p.offset > 0)onOffset();
+
+
         } else if (type == curve) {
-            ComponentRotatable::operator=(comp);
-
-            auto &p = dynamic_cast<const Line &>(comp);
-
+            setLineType(p.getLineType());
+            setStartArrow(p.startArrow);
+            setEndArrow(p.endArrow);
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
+
+            if(p.offset > 0)onOffset();
+
         } else if (type == horizontalLine) {
-            // 拷贝父类
-            ComponentRotatable::operator=(comp);
 
-            auto &p = dynamic_cast<const Line &>(comp);
-
+            setLineType(p.getLineType());
+            setStartArrow(p.startArrow);
+            setEndArrow(p.endArrow);
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
+            if(p.offset > 0)onOffset();
+
         } else if (type == verticalLine) {
             // 拷贝父类
-            ComponentRotatable::operator=(comp);
 
-            auto &p = dynamic_cast<const Line &>(comp);
-
+            std::cout<<"type vecttt\n\n\n";
+            setLineType(p.getLineType());
+            setStartArrow(p.startArrow);
+            setEndArrow(p.endArrow);
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
+            if(p.offset > 0)onOffset();
+
         } else if (type == curveTwo) {
             // 拷贝父类
-            ComponentRotatable::operator=(comp);
 
-            auto &p = dynamic_cast<const Line &>(comp);
-
+            setLineType(p.getLineType());
+            setStartArrow(p.startArrow);
+            setEndArrow(p.endArrow);
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
+            if(p.offset > 0)onOffset();
         } else if (type == hallowLine) {
+
             // 拷贝父类
-            ComponentRotatable::operator=(comp);
-
-            auto &p = dynamic_cast<const Line &>(comp);
-
+            setLineType(p.getLineType());
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
         } else if (type == complexLine) {
-            ComponentRotatable::operator=(comp);
+            setLineType(p.getLineType());
 
-            auto &p = dynamic_cast<const Line &>(comp);
 
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
@@ -545,12 +559,9 @@ namespace LewzenServer {
 
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
-
         }
         else if(type == flexableLine){
-            ComponentRotatable::operator=(comp);
-
-            auto &p = dynamic_cast<const Line &>(comp);
+            setLineType(p.getLineType());
 
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
@@ -569,6 +580,7 @@ namespace LewzenServer {
                 *pointList[i] = *(p.pointList[i]);
             }
         }
+
 
         return *this;
     }
@@ -587,7 +599,7 @@ namespace LewzenServer {
         ComponentStylized::operator=(j);
         ComponentRotatable::operator=(j);
 
-        std::string type = getType();
+        std::string type = getLineType();
         if (type == straightLine) {
             // 注册关键点
             startPoint = corePoints["start"];
@@ -706,7 +718,7 @@ namespace LewzenServer {
     void Line::moveCorePoint(const std::string &id, const double &_dx, const double &_dy) {
         auto delta = vectorFromCanvas(Lewzen::canvas_point(_dx, _dy)); // 计算组件坐标系的Δ
         double dx = delta.get_x(), dy = delta.get_y();
-        std::string type = getType();
+        std::string type = getLineType();
         if (type == straightLine) {
             int realId = -1;
             for (int i = 0; i < (int) pointList.size(); i++) {
@@ -1392,7 +1404,7 @@ namespace LewzenServer {
 //            SVGIG->remove(SVGIFlexableLineHide);
 //        }
         SVGIG->children({});
-        setType(lineType);
+        set_line_type(lineType);
         corePoints.clear();
         pointList.clear();
 
@@ -1552,7 +1564,7 @@ namespace LewzenServer {
     void Line::setStartArrow(const std::string &startArrow) {
 //        if(!arrows.count(startArrow))return;
         Line::startArrow = startArrow;
-        std::string type = getType();
+        std::string type = getLineType();
         if (type == straightLine) {
             SVGILine->MarkerStart = "url(#" + startArrow + ")";
         } else if (type == curve) {
@@ -1576,7 +1588,7 @@ namespace LewzenServer {
         std::cout << "endArrow\n";
         Line::endArrow = endArrow;
 
-        std::string type = getType();
+        std::string type = getLineType();
         if (type == straightLine) {
 
             SVGILine->MarkerEnd = "url(#" + endArrow + ")";
@@ -2020,7 +2032,8 @@ namespace LewzenServer {
         return sqrt(dx * dx + dy * dy);
     }
 
-    void Line::setDotLine(std::string dotType) {
+    void Line::setDotLine(std::string _dotType) {
+        dotType = _dotType;
         std::vector<int> tmp;
         if (dotType == "dashed") {
             tmp = {1, 4};
@@ -2343,7 +2356,17 @@ namespace LewzenServer {
         }
     }
 
+    const std::string &Line::getLineType() const {
+        return lineType;
+    }
 
+    void Line::set_line_type(std::string lt) {
+        lineType = lt;
+    }
+
+    const std::string &Line::getDotType() const {
+        return dotType;
+    }
 }
 
 

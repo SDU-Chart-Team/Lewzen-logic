@@ -19,10 +19,21 @@ namespace LewzenServer {
         static bool registered;
         const std::string module_type = "Line";
 
+
+
     protected:
 
         // 注册接口
         void registering();
+
+    public:
+        const std::string &getLineType() const;
+
+        void set_line_type(std::string lt);
+
+    protected:
+        std::string lineType="null" ;
+        std::string dotType="solid" ;
 
         // SVGI
         std::shared_ptr<Lewzen::SVGIPath> SVGILine;
@@ -177,6 +188,8 @@ namespace LewzenServer {
         Lewzen::Point2D getFlipPoint(Lewzen::Point2D p);
 
         Lewzen::Point2D getFlipP(Lewzen::Point2D p,Lewzen::Point2D s,Lewzen::Point2D e);
+
+        const std::string &getDotType() const;
 
         void calcComplexPoint(double ew,double eh,double eh1,double sw,double sh,double sh1);
 
