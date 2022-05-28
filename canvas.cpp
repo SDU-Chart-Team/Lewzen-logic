@@ -99,7 +99,7 @@ namespace LewzenServer {
             vec.push_back(comp);
         },
         [&](std::vector<std::shared_ptr<ComponentAbstract>> &comps){
-            for (auto comp : ComponentAbstract::extractTop(comps)) {
+            for (auto comp : comps) {
                 _component_removed(comp); // 移除组件
                 removed.insert({time, comp}); // 将组件移动到暂存区
                 comp->onRemoved(); // 移除事件
