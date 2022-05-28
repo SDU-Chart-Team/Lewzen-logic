@@ -381,6 +381,7 @@ namespace LewzenServer {
     // 克隆
     std::shared_ptr<ComponentAbstract> ComponentBasics::clone() {
         auto copied = Canvas::add(getType());
+        printf("%s\n", getType().c_str());
         *copied = *this; // 拷贝
         return copied;
     }

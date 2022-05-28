@@ -104,6 +104,11 @@
       var cmd = ret["domcmd"];
       interpret(document.svg, cmd);
     }
+    var move_point = (comp_id, pid, dx, dy) => {
+      var ret = JSON.parse(Module.server_run("{\"command\": \"move_point\", \"id\": \"" + comp_id + "\", \"pid\": \"" + pid + "\", \"dx\": " + dx + ", \"dy\": " + dy + "}"));
+      var cmd = ret["domcmd"];
+      interpret(document.svg, cmd);
+    }
     var rotate_component = (comp_id, theta) => {
       Module.server_run("{\"command\": \"cursor\", \"id\": \"" + comp_id + "\"}");
       var ret = JSON.parse(Module.server_run("{\"command\": \"set_theta\", \"theta\": " + theta + "}"));
@@ -129,7 +134,6 @@
     var load_json = (json) => {
       var json = JSON.stringify(json);
       var ret = JSON.parse(Module.server_run("{\"command\": \"load\", \"json\": " + json + "}"));
-      console.log(ret);
       var cmd = ret["domcmd"];
       interpret(document.svg, cmd);
     }
@@ -146,13 +150,17 @@
         add_component("rectangle");
         console.timeEnd('add rectangle')
 
-        console.time('add rectangle')
-        add_component("rectangle");
-        console.timeEnd('add rectangle')
+        console.time('add isometric_cube')
+        add_component("isometric_cube");
+        console.timeEnd('add isometric_cube')
 
         console.time('move rectangle')
         move_component(document.comp_ids[0], 100, 200);
         console.timeEnd('move rectangle')
+
+        console.time('move point')
+        move_point(document.comp_ids[1], "Control", 0, -10);
+        console.time('move point')
 
         console.time('set html')
         set_html(document.comp_ids[1], '<em>hel11111</em><em>111</em><u><em>111</em></u><u><em>1lo</em></u>');
@@ -167,16 +175,16 @@
         console.timeEnd('rotate')
 
         //console.time('unlink')
-        //unlink_component(document.comp_ids[0], document.comp_ids[1])
+        //unlink_component(document.comp_ids[0], document.comp_ids[1]);
         //console.timeEnd('unlink')
 
         console.time('copy')
         copy_component(document.comp_ids[1]);
         console.timeEnd('copy')
 
-        console.time('remove')
+        /*console.time('remove')
         remove_component(document.comp_ids[1], 1);
-        console.timeEnd('remove')
+        console.timeEnd('remove')*/
 
         //console.time('remove all')
         //remove_all(1);
