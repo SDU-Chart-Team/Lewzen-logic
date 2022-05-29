@@ -74,9 +74,8 @@
     // 测试方法
     var add_component = (comp_name) => {
       var ret = JSON.parse(Module.server_run("{\"command\": \"add\", \"type\": \"" + comp_name + "\"}"));
-      console.log(ret);
       var cmd = ret["domcmd"];
-      document.comp_ids.push(ret["returns"][0]["id"]);
+      document.comp_ids = document.comp_ids.concat(ret["returns"][0]["ids"]);
       interpret(document.svg, cmd);
     }
     var copy_component = (comp_id) => {
@@ -141,7 +140,19 @@
       var json = JSON.stringify(json);
       var ret = JSON.parse(Module.server_run("{\"command\": \"load\", \"json\": " + json + "}"));
       var cmd = ret["domcmd"];
+      document.comp_ids = document.comp_ids.concat(ret["returns"][0]["ids"]);
       interpret(document.svg, cmd);
+    }
+
+    // 压力测试
+    var pressure = {
+      create: function (type, n) {
+        for (var i = 0; i < n; i++) {
+          console.time('add ' + type)
+          add_component(type);
+          console.timeEnd('add ' + type)
+        }
+      }
     }
 
     // WASM模块
@@ -156,7 +167,7 @@
         add_component("rectangle");
         console.timeEnd('add rectangle')
 
-        /*console.time('add isometric_cube')
+        console.time('add isometric_cube')
         add_component("isometric_cube");
         console.timeEnd('add isometric_cube')
 
@@ -166,7 +177,7 @@
 
         console.time('move point')
         move_point(document.comp_ids[1], "Control", 0, -10);
-        console.time('move point')
+        console.timeEnd('move point')
 
         console.time('set html')
         set_html(document.comp_ids[1], '<em>hel11111</em><em>111</em><u><em>111</em></u><u><em>1lo</em></u>');
@@ -189,19 +200,21 @@
         console.timeEnd('copy')
 
         console.time('move rectangle')
-        move_component(document.comp_ids[2], 100, 200);
+        move_component(document.comp_ids[3], 100, 200);
         console.timeEnd('move rectangle')
 
         console.time('remove')
         remove_component(document.comp_ids[1], 1);
         console.timeEnd('remove')
 
-        console.time('remove all')
+        /*console.time('remove all')
         remove_all(1);
-        console.timeEnd('remove all')*/
+        console.timeEnd('remove all')
 
-        //var ld = {"comps":[{"alignment":{"horizental":1,"vertical":1},"children":null,"core_points":{"B":{"arrow":"","can_remove":false,"color":"","id":"B","is_virtual":false,"x":239,"y":240.5},"L":{"arrow":"","can_remove":false,"color":"","id":"L","is_virtual":false,"x":139,"y":190.5},"LB":{"arrow":"","can_remove":false,"color":"","id":"LB","is_virtual":false,"x":139,"y":240.5},"LT":{"arrow":"","can_remove":false,"color":"","id":"LT","is_virtual":false,"x":139,"y":140.5},"R":{"arrow":"","can_remove":false,"color":"","id":"R","is_virtual":false,"x":339,"y":190.5},"RB":{"arrow":"","can_remove":false,"color":"","id":"RB","is_virtual":false,"x":339,"y":240.5},"RT":{"arrow":"","can_remove":false,"color":"","id":"RT","is_virtual":false,"x":339,"y":140.5},"T":{"arrow":"","can_remove":false,"color":"","id":"T","is_virtual":false,"x":239,"y":140.5}},"html":"","modules":["Basics","Flippable","Rectangle","Rotatable","Scalable","Stylized","Writable"],"spacing":{"bottom":0,"global":10,"left":0,"right":0,"top":0},"style":"stroke: black; fill: white; stroke-width: 1px;","theta":0,"type":"rectangle"}],"indices":[0]};
-        //load_json(ld);
+        console.time('load')
+        var ld = {"comps":[{"alignment":{"horizental":1,"vertical":1},"children":null,"core_points":{"B":{"arrow":"","can_remove":false,"color":"","id":"B","is_virtual":false,"x":239,"y":240.5},"L":{"arrow":"","can_remove":false,"color":"","id":"L","is_virtual":false,"x":139,"y":190.5},"LB":{"arrow":"","can_remove":false,"color":"","id":"LB","is_virtual":false,"x":139,"y":240.5},"LT":{"arrow":"","can_remove":false,"color":"","id":"LT","is_virtual":false,"x":139,"y":140.5},"R":{"arrow":"","can_remove":false,"color":"","id":"R","is_virtual":false,"x":339,"y":190.5},"RB":{"arrow":"","can_remove":false,"color":"","id":"RB","is_virtual":false,"x":339,"y":240.5},"RT":{"arrow":"","can_remove":false,"color":"","id":"RT","is_virtual":false,"x":339,"y":140.5},"T":{"arrow":"","can_remove":false,"color":"","id":"T","is_virtual":false,"x":239,"y":140.5}},"html":"","modules":["Basics","Flippable","Rectangle","Rotatable","Scalable","Stylized","Writable"],"spacing":{"bottom":0,"global":10,"left":0,"right":0,"top":0},"style":"stroke: black; fill: white; stroke-width: 1px;","theta":0,"type":"rectangle"}],"indices":[0]};
+        load_json(ld);
+        console.timeEnd('load')*/
       }
     };
   </script>
