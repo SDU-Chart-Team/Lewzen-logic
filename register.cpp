@@ -26,11 +26,12 @@ namespace LewzenServer {
         // 将组件集合转为Id列表串
         addEvent("add", [&](json &param){ // 添加组件
             std::string type = param["type"];
-            if (auto comp = Canvas::add(type)) { 
-                param["status"] = SUCCEED;
-                param["id"] = comp->getId();
-                return param;
-            } else param["status"] = IFAILED;
+            Canvas::add(type);
+            param["status"] = SUCCEED;
+            std::vector<std::string> ids, tops;
+            Canvas::getAddedComponents(ids, tops);
+            param["ids"] = ids;
+            param["tops"] = tops;
             return param;
         });
         addEvent("cursor", [&](json &param){ // 选中单组件
@@ -69,27 +70,29 @@ namespace LewzenServer {
         });
         addEvent("remove", [&](json &param){ // 删除组件
             int time = param["time"];
-            auto comps = Canvas::remove(time);
-            if (comps.size() > 0) {
-                param["status"] = SUCCEED;
-                listComponentId(param["ids"], comps); // 输出id表
-            } else param["status"] = IFAILED;
+            Canvas::remove(time);
+            param["status"] = SUCCEED;
+            std::vector<std::string> ids;
+            Canvas::getRemovedComponents(ids);
+            param["ids"] = ids;
             return param;
         });
         addEvent("copy", [&](json &param){ // 复制组件
-            auto comps = Canvas::copy();
-            if (comps.size() > 0) {
-                param["status"] = SUCCEED;
-                listComponentId(param["ids"], comps); // 输出id表
-            } else param["status"] = IFAILED;
+            Canvas::copy();
+            param["status"] = SUCCEED;
+            std::vector<std::string> ids, tops;
+            Canvas::getAddedComponents(ids, tops);
+            param["ids"] = ids;
+            param["tops"] = tops;
             return param;
         });
         addEvent("readd", [&](json &param){ // 重添加组件
-            auto comps = Canvas::readd();
-            if (comps.size() > 0) {
-                param["status"] = SUCCEED;
-                listComponentId(param["ids"], comps); // 输出id表
-            } else param["status"] = IFAILED;
+            Canvas::readd();
+            param["status"] = SUCCEED;
+            std::vector<std::string> ids, tops;
+            Canvas::getAddedComponents(ids, tops);
+            param["ids"] = ids;
+            param["tops"] = tops;
             return param;
         });
         addEvent("discard", [&](json &param){ // 丢弃组件
@@ -103,9 +106,15 @@ namespace LewzenServer {
             param["status"] = SUCCEED;
             return param;
         });
-        addEvent("load", [&](json &param){ // 序列化
+        addEvent("load", [&](json &param){ // 反序列化
             Canvas::deserialize(param["json"]);
+
             param["status"] = SUCCEED;
+            std::vector<std::string> ids, tops;
+            Canvas::getAddedComponents(ids, tops);
+            param["ids"] = ids;
+            param["tops"] = tops;
+
             return param;
         });
     }

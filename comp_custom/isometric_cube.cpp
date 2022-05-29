@@ -7,12 +7,10 @@ namespace LewzenServer {
         // 父类初始化
         Rectangle::init();
 
-        // 设置类型
         setType("isometric_cube");
 
         // 维护图形SVG
-        SVGIG->children({}); // 移除旧的图形
-        
+        SVGIG->remove(SVGIRect); // 移除旧的图形
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);

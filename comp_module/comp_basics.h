@@ -53,8 +53,8 @@ namespace LewzenServer {
         // 事件
         virtual void onAdded();
         virtual void onChanged();
-        virtual void onRemoved();
-        virtual void onReadded();
+        virtual void onRemoved(int time);
+        virtual void onReadded(int time);
         virtual void onDiscarded();
         virtual void onParentChanged(const std::weak_ptr<ComponentAbstract> &prev, const std::weak_ptr<ComponentAbstract> &now);
         virtual void onChildAdded(const std::weak_ptr<ComponentAbstract> &child);

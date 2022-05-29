@@ -369,6 +369,7 @@ namespace LewzenServer {
         for (auto &c : getChildren()) c->init(); // 初始化子组件
         SVGIG = std::make_shared<Lewzen::SVGIG>();
         SVGIG->Id = getId();
+        SVGIG->Id.commit();
     }
     // 拷贝
     ComponentAbstract &ComponentBasics::operator=(const ComponentAbstract &comp) {
@@ -380,10 +381,7 @@ namespace LewzenServer {
     }
     // 克隆
     std::shared_ptr<ComponentAbstract> ComponentBasics::clone() {
-        auto copied = Canvas::add(getType());
-        printf("%s\n", getType().c_str());
-        *copied = *this; // 拷贝
-        return copied;
+        return Canvas::copy(shared_from_this());
     }
     // 序列化，并记录已操作的
     void ComponentBasics::serialize(json &j, std::vector<std::string> &processed) {
@@ -425,16 +423,20 @@ namespace LewzenServer {
         Canvas::updateViewBox(shared_from_this());
     }
     // 被删除事件
-    void ComponentBasics::onRemoved() {
-        for (auto c : getChildren()) c->onRemoved(); // 遍历孩子, 唤起被删除事件
-        if (auto p = getParent()) p->removeChild(shared_from_this()); // 删除父亲到自己的单向链接，但保留自己到父亲的链接
+    void ComponentBasics::onRemoved(int time) {
+        for (auto c : getChildren()) {
+            Canvas::remove(c, time); // 从上下文删除孩子
+            c->onRemoved(time); // 调用被删除事件
+        }
         Canvas::updateViewBox(shared_from_this());
     }
     // 被重添加事件
-    void ComponentBasics::onReadded() {
+    void ComponentBasics::onReadded(int time) {
+        for (auto c : getChildren()) { // 向上下文添加孩子, 唤起重添加事件
+            c->onReadded(time); // 调用重添加事件
+            Canvas::readd(c); // 重添加孩子
+        }
         Canvas::updateViewBox(shared_from_this());
-        if (auto p = getParent()) p->addChild(shared_from_this()); // 重新建立父亲到自己的单向链接
-        for (auto c : getChildren()) c->onReadded(); // 遍历孩子, 唤起重添加事件
     }
     // 被释放事件
     void ComponentBasics::onDiscarded() {

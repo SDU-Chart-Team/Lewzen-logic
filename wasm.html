@@ -74,6 +74,7 @@
     // 测试方法
     var add_component = (comp_name) => {
       var ret = JSON.parse(Module.server_run("{\"command\": \"add\", \"type\": \"" + comp_name + "\"}"));
+      console.log(ret);
       var cmd = ret["domcmd"];
       document.comp_ids.push(ret["returns"][0]["id"]);
       interpret(document.svg, cmd);
@@ -94,9 +95,14 @@
       interpret(document.svg, cmd);
     }
     var remove_all = (time) => {
-      while (document.comp_ids.length > 0) {
-        remove_component(document.comp_ids[0], time);
-      }
+      //while (document.comp_ids.length > 0) {
+      //  remove_component(document.comp_ids[0], time);
+      //}
+      Module.server_run("{\"command\": \"cursors\", \"ids\": " + JSON.stringify(document.comp_ids) + "}");
+      var ret = JSON.parse(Module.server_run("{\"command\": \"remove\", \"time\": " + time + "}"));
+      var cmd = ret["domcmd"];
+      document.comp_ids = []
+      interpret(document.svg, cmd);
     }
     var move_component = (comp_id, dx, dy) => {
       Module.server_run("{\"command\": \"cursor\", \"id\": \"" + comp_id + "\"}");
@@ -150,7 +156,7 @@
         add_component("rectangle");
         console.timeEnd('add rectangle')
 
-        console.time('add isometric_cube')
+        /*console.time('add isometric_cube')
         add_component("isometric_cube");
         console.timeEnd('add isometric_cube')
 
@@ -182,13 +188,17 @@
         copy_component(document.comp_ids[1]);
         console.timeEnd('copy')
 
-        /*console.time('remove')
-        remove_component(document.comp_ids[1], 1);
-        console.timeEnd('remove')*/
+        console.time('move rectangle')
+        move_component(document.comp_ids[2], 100, 200);
+        console.timeEnd('move rectangle')
 
-        //console.time('remove all')
-        //remove_all(1);
-        //console.timeEnd('remove all')
+        console.time('remove')
+        remove_component(document.comp_ids[1], 1);
+        console.timeEnd('remove')
+
+        console.time('remove all')
+        remove_all(1);
+        console.timeEnd('remove all')*/
 
         //var ld = {"comps":[{"alignment":{"horizental":1,"vertical":1},"children":null,"core_points":{"B":{"arrow":"","can_remove":false,"color":"","id":"B","is_virtual":false,"x":239,"y":240.5},"L":{"arrow":"","can_remove":false,"color":"","id":"L","is_virtual":false,"x":139,"y":190.5},"LB":{"arrow":"","can_remove":false,"color":"","id":"LB","is_virtual":false,"x":139,"y":240.5},"LT":{"arrow":"","can_remove":false,"color":"","id":"LT","is_virtual":false,"x":139,"y":140.5},"R":{"arrow":"","can_remove":false,"color":"","id":"R","is_virtual":false,"x":339,"y":190.5},"RB":{"arrow":"","can_remove":false,"color":"","id":"RB","is_virtual":false,"x":339,"y":240.5},"RT":{"arrow":"","can_remove":false,"color":"","id":"RT","is_virtual":false,"x":339,"y":140.5},"T":{"arrow":"","can_remove":false,"color":"","id":"T","is_virtual":false,"x":239,"y":140.5}},"html":"","modules":["Basics","Flippable","Rectangle","Rotatable","Scalable","Stylized","Writable"],"spacing":{"bottom":0,"global":10,"left":0,"right":0,"top":0},"style":"stroke: black; fill: white; stroke-width: 1px;","theta":0,"type":"rectangle"}],"indices":[0]};
         //load_json(ld);
