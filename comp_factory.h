@@ -31,7 +31,6 @@
 #include "comp_custom/cylinder.h"
 #include "comp_custom/card.h"
 #include "comp_custom/document.h"
-#include "comp_custom/hexagon.h"
 #include "comp_custom/step.h"
 #include "comp_custom/annotation.h"
 #include "comp_custom/data.h"

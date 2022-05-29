@@ -29,6 +29,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Or &>(comp);
+        return *this;
     }
     //
     void Or::serialize(json &j, std::vector<std::string> &processed)
@@ -43,6 +44,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics

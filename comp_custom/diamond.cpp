@@ -30,6 +30,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Diamond &>(comp);
+        return *this;
     }
     // 序列化，并记录已操作的
     void Diamond::serialize(json &j, std::vector<std::string> &processed)
@@ -42,6 +43,7 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics虚接口

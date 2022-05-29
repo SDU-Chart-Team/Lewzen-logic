@@ -118,10 +118,6 @@ namespace LewzenServer
     {
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Document>());
     };
-    std::function<std::shared_ptr<ComponentAbstract>()> newHexagon = []()
-    {
-        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Hexagon>());
-    };
     std::function<std::shared_ptr<ComponentAbstract>()> newStep = []()
     {
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Step>());
@@ -231,12 +227,10 @@ namespace LewzenServer
         {"rounded_rectangle", newRoundedRectangle},
         {"star", newStar},
         {"triangle", newTriangle},
-        {"text", newText},
         {"collate", newCollate},
         {"card", newCard},
         {"cylinder", newCylinder},
         {"document", newDocument},
-        {"hexagon", newHexagon},
         {"step", newStep},
         {"annotation", newAnnotation},
         {"data", newData},

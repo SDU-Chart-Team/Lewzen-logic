@@ -15,7 +15,7 @@ namespace LewzenServer
 
         //// 添加图形SVG
         // delete rect of Rectangle
-        SVGIG->remove(SVGIRect);
+        SVGIG->children({}); 
         Rectangle::moveCorePoint("RB", -100, 0);
         SVGICircle = std::make_shared<Lewzen::SVGICircle>();
         SVGIG->add(SVGICircle);
@@ -130,6 +130,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Circle &>(comp);
+        return *this;
     }
 
     // 序列化
@@ -144,6 +145,7 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics虚接口

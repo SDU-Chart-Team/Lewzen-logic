@@ -36,6 +36,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Envelope &>(comp);
+        return *this;
     }
     //
     void Envelope::serialize(json &j, std::vector<std::string> &processed)
@@ -50,6 +51,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+        return *this;
 
     }
 

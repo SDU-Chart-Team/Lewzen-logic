@@ -48,6 +48,7 @@ namespace LewzenServer
         // 拷贝关键点位置
 
         *Control = *(p.Control);
+        return *this;
     }
     // 序列化，并记录已操作的
     void Process::serialize(json &j, std::vector<std::string> &processed)
@@ -65,6 +66,7 @@ namespace LewzenServer
 
         // 注册关键点
         Control = corePoints["Control"];
+        return *this;
     }
 
     //// Basics虚接口

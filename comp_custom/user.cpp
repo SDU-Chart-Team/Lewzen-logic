@@ -24,6 +24,7 @@ namespace LewzenServer {
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const User &>(comp); 
+        return *this;
     }
     // 序列化，并记录已操作的
     void User::serialize(json &j, std::vector<std::string> &processed) {
@@ -34,6 +35,7 @@ namespace LewzenServer {
     ComponentAbstract &User::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+        return *this;
     }
     //// Basics虚接口
     void User::moveCorePoint(const std::string &id, const double &dx, const double &dy) {

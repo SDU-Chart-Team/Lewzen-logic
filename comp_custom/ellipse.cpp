@@ -33,6 +33,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Ellipse &>(comp);
+        return *this;
     }
 
     // serialization
@@ -48,6 +49,7 @@ namespace LewzenServer
     ComponentAbstract &Ellipse::operator=(const json &j)
     {
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics虚接口

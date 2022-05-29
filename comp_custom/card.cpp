@@ -49,6 +49,7 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const Card &>(comp); 
         // 拷贝关键点位置
         *Control = *(p.Control);
+        return *this;
     }
     // 序列化，并记录已操作的
     void Card::serialize(json &j, std::vector<std::string> &processed) {
@@ -61,6 +62,7 @@ namespace LewzenServer {
         Rectangle::operator=(j);
         // 注册关键点
         Control = corePoints["Control"];
+        return *this;
     }
     //// Basics虚接口
     void Card::moveCorePoint(const std::string &id, const double &dx, const double &dy) {

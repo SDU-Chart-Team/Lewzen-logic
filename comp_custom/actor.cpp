@@ -35,7 +35,7 @@ namespace LewzenServer {
     ComponentAbstract &Actor::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
-        // return *this;
+        return *this;
     }
     //// Basics虚接口
     void Actor::moveCorePoint(const std::string &id, const double &dx, const double &dy) {

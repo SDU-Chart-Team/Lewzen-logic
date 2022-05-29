@@ -31,6 +31,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Triangle &>(comp);
+        return *this;
     }
     //
     void Triangle::serialize(json &j, std::vector<std::string> &processed)
@@ -45,6 +46,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics

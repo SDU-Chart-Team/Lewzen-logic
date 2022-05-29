@@ -57,10 +57,11 @@ namespace LewzenServer {
 
         auto &p = dynamic_cast<const BigArrowLeft &>(comp); 
         // 拷贝关键点位置
-                    *abc = *(p.abc);
-                    // 拷贝关键点位置
-                    *cde = *(p.cde);
-                }
+        *abc = *(p.abc);
+        // 拷贝关键点位置
+        *cde = *(p.cde);
+        return *this;
+    }
     // 序列化，并记录已操作的
     void BigArrowLeft::serialize(json &j, std::vector<std::string> &processed) {
         // 父类序列化
@@ -71,10 +72,11 @@ namespace LewzenServer {
         // 父类反序列化
         Rectangle::operator=(j);
         // 注册关键点
-                    abc = corePoints["abc"];
-                    // 注册关键点
-                    cde = corePoints["cde"];
-                }
+        abc = corePoints["abc"];
+        // 注册关键点
+        cde = corePoints["cde"];
+        return *this;
+    }
     //// Basics虚接口
     void BigArrowLeft::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
         double disY0 = abc->getY() - getY(); // 记录控制点到矩形上边的距离

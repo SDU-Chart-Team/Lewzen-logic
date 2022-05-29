@@ -54,6 +54,7 @@ namespace LewzenServer
         auto &p = dynamic_cast<const LoopLimit &>(comp);
         // 拷贝关键点位置
         *Control0 = *(p.Control0);
+        return *this;
     }
     // 序列化，并记录已操作的
     void LoopLimit::serialize(json &j, std::vector<std::string> &processed)
@@ -68,6 +69,7 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control0 = corePoints["Control0"];
+        return *this;
     }
     //// Basics虚接口
     void LoopLimit::moveCorePoint(const std::string &id, const double &dx, const double &dy)

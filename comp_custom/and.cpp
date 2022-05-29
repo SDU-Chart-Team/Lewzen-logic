@@ -26,6 +26,7 @@ namespace LewzenServer
     {
         // 拷贝父类
         Rectangle::operator=(comp);
+        return *this;
     }
     // 序列化，并记录已操作的
     void And::serialize(json &j, std::vector<std::string> &processed)
@@ -40,6 +41,7 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics虚接口

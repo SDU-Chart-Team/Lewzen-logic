@@ -28,6 +28,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(comp);
+        return *this;
     }
     //
     void Star::serialize(json &j, std::vector<std::string> &processed)
@@ -42,6 +43,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+        return *this;
     }
 
     //// Basics
