@@ -85,6 +85,12 @@
       document.comp_ids = document.comp_ids.concat(ret["returns"][0]["ids"]);
       interpret(document.svg, cmd);
     }
+    var readd_component = () => {
+      var ret = JSON.parse(Module.server_run("{\"command\": \"readd\"}"));
+      var cmd = ret["domcmd"];
+      document.comp_ids = document.comp_ids.concat(ret["returns"][0]["ids"]);
+      interpret(document.svg, cmd);
+    }
     var remove_component = (comp_id, time) => {
       Module.server_run("{\"command\": \"cursor\", \"id\": \"" + comp_id + "\"}");
       var ret = JSON.parse(Module.server_run("{\"command\": \"remove\", \"time\": " + time + "}"));
@@ -167,9 +173,9 @@
         add_component("rectangle");
         console.timeEnd('add rectangle')
 
-        console.time('add isometric_cube')
-        add_component("isometric_cube");
-        console.timeEnd('add isometric_cube')
+        console.time('add star')
+        add_component("star");
+        console.timeEnd('add star')
 
         console.time('move rectangle')
         move_component(document.comp_ids[0], 100, 200);
@@ -206,6 +212,10 @@
         console.time('remove')
         remove_component(document.comp_ids[1], 1);
         console.timeEnd('remove')
+
+        console.time('readd')
+        readd_component();
+        console.timeEnd('readd')
 
         /*console.time('remove all')
         remove_all(1);

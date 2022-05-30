@@ -79,13 +79,13 @@ namespace LewzenServer {
     // 将组件添加进上下文
     void Canvas::add(std::weak_ptr<ComponentAbstract> comp) {
         if (auto c = comp.lock()) {
-            c->init(); // 初始化组件
             _component_added(c); // 加入组件
         }
     }
     // 创建组件
     std::shared_ptr<ComponentAbstract> Canvas::add(const std::string &type) {
         auto comp = ComponentFactory::createComponent(type); // 创建一个组件
+        comp->init(); // 初始化组件
         add(comp);
         comp->onAdded(); // 添加事件
         return comp;
@@ -176,9 +176,9 @@ namespace LewzenServer {
         std::vector<std::shared_ptr<ComponentAbstract>> comps;
         for (auto it = removed.rbegin(); it->first >= bound->first && it != removed.rend(); it++) comps.push_back(it->second); // 取出组件
         for (auto &comp: ComponentBasics::extractTop(comps)) {
+            readd(comp); // 重添加
             comp->onReadded(time); // 重添加事件
             if (comp->getParent()) comp->getParent()->addChild(comp); // 添加父子关系
-            readd(comp); // 重添加            
         }
         removed.erase(bound, removed.end());
     }

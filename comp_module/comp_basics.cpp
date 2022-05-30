@@ -432,11 +432,11 @@ namespace LewzenServer {
     }
     // 被重添加事件
     void ComponentBasics::onReadded(int time) {
-        for (auto c : getChildren()) { // 向上下文添加孩子, 唤起重添加事件
-            c->onReadded(time); // 调用重添加事件
-            Canvas::readd(c); // 重添加孩子
-        }
         Canvas::updateViewBox(shared_from_this());
+        for (auto c : getChildren()) { // 向上下文添加孩子, 唤起重添加事件
+            Canvas::readd(c); // 重添加孩子
+            c->onReadded(time); // 调用重添加事件
+        }
     }
     // 被释放事件
     void ComponentBasics::onDiscarded() {
