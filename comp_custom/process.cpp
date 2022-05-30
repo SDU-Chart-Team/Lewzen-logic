@@ -19,7 +19,7 @@ namespace LewzenServer
 
         // 初始化关键点表
         Control = createCorePoint("Control", 25, 25);
-
+        Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
                            {
                         if (!corePointMoving) return; 
@@ -75,7 +75,7 @@ namespace LewzenServer
     {
         double d = Control->getX() - getX();
         // 具体更新
-        if (id == "I")
+        if (id == "Control")
         {
             corePointMoving = true; // 更新锁
             *Control += createPoint(dx, 0);

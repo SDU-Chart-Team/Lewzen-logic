@@ -19,22 +19,22 @@ namespace LewzenServer {
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
             if (!corePointMoving) return;
-                double maxD = std::min(getX()+getWidth()*0.5,getY()+getHeight()*0.5);
+                double maxD = std::min(getWidth()*0.5,getHeight()*0.5);
                                 if(nx > maxD)
                                 {
-                                    Control->setX(maxD);
+                                    *Control=createPoint(getX()+maxD,getY()+maxD);
                                 }
                                 if(nx < getX())
                                 {
-                                    Control->setX(getX());
+                                    *Control=createPoint(getX(),getY());
                                 }
                                 if(ny > maxD)
                                 {
-                                    Control->setY(maxD);
+                                    *Control=createPoint(getX()+maxD,getY()+maxD);
                                 }
                                 if(ny < getY())
                                 {
-                                    Control->setY(getY());
+                                    *Control=createPoint(getX(),getY());
                                 }
         });
                 corePoints[Control->getId()] = Control;

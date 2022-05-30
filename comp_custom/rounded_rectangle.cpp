@@ -95,7 +95,7 @@ namespace LewzenServer
             {
                 d = 0;
             }
-            *Control = createPoint(R->getX() - d, getY() + getHeight() / 4);
+            *Control = createPoint(getX() + getWidth() - d, getY() + getHeight() / 4);
         }
         onChanged(); // 更新事件
     }

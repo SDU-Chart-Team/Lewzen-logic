@@ -15,7 +15,7 @@ namespace LewzenServer
 
         //// 添加图形SVG
         // delete rect of Rectangle
-        SVGIG->children({}); 
+        SVGIG->children({});
         Rectangle::moveCorePoint("RB", -100, 0);
         SVGICircle = std::make_shared<Lewzen::SVGICircle>();
         SVGIG->add(SVGICircle);
@@ -24,16 +24,16 @@ namespace LewzenServer
         // 从动规律：R=RB;B=RB;L=LB;T=RT'
         // 更新函数，在set坐标和+=操作时都调用回调函数
         LT->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                      {
                         if(!corePointMoving)
                             {return;}
                         LB->setX(nx); 
                         RT->setY(ny);
                         *L = (*LT + *LB) * 0.5;
                         *T = (*LT + *RT) * 0.5; 
-                    });
+                        });
         LB->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                      {
                         if (!corePointMoving)
                         {
                             return;
@@ -42,9 +42,9 @@ namespace LewzenServer
                         RB->setY(ny);
                         *L = (*LT + *LB) * 0.5;
                         *B = (*LB + *RB) * 0.5; 
-                    });
+                        });
         RB->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                      {
                         if(!corePointMoving)
                         {
                             return;
@@ -53,9 +53,9 @@ namespace LewzenServer
                         LB->setY(ny);
                         *R = (*RT + *RB) * 0.5;
                         *B = (*LB + *RB) * 0.5; 
-                    });
+                        });
         RT->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                      {
                         if (!corePointMoving)
                         {
                             return;
@@ -64,56 +64,40 @@ namespace LewzenServer
                         LT->setY(ny);
                         *R = (*RT + *RB) * 0.5;
                         *T = (*LT + *RT) * 0.5; 
-                    });
+                        });
 
         R->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                     {
                         if (!corePointMoving)
                         {
                             return;
                         }
-                        double dx = nx - x;
-                        double dy = ny - y;
-                        RT->setX(nx);
-                        // *RB += createPoint(dx, dy * 2);
-                        *RB = (*R) * 2 - *RT; 
-                    });
+                        // LT->setX(nx), LB->setX(nx); 
+                        });
         B->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                     {
                         if (!corePointMoving)
                         {
                             return;
                         }
-                        double dx = nx - x;
-                        double dy = ny - y;
-                        LB->setY(ny);
-                        // *RB += createPoint(dx * 2, dy);
-                        *RB = (*R) * 2 - (*LB); 
-                    });
+                        // LB->setY(ny), RB->setY(ny); 
+                        });
         L->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                     {
                         if (!corePointMoving)
                         {
                             return;
                         }
-                        double dx = nx - x;
-                        double dy = ny - y;
-                        LT->setX(nx);
-                        // *LB += createPoint(dx, dy * 2);
-                        *LB = (*L) * 2 - (*LT); 
-                    });
+                        // RT->setX(nx), RB->setX(nx); 
+                        });
         T->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                    {
+                     {
                         if (!corePointMoving)
                         {
                             return;
                         }
-                        double dx = nx - x;
-                        double dy = ny - y;
-                        LT->setY(ny);
-                        // *RT += createPoint(dx * 2, dy);
-                        *RT = (*T) * 2 - (*LT); 
-                    });
+                        // LT->setY(ny), RT->setY(ny); 
+                        });
 
         // 绑定图形属性
         std::function<double()> _getCx = std::bind(&Circle::getCx, this);
@@ -153,46 +137,37 @@ namespace LewzenServer
     // 为保证圆形，dx恒等于dy；且移动非角点时，存在从动点
     // 角点的决定性移动方向：LT:dx;RT:dy;RB:dy;LB=dx
 
-    void Circle::moveCorePoint(const std::string &id, const double &_dx, const double &_dy)
+    void Circle::moveCorePoint(const std::string &id, const double &dx, const double &dy)
     {
-        auto delta = vectorFromCanvas(Lewzen::canvas_point(_dx, _dy));
-        double dx = delta.get_x(), dy = delta.get_y();
-        corePointMoving = true;
+
         if (id == "L")
         {
-            *L += createPoint(dx, dx * (-0.5));
+            corePointMoving = true;
+            *LB += createPoint(dx, dx);
+            corePointMoving = false;
         }
         if (id == "R")
         {
-            *R += createPoint(dx, dx * 0.5);
+            corePointMoving = true;
+            *RB += createPoint(dy, dy);
+            corePointMoving = false;
         }
         if (id == "T")
         {
-            *T += createPoint(dy * (-0.5), dy);
+            corePointMoving = true;
+            *RT += createPoint(dy, dy);
+            corePointMoving = false;
         }
         if (id == "B")
         {
-            *B += createPoint(dy * 0.5, dy);
-        }
-        if (id == "LT")
-        {
-            *LT += createPoint(dx, dx);
-        }
-        if (id == "LB")
-        {
-            *LB += createPoint(dx, dx);
-        }
-        if (id == "RT")
-        {
-            *RT += createPoint(dy, dy);
-        }
-        if (id == "RB")
-        {
+            corePointMoving = true;
             *RB += createPoint(dy, dy);
+            corePointMoving = false;
         }
-
-        corePointMoving = false;
-        // onCorePointMoved();
+        else
+        {
+            Rectangle::moveCorePoint(id, dx, dy);
+        }
         onChanged();
     }
 
@@ -207,6 +182,6 @@ namespace LewzenServer
     }
     const double Circle::getR() const
     {
-        return std::abs((L->getX() - R->getX()) * 0.5);
+        return std::abs(getWidth() * 0.5);
     }
 }

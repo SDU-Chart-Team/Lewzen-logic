@@ -24,9 +24,9 @@ namespace LewzenServer
                                if (!corePointMoving)
                                    return;
                                if (nx < getX())
-                                   Control->setX(getX()); //
+                                   Control->setX(getX()); 
                                if (nx > getX() + getWidth())
-                                   Control->setX(getX() + getWidth()); //
+                                   Control->setX(getX() + getWidth()); 
                            });
         corePoints[Control->getId()] = Control;
         // 绑定图形属性
@@ -63,8 +63,6 @@ namespace LewzenServer
     {
         double disY = Control->getY() - getY(); // 记录控制点到矩形上边的距离
         double disX = Control->getX() - getX();
-        double ptgX = ((Control->getX() - getX()) / getWidth()) * getWidth();
-        double ptgY = ((Control->getY() - getY()) / getHeight()) * getHeight();
         if (id == "Control")
         {                           // 移动控制点
             corePointMoving = true; // 开启更新锁
@@ -78,7 +76,7 @@ namespace LewzenServer
                 disX = getWidth();
             if (getY() + disY > getY() + getHeight())
                 disY = getHeight();
-            *Control = createPoint(getX() + disX, getY() + getWidth() * 0.5); // 设置新的坐标
+            *Control = createPoint(getX() + disX, getY() + getHeight() * 0.5); // 设置新的坐标
         }
         onChanged(); // 更新事件
     }

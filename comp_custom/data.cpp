@@ -63,8 +63,6 @@ namespace LewzenServer
     {
         double disY = Control->getY() - getY(); // 记录控制点到矩形上边的距离
         double disX = Control->getX() - getX();
-        double ptgX = ((Control->getX() - getX()) / getWidth()) * getWidth();
-        double ptgY = ((Control->getY() - getY()) / getHeight()) * getHeight();
         if (id == "Control")
         {                           // 移动控制点
             corePointMoving = true; // 开启更新锁
@@ -74,11 +72,11 @@ namespace LewzenServer
         else
         { // 移动其他点
             Rectangle::moveCorePoint(id, dx, dy);
-            if (getX() + ptgX > getX() + getWidth() * 0.5)
-                ptgX = getWidth() * 0.5;
-            if (getY() + ptgY > getY() + getHeight())
-                ptgY = getHeight();
-            *Control = createPoint(getX() + ptgX, getY() + ptgY); // 设置新的坐标
+            if (getX() + disX > getX() + getWidth() * 0.5)
+                disX = getWidth() * 0.5;
+            if (getY() + disY > getY() + getHeight())
+                disY = getHeight();
+            *Control = createPoint(getX() + disX, getY() + disY); // 设置新的坐标
         }
         onChanged(); // 更新事件
     }

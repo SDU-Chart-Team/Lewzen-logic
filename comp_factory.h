@@ -52,6 +52,8 @@
 #include "comp_custom/tee.h"
 #include "comp_custom/big_arrow_left.h"
 #include "comp_custom/plus.h"
+#include "comp_custom/preparation.h"
+
 
 namespace LewzenServer {
     class ComponentAbstract;

@@ -4,8 +4,7 @@ namespace LewzenServer {
     //// 通用虚接口
     // 非构造初始化
     void BigArrowLeft::init() {
-
-        // 父类初始化
+            // 父类初始化
         Rectangle::init();
         // 设置类型
         setType("big_arrow_left");
@@ -57,11 +56,10 @@ namespace LewzenServer {
 
         auto &p = dynamic_cast<const BigArrowLeft &>(comp); 
         // 拷贝关键点位置
-        *abc = *(p.abc);
-        // 拷贝关键点位置
-        *cde = *(p.cde);
-        return *this;
-    }
+                    *abc = *(p.abc);
+                    // 拷贝关键点位置
+                    *cde = *(p.cde);
+                }
     // 序列化，并记录已操作的
     void BigArrowLeft::serialize(json &j, std::vector<std::string> &processed) {
         // 父类序列化
@@ -72,21 +70,16 @@ namespace LewzenServer {
         // 父类反序列化
         Rectangle::operator=(j);
         // 注册关键点
-        abc = corePoints["abc"];
-        // 注册关键点
-        cde = corePoints["cde"];
-        return *this;
-    }
+                    abc = corePoints["abc"];
+                    // 注册关键点
+                    cde = corePoints["cde"];
+                }
     //// Basics虚接口
     void BigArrowLeft::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
         double disY0 = abc->getY() - getY(); // 记录控制点到矩形上边的距离
         double disX0 = abc->getX() - getX();
-        double ptgX0 = ((abc->getX() - getX()) / getWidth()) * getWidth();
-        double ptgY0 = ((abc->getY() - getY()) / getHeight()) * getHeight();
         double disY1 = cde->getY() - getY(); // 记录控制点到矩形上边的距离
         double disX1 = cde->getX() - getX();
-        double ptgX1 = ((cde->getX() - getX()) / getWidth()) * getWidth();
-        double ptgY1 = ((cde->getY() - getY()) / getHeight()) * getHeight();
         if (id == "abc") { // 移动控制点
             corePointMoving = true; // 开启更新锁
             *abc += createPoint(dx, dy);
@@ -99,17 +92,13 @@ if(abc->getX()<cde->getX()){abc->setX(cde->getX());}        }
 if(cde->getX()>abc->getX()){cde->setX(abc->getX());}        }
         else {
             Rectangle::moveCorePoint(id, dx, dy);
-            if (getX()+ptgX0 > getX()+getWidth()) ptgX0 = getX()+getWidth()-getX();
-            if (getX()+ptgX0 < getX()) ptgX0 = getX()-getX();
-            if ( getY()+ptgY0 > getY()+getHeight()*0.5) ptgY0 = getY()+getHeight()*0.5-getY();
-            if ( getY()+ptgY0 < getY()) ptgY0 = getY()-getY();
-            *abc = createPoint(getX()+ptgX0, getY() + ptgY0); // 设置新的坐标
-                        if (getX()+ptgX1 > getX()+getWidth()) ptgX1 = getX()+getWidth()-getX();
-            if (getX()+ptgX1 < getX()) ptgX1 = getX()-getX();
-            if ( getY()+ptgY1 > getY()+getHeight()) ptgY1 = getY()+getHeight()-getY();
-            if ( getY()+ptgY1 < getY()) ptgY1 = getY()-getY();
-            *cde = createPoint(getX()+ptgX1, getY() + ptgY1); // 设置新的坐标
-                    }
+            if (getX()+disX0 > getX()+getWidth()) disX0 = getX()+getWidth()-getX();
+            if (getY()+disY0 > getY()+getHeight()*0.5) disY0 = getY()+getHeight()*0.5-getY();
+            *abc = createPoint(getX()+disX0,getY()+disY0); // 设置新的坐标
+             *abc = createPoint(getX()+disX0,getY()+disY0);            if (getX()+disX1 > getX()+getWidth()) disX1 = getX()+getWidth()-getX();
+            if (getY()+disY1 > getY()+getHeight()) disY1 = getY()+getHeight()-getY();
+            *cde = createPoint(getX()+disX1, getY()+getHeight()*0.5); // 设置新的坐标
+        }
         onChanged(); // 更新事件
     }
 
