@@ -503,8 +503,6 @@ namespace LewzenServer {
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
 
-            if(p.offset > 0)onOffset();
-
         } else if (type == horizontalLine) {
 
             setLineType(p.getLineType());
@@ -540,7 +538,6 @@ namespace LewzenServer {
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
-            if(p.offset > 0)onOffset();
         } else if (type == hallowLine) {
 
             // 拷贝父类
@@ -593,6 +590,12 @@ namespace LewzenServer {
         // 父类序列化
         ComponentRotatable::serialize(j, processed);
         ComponentStylized::serialize(j, processed);
+
+        j["end_arrow"] = endArrow;
+        j["start_arrow"] = startArrow;
+        j["line_type"] = getLineType();
+        j["offset"] = offset;
+        j["dot_type"] = dotType;
         // (无额外私有内容)
     }
 
@@ -601,9 +604,16 @@ namespace LewzenServer {
         // 父类反序列化
         ComponentStylized::operator=(j);
         ComponentRotatable::operator=(j);
-
+        SVGIG->children({});
+        pointList.clear();
+        set_line_type(j["line_type"]);
+        offset = j["offset"];
+        setDotLine(j["dot_type"]);
+        std::cout<<"fxlh "<<getLineType()<<" "<<startArrow<<" "<<endArrow<<" "<<offset<<std::endl;
         std::string type = getLineType();
         if (type == straightLine) {
+            setStartArrow(j["start_arrow"]);
+            setEndArrow(j["end_arrow"]);
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -614,6 +624,7 @@ namespace LewzenServer {
                 else if(t.first == "end")val = 1;
                 else val = std::stod(t.first);
                 tmp.push_back(val);
+
             }
 
             sort(tmp.begin(),tmp.end());
@@ -624,11 +635,31 @@ namespace LewzenServer {
                 }
                 else if(t == 1)val = "end";
                 else{
-                    val = std::to_string(t);
+                    for(auto p:corePoints){
+                        if(p.first=="start"||p.first=="end")continue;
+                        auto p1 = std::stod(p.first);
+                        if(fabs(p1-t)<1e-7){
+                            val = p.first;break;
+                        }
+                    }
                 }
-                pointList.push_back(corePoints[val]);
+
+                if(corePoints.count(val)){
+                    auto tt = corePoints[val];
+                    pointList.push_back(corePoints[val]);
+                }
+                else{
+                    std::cout<<"valdddddd"<<val<<"\n\n\n";
+                }
+
             }
+            if(offset>0)onOffset();
+            SVGIG->add(SVGILine);
+            SVGIG->add(SVGILineHide);
+
         } else if (type == curve) {
+            setStartArrow(j["start_arrow"]);
+            setEndArrow(j["end_arrow"]);
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -636,7 +667,13 @@ namespace LewzenServer {
             pointList.push_back(startPoint);
             pointList.push_back(midPoint);
             pointList.push_back(endPoint);
+
+
+            SVGIG->add(SVGICurve);
+            SVGIG->add(SVGICurveHide);
         } else if (type == verticalLine) {
+            setStartArrow(j["start_arrow"]);
+            setEndArrow(j["end_arrow"]);
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -644,7 +681,12 @@ namespace LewzenServer {
             pointList.push_back(startPoint);
             pointList.push_back(midPoint);
             pointList.push_back(endPoint);
+            if(offset>0)onOffset();
+            SVGIG->add(SVGIVerticalLine);
+            SVGIG->add(SVGIVerticalLineHide);
         } else if (type == horizontalLine) {
+            setStartArrow(j["start_arrow"]);
+            setEndArrow(j["end_arrow"]);
             // 注册关键点
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -652,7 +694,12 @@ namespace LewzenServer {
             pointList.push_back(startPoint);
             pointList.push_back(midPoint);
             pointList.push_back(endPoint);
+            if(offset>0)onOffset();
+            SVGIG->add(SVGIHorizontalLine);
+            SVGIG->add(SVGIHorizontalLineHide);
         } else if (type == curveTwo) {
+            setStartArrow(j["start_arrow"]);
+            setEndArrow(j["end_arrow"]);
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             midPoint = corePoints["mid"];
@@ -661,11 +708,17 @@ namespace LewzenServer {
             pointList.push_back(midPoint);
             pointList.push_back(midCPoint);
             pointList.push_back(endPoint);
+
+            SVGIG->add(SVGICurveTwo);
+            SVGIG->add(SVGICurveTwoHide);
         } else if (type == hallowLine) {
+
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
             pointList.push_back(startPoint);
             pointList.push_back(endPoint);
+            SVGIG->add(SVGIHallowLine);
+            SVGIG->add(SVGIHallowLineHide);
         } else if (type == complexLine) {
             startPoint = corePoints["start"];
             endPoint = corePoints["end"];
@@ -679,6 +732,8 @@ namespace LewzenServer {
             pointList.push_back(midPoint);
             pointList.push_back(midCPoint);
             pointList.push_back(endPoint);
+            SVGIG->add(SVGIComplexLine);
+            SVGIG->add(SVGIComplexLineHide);
         }
         else if(type == flexableLine){
             startPoint = corePoints["start"];
@@ -687,7 +742,6 @@ namespace LewzenServer {
             midCPoint = corePoints["midC"];
             arrowPoint = corePoints["arrow"];
             arrowCPoint = corePoints["arrowC"];
-
             std::vector<double>tmp;
             for(auto t:corePoints){
                 if(t.first=="mid"||t.first=="midC"||t.first=="arrow"||t.first=="arrowC")continue;
@@ -697,7 +751,6 @@ namespace LewzenServer {
                 else val = std::stod(t.first);
                 tmp.push_back(val);
             }
-
             sort(tmp.begin(),tmp.end());
             for(auto t:tmp){
                 std::string val;
@@ -706,12 +759,28 @@ namespace LewzenServer {
                 }
                 else if(t == 1)val = "end";
                 else{
-                    val = std::to_string(t);
-                }
-                pointList.push_back(corePoints[val]);
-            }
-        }
+                    for(auto p:corePoints){
+                        if(p.first=="start"||p.first=="end")continue;
+                        if(p.first=="mid"||p.first=="midC"||p.first=="arrow"||p.first=="arrowC")continue;
 
+                        auto p1 = std::stod(p.first);
+                        if(fabs(p1-t)<1e-7){
+                            val = p.first;break;
+                        }
+                    }
+                }
+                if(corePoints.count(val)){
+                    auto tt = corePoints[val];
+                    pointList.push_back(corePoints[val]);
+                }
+                else{
+                    std::cout<<"valdddddd"<<val<<"\n\n\n";
+                }
+            }
+            SVGIG->add(SVGIFlexableLine);
+            SVGIG->add(SVGIFlexableLineHide);
+        }
+        std::cout<<"kkk\n\n\n";
         return *this;
     }
 
