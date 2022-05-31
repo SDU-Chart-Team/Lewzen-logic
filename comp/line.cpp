@@ -329,9 +329,12 @@ namespace LewzenServer {
     }
 
     Line::Line() {
-        if (!registered) registering(); // 注册
+        if (!registered) {
+            registering(); // 注册
+             initArrow();
+        }
         addModuleTypes(module_type); // 添加模块类型
-        initArrow();
+
     }
 
     //// 通用虚接口
@@ -392,12 +395,12 @@ namespace LewzenServer {
         // 注册关键点
         setCorePoints(pointList);
         // 默认样式
-        setStyle("stroke: black; fill: none; stroke-width: 1px;");
+        setStyle("stroke: black; fill: none; stroke-width: 2px;");
         // 绑定属性
         std::function<std::string()> _getD = std::bind(&Line::getD, this);
         SVGILine->D.bind(_getD);
         SVGILineHide->D.bind(_getD);
-        SVGILineHide->Visibility="hidden";
+        SVGILineHide->Opacity=0;
         SVGILineHide->StrokeWidth=10;
         SVGIG->add(SVGILine);
         SVGIG->add(SVGILineHide);
@@ -407,46 +410,46 @@ namespace LewzenServer {
         std::function<std::string()> _getCurveD = std::bind(&Line::getCurveD, this);
         SVGICurve->D.bind(_getCurveD);
         SVGICurveHide->D.bind(_getCurveD);
-        SVGICurveHide->Visibility="hidden";
+        SVGICurveHide->Opacity=0;
         SVGICurveHide->StrokeWidth=10;
 
 
         std::function<std::string()> _getVD = std::bind(&Line::getVerticalLineD, this);
         SVGIVerticalLine->D.bind(_getVD);
         SVGIVerticalLineHide->D.bind(_getVD);
-        SVGIVerticalLineHide->Visibility="hidden";
+        SVGIVerticalLineHide->Opacity=0;
         SVGIVerticalLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getHD = std::bind(&Line::getHorizontalLineD, this);
         SVGIHorizontalLine->D.bind(_getHD);
         SVGIHorizontalLineHide->D.bind(_getHD);
-        SVGIHorizontalLineHide->Visibility="hidden";
+        SVGIHorizontalLineHide->Opacity=0;
         SVGIHorizontalLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getCTD = std::bind(&Line::getCurveTwoD, this);
         SVGICurveTwo->D.bind(_getCTD);
         SVGICurveTwoHide->D.bind(_getCTD);
 
-        SVGICurveTwoHide->Visibility="hidden";
+        SVGICurveTwoHide->Opacity=0;
         SVGICurveTwoHide->StrokeWidth=10;
 
         std::function<std::string()> _getHalD = std::bind(&Line::getHallowLineD, this);
         SVGIHallowLine->D.bind(_getHalD);
         SVGIHallowLineHide->D.bind(_getHalD);
 
-        SVGIHallowLineHide->Visibility="hidden";
+        SVGIHallowLineHide->Opacity=0;
         SVGIHallowLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getComD = std::bind(&Line::getComplexLineD, this);
         SVGIComplexLine->D.bind(_getComD);
         SVGIComplexLineHide->D.bind(_getComD);
-        SVGIComplexLineHide->Visibility="hidden";
+        SVGIComplexLineHide->Opacity=0;
         SVGIComplexLineHide->StrokeWidth=10;
 
         std::function<std::string()> _getFlD = std::bind(&Line::getFlexableLineD, this);
         SVGIFlexableLine->D.bind(_getFlD);
         SVGIFlexableLineHide->D.bind(_getFlD);
-        SVGIFlexableLineHide->Visibility="hidden";
+        SVGIFlexableLineHide->Opacity=0;
         SVGIFlexableLineHide->StrokeWidth=10;
 
 
@@ -1710,8 +1713,8 @@ namespace LewzenServer {
     std::string Line::getCurveTwoD() {
         std::string res = "M " + std::to_string(startPoint->getX()) + " " + std::to_string(startPoint->getY())
                           + " C " + std::to_string(midPoint->getX()) + " " + std::to_string(midPoint->getY()) +
-                          "," + std::to_string(midCPoint->getX()) + " " + std::to_string(midCPoint->getY())
-                          + "," + std::to_string(endPoint->getX()) + " " + std::to_string(endPoint->getY());
+                          " " + std::to_string(midCPoint->getX()) + " " + std::to_string(midCPoint->getY())
+                          + " " + std::to_string(endPoint->getX()) + " " + std::to_string(endPoint->getY());
         return res;
     }
 
@@ -1780,12 +1783,12 @@ namespace LewzenServer {
                            s,e);
         auto fac = getFlipP(createPoint(arrowCPoint->getX(),arrowCPoint->getY()),s,e);
 
-        ss<<"M"<< arrowPoint->getX()<<","<<arrowPoint->getY()<<" ";
-        ss<<"L"<<arrowCPoint->getX()<<","<<arrowCPoint->getY()<<" ";
-        ss<<"L"<<startPoint->getX()<<","<<startPoint->getY()<<" ";
+        ss<<"M "<< arrowPoint->getX()<<" "<<arrowPoint->getY()<<" ";
+        ss<<"L "<<arrowCPoint->getX()<<" "<<arrowCPoint->getY()<<" ";
+        ss<<"L "<<startPoint->getX()<<" "<<startPoint->getY()<<" ";
 
-        ss<<"L"<<fac.get_x()<<","<<fac.get_y()<<" ";
-        ss<<"L"<<fa.get_x()<<","<<fa.get_y()<<" ";
+        ss<<"L "<<fac.get_x()<<" "<<fac.get_y()<<" ";
+        ss<<"L "<<fa.get_x()<<" "<<fa.get_y()<<" ";
         int sz = pointList.size()-1;
         auto s1 = createPoint(pointList[sz-2]->getX(),pointList[sz-2]->getY());
         auto e1 = createPoint(endPoint->getX(),endPoint->getY());
@@ -1793,12 +1796,12 @@ namespace LewzenServer {
                       s1,e1);
         auto fmc = getFlipP(createPoint(midCPoint->getX(),midCPoint->getY()),s1,e1);
 
-        ss<<"M"<<midPoint->getX()<<","<<midPoint->getY()<<" ";
-        ss<<"L"<<midCPoint->getX()<<","<<midCPoint->getY()<<" ";
-        ss<<"L"<<endPoint->getX()<<","<<endPoint->getY()<<" ";
+        ss<<"M "<<midPoint->getX()<<" "<<midPoint->getY()<<" ";
+        ss<<"L "<<midCPoint->getX()<<" "<<midCPoint->getY()<<" ";
+        ss<<"L "<<endPoint->getX()<<" "<<endPoint->getY()<<" ";
 
-        ss<<"L"<<fmc.get_x()<<","<<fmc.get_y()<<" ";
-        ss<<"L"<<fm.get_x()<<","<<fm.get_y()<<" ";
+        ss<<"L "<<fmc.get_x()<<" "<<fmc.get_y()<<" ";
+        ss<<"L "<<fm.get_x()<<" "<<fm.get_y()<<" ";
 
         std::vector<Lewzen::Point2D>coords;
 
@@ -1813,16 +1816,16 @@ namespace LewzenServer {
 
 
         auto path = offsetCoords(coords,len);
-        ss<<"M"<<path[0].get_x()<<","<<path[0].get_y()<<" ";
+        ss<<"M "<<path[0].get_x()<<" "<<path[0].get_y()<<" ";
         for(int i=1;i<(int)path.size();i++){
-            ss<<"L"<<path[i].get_x()<<","<<path[i].get_y()<<" ";
+            ss<<"L "<<path[i].get_x()<<" "<<path[i].get_y()<<" ";
 
         }
         path = offsetCoords(coords,-len);
 
-        ss<<"M"<<path[0].get_x()<<","<<path[0].get_y()<<" ";
+        ss<<"M "<<path[0].get_x()<<" "<<path[0].get_y()<<" ";
         for(int i=1;i<(int)path.size();i++){
-            ss<<"L"<<path[i].get_x()<<","<<path[i].get_y()<<" ";
+            ss<<"L "<<path[i].get_x()<<" "<<path[i].get_y()<<" ";
         }
         return ss.str();
 

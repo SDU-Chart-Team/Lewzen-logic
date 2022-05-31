@@ -91,12 +91,12 @@ namespace LewzenServer {
 
         std::stringstream ss;
 
-        ss << "M" << bl.get_x()<<","<<bl.get_y()<<" ";
-        ss <<"L"<<ml.get_x()<<","<<ml.get_y()<<" ";
-        ss <<"L"<<tl.get_x()<<","<<tl.get_y()<<" ";
-        ss<<"L"<<tr.get_x()<<","<<tr.get_y()<<" ";
-        ss <<"L"<<mr.get_x()<<","<<mr.get_y()<<" ";
-        ss<<"L"<<br.get_x()<<","<<br.get_y()<<" ";
+        ss << "M " << bl.get_x()<<" "<<bl.get_y()<<" ";
+        ss <<"L "<<ml.get_x()<<" "<<ml.get_y()<<" ";
+        ss <<"L "<<tl.get_x()<<" "<<tl.get_y()<<" ";
+        ss<<"L "<<tr.get_x()<<" "<<tr.get_y()<<" ";
+        ss <<"L "<<mr.get_x()<<" "<<mr.get_y()<<" ";
+        ss<<"L "<<br.get_x()<<" "<<br.get_y()<<" ";
         ss<<"z";
         return ss.str();
     }

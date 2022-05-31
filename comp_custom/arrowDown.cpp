@@ -137,14 +137,14 @@ namespace LewzenServer {
 
 
         std::stringstream ss;
-        ss << "M" << ControlDown->getX() << "," << ControlDown->getY() << " ";
-        ss << "L" << rm.get_x() << "," << rm.get_y() << " ";
-        ss << "L" << ld.get_x() << "," << ld.get_y() << " ";
-        ss << "L" << lm.get_x() << "," << lm.get_y() << " ";
-        ss << "L" << lc.get_x() << "," << lc.get_y() << " ";
-        ss << "L" << lu.get_x() << "," << lu.get_y() << " ";
-        ss << "L" << ControlUp->getX() << "," << ControlUp->getY() << " ";
-        ss << "L" << ru.get_x() << "," << ru.get_y() << " ";
+        ss << "M " << ControlDown->getX() << " " << ControlDown->getY() << " ";
+        ss << "L " << rm.get_x() << " " << rm.get_y() << " ";
+        ss << "L " << ld.get_x() << " " << ld.get_y() << " ";
+        ss << "L " << lm.get_x() << " " << lm.get_y() << " ";
+        ss << "L " << lc.get_x() << " " << lc.get_y() << " ";
+        ss << "L " << lu.get_x() << " " << lu.get_y() << " ";
+        ss << "L " << ControlUp->getX() << "," << ControlUp->getY() << " ";
+        ss << "L " << ru.get_x() << " " << ru.get_y() << " ";
         ss << "Z";
 
         return ss.str();

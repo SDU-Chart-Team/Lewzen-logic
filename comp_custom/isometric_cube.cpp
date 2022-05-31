@@ -6,11 +6,12 @@ namespace LewzenServer {
     void IsometricCube::init() {
         // 父类初始化
         Rectangle::init();
-
+        // 设置类型
         setType("isometric_cube");
 
+
         // 维护图形SVG
-        SVGIG->remove(SVGIRect); // 移除旧的图形
+        SVGIG->children({}); // 移除旧的图形
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
@@ -86,18 +87,18 @@ namespace LewzenServer {
 
         std::stringstream ss;
     
-        ss << "M" << c.get_x() << "," << c.get_y() << " ";
-        ss << "L" << tl.get_x() << "," << tl.get_y() << " ";
-        ss << "L" << t.get_x() << "," << t.get_y() << " ";
-        ss << "L" << tr.get_x() << "," << tr.get_y() << " ";
-        ss << "L" << c.get_x() << "," << c.get_y() << " ";
-        ss << "L" << b.get_x() << "," << b.get_y() << " ";
+        ss << "M " << c.get_x() << " " << c.get_y() << " ";
+        ss << "L " << tl.get_x() << " " << tl.get_y() << " ";
+        ss << "L " << t.get_x() << " " << t.get_y() << " ";
+        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
+        ss << "L " << c.get_x() << " " << c.get_y() << " ";
+        ss << "L " << b.get_x() << " " << b.get_y() << " ";
 
-        ss << "M" << tl.get_x() << "," << tl.get_y() << " ";
-        ss << "L" << bl.get_x() << "," << bl.get_y() << " ";
-        ss << "L" << b.get_x() << "," << b.get_y() << " ";
-        ss << "L" << br.get_x() << "," << br.get_y() << " ";
-        ss << "L" << tr.get_x() << "," << tr.get_y() << " ";
+        ss << "M " << tl.get_x() << " " << tl.get_y() << " ";
+        ss << "L " << bl.get_x() << " " << bl.get_y() << " ";
+        ss << "L " << b.get_x() << " " << b.get_y() << " ";
+        ss << "L " << br.get_x() << " " << br.get_y() << " ";
+        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
 
         return ss.str();
     }

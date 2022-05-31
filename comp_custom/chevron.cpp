@@ -135,14 +135,14 @@ namespace LewzenServer {
         auto bm = createPoint(ControlRight->getX(), getY() + getHeight());
 
         std::stringstream ss;
-        ss << "M" << ControlLeft->getX() << "," << ControlLeft->getY() << " ";
-        ss << "L" << tl.get_x() << "," << tl.get_y() << " ";
-        ss << "L" << ControlRight->getX() << "," << ControlRight->getY() << " ";
-        ss << "L" << tm.get_x() << "," << tm.get_y() << " ";
-        ss << "L" << tr.get_x() << "," << tr.get_y() << " ";
-        ss << "L" << bm.get_x() << "," << bm.get_y() << " ";
-        ss << "L" << bc.get_x() << "," << bc.get_y() << " ";
-        ss << "L" << bl.get_x() << "," << bl.get_y() << " ";
+        ss << "M " << ControlLeft->getX() << " " << ControlLeft->getY() << " ";
+        ss << "L " << tl.get_x() << " " << tl.get_y() << " ";
+        ss << "L " << ControlRight->getX() << " " << ControlRight->getY() << " ";
+        ss << "L " << tm.get_x() << " " << tm.get_y() << " ";
+        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
+        ss << "L " << bm.get_x() << " " << bm.get_y() << " ";
+        ss << "L " << bc.get_x() << " " << bc.get_y() << " ";
+        ss << "L " << bl.get_x() << " " << bl.get_y() << " ";
         ss << "Z";
 
         return ss.str();
