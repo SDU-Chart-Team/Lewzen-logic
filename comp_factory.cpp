@@ -158,10 +158,10 @@ namespace LewzenServer
     {
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<TapeData>());
     };
-    std::function<std::shared_ptr<ComponentAbstract>()> newLoopLimit = []()
-    {
-        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<LoopLimit>());
-    };
+    // std::function<std::shared_ptr<ComponentAbstract>()> newLoopLimit = []()
+    // {
+    //     return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<LoopLimit>());
+    // };
     std::function<std::shared_ptr<ComponentAbstract>()> newOffPageConnector = []()
     {
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<OffPageConnector>());
@@ -206,6 +206,52 @@ namespace LewzenServer
     {
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Preparation>());
     };
+    std::function<std::shared_ptr<ComponentAbstract>()> newStart = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Start>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newTerminator = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Terminator>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newStoredData = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<StoredData>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newSort = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Sort>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newDecision = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Decision>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newManualOperation = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<ManualOperation>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newNormalProcess = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<NormalProcess>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newUseCase = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<UseCase>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newEntity = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Entity>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newRelation = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Relation>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newWeakRelation = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<WeakRelation>());
+    };
+
+
 
     std::unordered_map<std::string, std::function<std::shared_ptr<ComponentAbstract>()>> ComponentFactory::newComponent = {
         {"rectangle", newRectangle},
@@ -245,7 +291,7 @@ namespace LewzenServer
         {"callout", newCallout},
         {"manual_input", newManualInput},
         {"tape_data", newTapeData},
-        {"loop_limit", newLoopLimit},
+        // {"loop_limit", newLoopLimit},
         {"off_page_connector", newOffPageConnector},
         {"delay", newDelay},
         {"display", newDisplay},
@@ -256,7 +302,20 @@ namespace LewzenServer
         {"tee", newTee},
         {"big_arrow_left", newBigArrowLeft},
         {"plus", newPlus},
-        {"preparation",newPreparation},
+        {"preparation", newPreparation},
+        {"start", newStart},
+        {"terminator", newTerminator},
+        {"stored_data", newStoredData},
+        {"sort", newSort},
+        {"decision", newDecision},
+        {"manual_operation", newManualOperation},
+        {"normal_process", newNormalProcess},
+        {"use_case", newUseCase},
+        {"entity", newEntity},
+        {"relation",newRelation},
+        {"weak_relation",newWeakRelation},
+
+
     };
 
     std::shared_ptr<ComponentAbstract> ComponentFactory::createComponent(const std::string &type)

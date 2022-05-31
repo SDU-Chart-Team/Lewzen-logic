@@ -41,7 +41,7 @@
 #include "comp_custom/callout.h"
 #include "comp_custom/manual_input.h"
 #include "comp_custom/tape_data.h"
-#include "comp_custom/loop_limit.h"
+// #include "comp_custom/loop_limit.h"
 #include "comp_custom/off_page_connector.h"
 #include "comp_custom/delay.h"
 #include "comp_custom/display.h"
@@ -53,6 +53,19 @@
 #include "comp_custom/big_arrow_left.h"
 #include "comp_custom/plus.h"
 #include "comp_custom/preparation.h"
+#include "comp_custom/start.h"
+#include "comp_custom/terminator.h"
+#include "comp_custom/stored_data.h"
+#include "comp_custom/sort.h"
+#include "comp_custom/decision.h"
+#include "comp_custom/manual_operation.h"
+#include "comp_custom/normal_process.h"
+#include "comp_custom/use_case.h"
+#include "comp_custom/entity.h"
+#include "comp_custom/relation.h"
+#include "comp_custom/weak_relation.h"
+
+
 
 
 namespace LewzenServer {

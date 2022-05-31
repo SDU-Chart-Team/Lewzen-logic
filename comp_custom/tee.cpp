@@ -70,7 +70,7 @@ namespace LewzenServer {
         double disX0 = Control0->getX() - getX();
         if (id == "Control0") { // 移动控制点
             corePointMoving = true; // 开启更新锁
-            *Control0 += createPoint(dx, dx);
+            *Control0 += createPoint(dx, dy);
             corePointMoving = false;
         }
         else {

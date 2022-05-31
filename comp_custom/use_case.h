@@ -1,15 +1,17 @@
-#ifndef __LEWZENSERVER_LOOP_LIMIT__
-#define __LEWZENSERVER_LOOP_LIMIT__
+#ifndef __LEWZENSERVER_USE_CASE__
+#define __LEWZENSERVER_USE_CASE__
 
 #include "../comp/rectangle.h"
 
-namespace LewzenServer {
-    class LoopLimit : virtual public Rectangle {
+namespace LewzenServer
+{
+    class UseCase : virtual public Rectangle
+    {
     protected:
-        std::shared_ptr<Lewzen::SVGIPath> SVGIPath;
-        std::shared_ptr<CorePoint> Control0;
+        // SVGI
+        std::shared_ptr<Lewzen::SVGIEllipse> SVGIEllipse;
 
-        public:
+    public:
         //// 通用虚接口
         // 非构造初始化
         virtual void init() override;
@@ -20,12 +22,15 @@ namespace LewzenServer {
         // 反序列化
         virtual ComponentAbstract &operator=(const json &j) override;
 
-        //// Basics virtual interface
+        //// Basics虚接口
         virtual void moveCorePoint(const std::string &id, const double &dx, const double &dy) override;
 
-        //// IsometricCube interface
-        // 计算路径
-        const std::string getPath() const;
+        //// 椭圆形接口
+        const double getCx() const;
+        const double getCy() const;
+        const double getRx() const;
+        const double getRy() const;
     };
 }
+
 #endif
