@@ -66,7 +66,27 @@
 #include "comp_custom/weak_relation.h"
 
 
+#include "comp_custom/subTopic.h"
+#include "comp_custom/package.h"
+#include "comp_custom/swimming_lane.h"
+#include "comp_custom/frame.h"
+#include "comp_custom/notes.h"
+#include "comp_custom/interfacesClasses.h"
+#include "comp_custom/classes.h"
+#include "comp_custom/activities.h"
+#include "comp_custom/multi_instance_class.h"
+#include "comp_custom/send_signal.h"
+#include "comp_custom/receive_signal.h"
+#include "comp_custom/time_signal.h"
+#include "comp_custom/delete.h"
+#include "comp_custom/element.h"
 
+#include "comp_custom/lifeline.h"
+#include "comp_custom/generalize.h"
+#include "comp_custom/generalize_all.h"
+#include "comp_custom/bind.h"
+#include "comp_custom/entity_circle.h"
+#include "comp_custom/node.h"
 
 namespace LewzenServer {
     class ComponentAbstract;
