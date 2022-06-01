@@ -19,6 +19,7 @@ void copy() {
 void test_life() {
     std::cout << LewzenServer::Register::init() << std::endl;
     std::cout << "-------" << std::endl;
+    for (int i = 0; i < 100; i++) add("rectangle");
     add("rectangle");
     add("rectangle");
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
@@ -31,7 +32,12 @@ void test_life() {
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
 
-    std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id[0] + "\"]}") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id[1] + "\"]}") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "move", "dx": -100, "dy": -100})") << std::endl;
+    std::cout << LewzenServer::Canvas::HTML() << std::endl;
+    std::cout << "-------" << std::endl;
+
+    std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id[1] + "\"]}") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "remove", "time": 1})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
@@ -39,14 +45,17 @@ void test_life() {
     std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id[3] + "\"]}") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "get_children"})") << std::endl;
 
-    /*std::cout << LewzenServer::Register::run(R"({"command": "readd"})") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "readd"})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
     std::cout << "-------" << std::endl;
 
-    std::cout << LewzenServer::Register::run(R"({"command": "cursor", "id": ")" + id[0] + "\"}") << std::endl;
+    std::cout << LewzenServer::Register::run(R"({"command": "cursors", "ids": [")" + id[0] + "\", \"" + id[20] + "\", \"" + id[1] + "\"]}") << std::endl;
     std::cout << LewzenServer::Register::run(R"({"command": "remove", "time": 2})") << std::endl;
     std::cout << LewzenServer::Canvas::HTML() << std::endl;
-    std::cout << "-------" << std::endl;*/
+    std::cout << "-------" << std::endl;
+
+    std::cout << LewzenServer::Register::run(R"({"command": "readd"})") << std::endl;
+    std::cout << "-------" << std::endl;
 
     std::cout << LewzenServer::Register::run(R"({"command": "discard", "time": 1})") << std::endl;
     std::cout << "-------" << std::endl;

@@ -220,11 +220,12 @@ namespace LewzenServer {
     }
     const std::string ComponentWritable::getForeignHTML() { // 将当前状态转化为原生HTML
         std::stringstream ss; auto rect = getWriteArea();
+        printf("%s  x: %.4f\n", getId().c_str(), rect.x);
         ss << R"(<div xmlns="http://www.w3.org/1999/xhtml" style="width: )";
         ss << std::to_string(rect.width - _spacing.left - _spacing.right - 2 * _spacing.global) << "px"; // 上边界
         ss << "; height: ";
         ss << "1px"; // 高度
-        ss << "; padding-top: ";
+        ss << "; position:relative; top: ";
         if (_alignment.vertical == 0) ss << std::to_string(rect.y + _spacing.top + _spacing.global) << "px"; // 上准线
         else if (_alignment.vertical == 1) ss << std::to_string(rect.y + rect.height / 2) << "px"; // 居中准线
         else if (_alignment.vertical == 2) ss << std::to_string(rect.y + rect.height - _spacing.bottom - _spacing.global) << "px"; // 下准线

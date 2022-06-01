@@ -415,12 +415,13 @@ namespace LewzenServer {
     //// 事件
     // 被添加事件
     void ComponentBasics::onAdded() {
-        Canvas::updateViewBox(shared_from_this());
+        Canvas::updateViewBox(shared_from_this()); // 更新画布大小
         for (auto c : getChildren()) c->onAdded(); // 遍历孩子, 唤起被添加事件
     }
     // 被更新事件
     void ComponentBasics::onChanged() {
-        Canvas::updateViewBox(shared_from_this());
+        Canvas::addUpdatedComponents(getId()); // 记录被更新
+        Canvas::updateViewBox(shared_from_this()); // 更新画布大小
     }
     // 被删除事件
     void ComponentBasics::onRemoved(int time) {
@@ -428,11 +429,11 @@ namespace LewzenServer {
             Canvas::remove(c, time); // 从上下文删除孩子
             c->onRemoved(time); // 调用被删除事件
         }
-        Canvas::updateViewBox(shared_from_this());
+        Canvas::updateViewBox(shared_from_this()); // 更新画布大小
     }
     // 被重添加事件
     void ComponentBasics::onReadded(int time) {
-        Canvas::updateViewBox(shared_from_this());
+        Canvas::updateViewBox(shared_from_this()); // 更新画布大小
         for (auto c : getChildren()) { // 向上下文添加孩子, 唤起重添加事件
             Canvas::readd(c); // 重添加孩子
             c->onReadded(time); // 调用重添加事件
@@ -441,7 +442,6 @@ namespace LewzenServer {
     // 被释放事件
     void ComponentBasics::onDiscarded() {
         for (auto c : getChildren()) c->onDiscarded(); // 遍历孩子, 唤起被释放事件
-        Canvas::updateViewBox(shared_from_this());
         auto chd = getChildren(); for (auto &c : chd) removeChild(c); // 释放孩子
     }
     // 父亲变更
