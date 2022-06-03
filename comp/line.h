@@ -33,6 +33,12 @@ namespace LewzenServer {
 
     protected:
         std::string lineType="null" ;
+    public:
+        double getOffset() const;
+
+        void setOffset(double offset);
+
+    protected:
         std::string dotType="solid" ;
 
         // SVGI

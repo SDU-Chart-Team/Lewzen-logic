@@ -326,6 +326,58 @@ namespace LewzenServer {
             param["status"] = SUCCEED;
             return param;
         });
+
+
+        Register::addEvent("get_offset", [&](json &param) {
+            // 切换器
+
+            Register::switchBoth(param, module_type,
+                                 [&](std::shared_ptr<ComponentAbstract> &cursor) {
+                                     auto comp = std::dynamic_pointer_cast<Line>(cursor); // 动态类型转换
+                                     auto ofs = comp->getOffset();
+                                     std::string fofs;
+                                     if(ofs > 0){
+                                         fofs = "open";
+                                     }
+                                     else {
+                                         fofs = "close";
+                                     }
+
+                                     param["offset"] = fofs;
+                                     param["status"] = SUCCEED;
+                                 },
+                                 [&](std::vector<std::shared_ptr<ComponentAbstract>> &cursors) {
+                                     bool matched = false;
+                                     json j;
+                                     for (auto cursor: cursors) {
+                                         auto comp = std::dynamic_pointer_cast<Line>(cursor); // 动态类型转换
+                                         auto ofs = comp->getOffset();
+                                         std::string fofs;
+                                         if(ofs > 0){
+                                             fofs = "open";
+                                         }
+                                         else {
+                                             fofs = "close";
+                                         }
+                                         if (!matched) {
+                                             j["offset"] = fofs;
+                                             matched = true;
+                                         } else { // 多值
+                                             json b;
+                                             b["offset"] = fofs;
+                                             if (j != b) {
+                                                 matched = false;
+                                                 break;
+                                             }
+                                         }
+                                     }
+                                     if (matched) {
+                                         param["offset"] = j["offset"];
+                                         param["status"] = SUCCEED;
+                                     } else param["status"] = MULTIVL;
+                                 });
+            return param;
+        });
     }
 
     Line::Line() {
@@ -462,7 +514,9 @@ namespace LewzenServer {
 
         endArrow = "end_arrow";
         SVGILine->MarkerEnd = "url(#" + endArrow + ")";
-
+        SVGIHallowLine->MarkerEnd = "url(#null)";
+        SVGIComplexLine->MarkerEnd = "url(#null)";
+        SVGIFlexableLine->MarkerEnd = "url(#null)";
 //        scale(2.0,2.0);
 //        flip(0,1,-200);
     }
@@ -2438,6 +2492,14 @@ namespace LewzenServer {
 
     const std::string &Line::getDotType() const {
         return dotType;
+    }
+
+    double Line::getOffset() const {
+        return offset;
+    }
+
+    void Line::setOffset(double offset) {
+        Line::offset = offset;
     }
 }
 
