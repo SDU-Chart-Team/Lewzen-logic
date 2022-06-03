@@ -206,6 +206,7 @@ namespace LewzenServer {
     }
     void ComponentWritable::setSpacing(const Spacing &spacing) {
         _spacing = spacing;
+        onChanged();
     }
     // 对齐
     const ComponentWritable::Alignment ComponentWritable::getAlignment() const {
@@ -213,6 +214,7 @@ namespace LewzenServer {
     }
     void ComponentWritable::setAlignment(const Alignment &alignment) {
         _alignment = alignment;
+        onChanged();
     }
     // HTML内容
     const std::string ComponentWritable::getHTML() {
@@ -250,5 +252,6 @@ namespace LewzenServer {
             if (_HTML != "" && !_fObjAdded) svgi->add(fObj), _fObjAdded = true;
             else if (_HTML == "") svgi->remove(fObj), _fObjAdded = false;
         }
+        onChanged();
     }    
 }

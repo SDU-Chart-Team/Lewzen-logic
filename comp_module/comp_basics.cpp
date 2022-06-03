@@ -481,15 +481,19 @@ namespace LewzenServer {
     // 调整层级
     void ComponentBasics::forward() {
         Canvas::forward(getId());
+        onChanged();
     }
     void ComponentBasics::backward() {
         Canvas::backward(getId());
+        onChanged();
     }
     void ComponentBasics::front() {
         Canvas::front(getId());
+        onChanged();
     }
     void ComponentBasics::back() {
         Canvas::back(getId());
+        onChanged();
     }
     // 移动变换后操作
     void ComponentBasics::onMoved(const double &dx, const double &dy) {

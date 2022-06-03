@@ -88,5 +88,6 @@ namespace LewzenServer {
     // 设置样式
     void ComponentStylized::setStyle(const std::string &style) {
         _style = style;
+        onChanged();
     }
 }
