@@ -517,6 +517,7 @@ namespace LewzenServer {
         SVGIHallowLine->MarkerEnd = "url(#null)";
         SVGIComplexLine->MarkerEnd = "url(#null)";
         SVGIFlexableLine->MarkerEnd = "url(#null)";
+
 //        scale(2.0,2.0);
 //        flip(0,1,-200);
     }
@@ -1432,7 +1433,7 @@ namespace LewzenServer {
                 }
 
                 calcFlexablePoint(ew,eh,eh1,sw,sh,sh1);
-                std::cout<<"finish\n\n\n\n\n";
+//                std::cout<<"finish\n\n\n\n\n";
 
             }
             onRotateCenterChanged(); // 旋转中心变化响应
@@ -1485,6 +1486,7 @@ namespace LewzenServer {
 //        setTheta(theta * 2- getTheta());
         // 响应翻转
         onFlipped(a, b, c);
+        onChanged();
     }
 
     Lewzen::Point2D Line::getRotateCenter() const {
@@ -1664,6 +1666,7 @@ namespace LewzenServer {
             SVGIG->add(SVGIFlexableLine);
             SVGIG->add(SVGIFlexableLineHide);
         }
+        onChanged();
     }
 
 
@@ -1702,6 +1705,7 @@ namespace LewzenServer {
         } else if (type == curveTwo) {
             SVGICurveTwo->MarkerStart = "url(#" + startArrow + ")";
         }
+        onChanged();
 
     }
 
@@ -1711,12 +1715,11 @@ namespace LewzenServer {
 
     void Line::setEndArrow(const std::string &endArrow) {
 //        if(!arrows.count(endArrow))return;
-        std::cout << "endArrow\n";
+//        std::cout << "endArrow\n";
         Line::endArrow = endArrow;
 
         std::string type = getLineType();
         if (type == straightLine) {
-
             SVGILine->MarkerEnd = "url(#" + endArrow + ")";
         } else if (type == curve) {
             SVGICurve->MarkerEnd = "url(#" + endArrow + ")";
@@ -1727,6 +1730,7 @@ namespace LewzenServer {
         } else if (type == curveTwo) {
             SVGICurveTwo->MarkerEnd = "url(#" + endArrow + ")";
         }
+        onChanged();
     }
 
     std::string Line::getD() {
@@ -2055,13 +2059,12 @@ namespace LewzenServer {
         std::string tmp = "null";
         setStartArrow(tmp);
         setEndArrow(tmp);
-        std::cout << "startA " << startArrow << std::endl;
-        std::cout << "EA " << endArrow << std::endl;
-
+        onChanged();
     }
 
     void Line::closeOffset(){
         offset = 0;
+        onChanged();
     };
 
     std::vector<Lewzen::Point2D> Line::offsetCoords(std::vector<Lewzen::Point2D> coords, double offset) {
@@ -2160,13 +2163,14 @@ namespace LewzenServer {
 
     void Line::setDotLine(std::string _dotType) {
         dotType = _dotType;
-        std::vector<int> tmp;
+        std::vector<int> tmp{0,0};
         if (dotType == "dashed") {
             tmp = {1, 4};
         } else if (dotType == "dotted") {
             tmp = {1, 1};
         }
         SVGIG->StrokeDasharray = tmp;
+        onChanged();
     }
 
     void Line::onSameSide() {
