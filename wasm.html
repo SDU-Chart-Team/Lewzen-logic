@@ -142,6 +142,13 @@
       var cmd = ret["domcmd"];
       interpret(document.svg, cmd);
     }
+    var set_linetype = (comp_id) => {
+      Module.server_run("{\"command\": \"cursor\", \"id\": \"" + comp_id + "\"}");
+      var ret = JSON.parse(Module.server_run("{\"command\": \"set_start_arrow\", \"start_arrow\": \"start_arrow_two_tri\"}"));
+      console.log(ret);
+      var cmd = ret["domcmd"];
+      interpret(document.svg, cmd);
+    }
     var load_json = (json) => {
       var json = JSON.stringify(json);
       var ret = JSON.parse(Module.server_run("{\"command\": \"load\", \"json\": " + json + "}"));
@@ -170,7 +177,7 @@
 
         // 进行测试
         console.time('add rectangle')
-        add_component("line");
+        add_component("rectangle");
         console.timeEnd('add rectangle')
 
         console.time('add envelope')
