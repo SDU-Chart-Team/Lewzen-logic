@@ -46,6 +46,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+
         return *this;
     }
 

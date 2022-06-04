@@ -20,14 +20,14 @@ namespace LewzenServer
         Control = createCorePoint("Control", getX() + getWidth() * 0.25, getY() + getHeight() * 0.5);
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                           {
-                               if (!corePointMoving)
-                                   return;
-                               if (nx < getX())
-                                   Control->setX(getX()); //
-                               if (nx > getX() + getWidth() * 0.5)
-                                   Control->setX(getX() + getWidth() * 0.5); //
-                           });
+                        {
+                            if (!corePointMoving)
+                                return;
+                            if (nx < getX())
+                                Control->setX(getX()); //
+                            if (nx > getX() + getWidth() * 0.5)
+                                Control->setX(getX() + getWidth() * 0.5); //
+                        });
         corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Data::getPath, this);
@@ -56,6 +56,7 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control = corePoints["Control"];
+        
         return *this;
     }
     //// Basics虚接口

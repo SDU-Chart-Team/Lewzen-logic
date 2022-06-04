@@ -22,7 +22,6 @@ namespace LewzenServer {
     ComponentAbstract &Actor::operator=(const ComponentAbstract &comp) {
         // 拷贝父类
         Rectangle::operator=(comp);
-
         auto &p = dynamic_cast<const Actor &>(comp); 
         return *this;
     }
@@ -35,11 +34,12 @@ namespace LewzenServer {
     ComponentAbstract &Actor::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+
         return *this;
     }
     //// Basics虚接口
     void Actor::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
-       Rectangle::moveCorePoint(id, dx, dy);
+        Rectangle::moveCorePoint(id, dx, dy);
         onChanged(); // 更新事件
     }
 
@@ -58,12 +58,13 @@ namespace LewzenServer {
         std::stringstream ss;
         ss << "M " << p0.get_x() << " " << p0.get_y() << " ";
         ss << "A " << getWidth()*0.25 << " " << getHeight()*0.125<< " " << 0 << " " << 0  <<" "<< 1 << " " << p1.get_x() << " " << p1.get_y() << " ";
-        ss << "M " << p2.get_x() << " " << p2.get_y() << " ";
-        ss << "A " << getWidth()*0.25 << " " << getHeight()*0.125<< " " << 0 << " " << 0  <<" "<< 0 << " " << p3.get_x() << " " << p3.get_y() << " ";
+        ss << "A " << getWidth()*0.25 << " " << getHeight()*0.125<< " " << 0 << " " << 0  <<" "<< 1 << " " << p2.get_x() << " " << p2.get_y() << " ";
+        ss << "M " << p3.get_x() << " " << p3.get_y() << " ";
         ss << "L " << p4.get_x() << " " << p4.get_y() << " ";
         ss << "L " << p5.get_x() << " " << p5.get_y() << " ";
-        ss << "M " << p6.get_x() << " " << p6.get_y() << " ";
+        ss << "L " << p6.get_x() << " " << p6.get_y() << " ";
         ss << "L " << p7.get_x() << " " << p7.get_y() << " ";
+        ss << "L " << p6.get_x() << " " << p6.get_y() << " ";
         ss << "M " << p8.get_x() << " " << p8.get_y() << " ";
         ss << "L " << p9.get_x() << " " << p9.get_y() << " ";
         return ss.str();

@@ -38,7 +38,8 @@ namespace LewzenServer
                                 if (ny > getY() + getHeight())
                                 {
                                     Control0->setY(getY() + getHeight());
-                                } });
+                                } 
+                            });
         corePoints[Control0->getId()] = Control0;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Corner::getPath, this);
@@ -67,6 +68,7 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control0 = corePoints["Control0"];
+        
         return *this;
     }
     //// Basics虚接口

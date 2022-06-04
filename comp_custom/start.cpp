@@ -38,7 +38,7 @@ namespace LewzenServer {
     }
     //// Basics虚接口
     void Start::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
-       Rectangle::moveCorePoint(id, dx, dy);
+        Rectangle::moveCorePoint(id, dx, dy);
         onChanged(); // 更新事件
     }
 

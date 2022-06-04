@@ -16,19 +16,19 @@ namespace LewzenServer
         // 无需添加图形SVG
 
         // 初始化关键点表
-        Control = createCorePoint("Control", 190, 25);
+        Control = createCorePoint("Control", 10, 25);
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
                             {
                                 double maxR = std::min((this->getHeight() / 2), (this->getWidth() / 2));
                                 if (!corePointMoving) return;
-                                if(nx > R->getX())
+                                if(nx < getX())
                                 {
-                                    Control->setX(R->getX());
+                                    Control->setX(getX());
                                 }
-                                if(nx < R->getX() - maxR)
+                                if(nx > maxR)
                                 {
-                                    Control->setX(R->getX() - maxR);
+                                    Control->setX(maxR);
                                 }
                             });
         // 注册关键点
@@ -46,6 +46,7 @@ namespace LewzenServer
     {
         // 拷贝父类
         Rectangle::operator=(comp);
+
 
         auto &p = dynamic_cast<const RoundedRectangle &>(comp);
         // 拷贝关键点位置
@@ -65,9 +66,11 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
-
         // 注册关键点
         Control = corePoints["Control"];
+
+
+        
         return *this;
     }
 
@@ -76,7 +79,7 @@ namespace LewzenServer
     void RoundedRectangle::moveCorePoint(const std::string &id, const double &dx, const double &dy)
     {
         // 圆角半径=控制点到右侧的距离
-        double d = R->getX() - Control->getX();
+        double d = Control->getX() - getX();
         double maxR = std::min((this->getHeight() / 2), (this->getWidth() / 2));
 
         if (id == "Control")
@@ -96,7 +99,7 @@ namespace LewzenServer
             {
                 d = 0;
             }
-            *Control = createPoint(getX() + getWidth() - d, getY() + getHeight() / 4);
+            *Control = createPoint(getX() + d, getY() + getHeight() / 4);
         }
         onChanged(); // 更新事件
     }

@@ -21,16 +21,17 @@ namespace LewzenServer
         Control = createCorePoint("Control", 25, 25);
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                           {
-                        if (!corePointMoving) return; 
-                        if(nx > getX() + getWidth() / 2)
                         {
-                            Control -> setX(T->getX());
-                        }
-                        if(nx < getX())
-                        {
-                            Control ->setX(getX());
-                        } });
+                            if (!corePointMoving) return; 
+                            if(nx > getX() + getWidth() / 2)
+                            {
+                                Control -> setX(T->getX());
+                            }
+                            if(nx < getX())
+                            {
+                                Control ->setX(getX());
+                            } 
+                        });
         // 注册关键点
         corePoints[Control->getId()] = Control;
 
@@ -43,6 +44,7 @@ namespace LewzenServer
     {
         // 拷贝父类
         Rectangle::operator=(comp);
+
 
         auto &p = dynamic_cast<const Process &>(comp);
         // 拷贝关键点位置
@@ -63,9 +65,11 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
-
         // 注册关键点
         Control = corePoints["Control"];
+
+
+        
         return *this;
     }
 

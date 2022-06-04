@@ -22,6 +22,7 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const TapeData &>(comp); 
         return *this;
     }
@@ -34,11 +35,12 @@ namespace LewzenServer {
     ComponentAbstract &TapeData::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+
         return *this;
     }
     //// Basics虚接口
     void TapeData::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
-       Rectangle::moveCorePoint(id, dx, dy);
+        Rectangle::moveCorePoint(id, dx, dy);
         onChanged(); // 更新事件
     }
 

@@ -22,6 +22,7 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const Relation &>(comp); 
         return *this;
     }
@@ -34,6 +35,7 @@ namespace LewzenServer {
     ComponentAbstract &Relation::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+
         return *this;
     }
     //// Basics虚接口

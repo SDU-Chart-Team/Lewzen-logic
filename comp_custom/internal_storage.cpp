@@ -46,15 +46,6 @@ namespace LewzenServer
         // 注册关键点
         corePoints[Control->getId()] = Control;
 
-        // 绑定属性
-        // std::function<double()> _getX = std::bind(&InternalStorage::getX, this);
-        // std::function<double()> _getY = std::bind(&InternalStorage::getY, this);
-        // std::function<double()> _getWidth = std::bind(&InternalStorage::getWidth, this);
-        // std::function<double()> _getHeight = std::bind(&InternalStorage::getHeight, this);
-        // SVGIRect->X.bind(_getX);
-        // SVGIRect->Y.bind(_getY);
-        // SVGIRect->Width.bind(_getWidth);
-        // SVGIRect->Height.bind(_getHeight);
         std::function<std::string()> _getD = std::bind(&InternalStorage::getD, this);
         SVGIPath->D.bind(_getD);
     }
@@ -63,6 +54,7 @@ namespace LewzenServer
     {
         // 拷贝父类
         Rectangle::operator=(comp);
+
 
         auto &p = dynamic_cast<const InternalStorage &>(comp);
         // 拷贝关键点位置
@@ -83,10 +75,11 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
-
         // 注册关键点
 
         Control = corePoints["Control"];
+
+        
         return *this;
     }
 

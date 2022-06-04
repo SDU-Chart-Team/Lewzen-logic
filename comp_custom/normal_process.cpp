@@ -17,6 +17,7 @@ namespace LewzenServer
 
         // 初始化关键点表
         Control = createCorePoint("Control", 190, 25);
+        Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
                             {
                                 double maxR = std::min((this->getHeight() / 2), (this->getWidth() / 2));
@@ -46,6 +47,7 @@ namespace LewzenServer
         // 拷贝父类
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const NormalProcess &>(comp);
         // 拷贝关键点位置
         *Control = *(p.Control);
@@ -64,9 +66,11 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
-
         // 注册关键点
         Control = corePoints["Control"];
+
+
+        
         return *this;
     }
 

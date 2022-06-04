@@ -32,6 +32,7 @@ namespace LewzenServer
     {
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const UseCase &>(comp);
         return *this;
     }
@@ -49,6 +50,7 @@ namespace LewzenServer
     ComponentAbstract &UseCase::operator=(const json &j)
     {
         Rectangle::operator=(j);
+
         return *this;
     }
 

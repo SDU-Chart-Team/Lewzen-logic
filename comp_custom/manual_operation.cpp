@@ -16,13 +16,12 @@ namespace LewzenServer {
         SVGIG->add(SVGIPath);
         Control = createCorePoint("Control", getX()+getWidth()*0.2, getY()+getHeight());
         Control->setColor("orange");
-                    Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-                        if (!corePointMoving) return;
-                        if (nx < getX()) Control->setX(getX());  
-                        if (nx > getX()+getWidth()*0.5) Control->setX(getX()+getWidth()*0.5);
-            
-                        });
-                            corePoints[Control->getId()] = Control;
+        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx < getX()) Control->setX(getX());  
+            if (nx > getX()+getWidth()*0.5) Control->setX(getX()+getWidth()*0.5);
+        });
+        corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&ManualOperation::getPath, this);
         SVGIPath->D.bind(_getPath);
@@ -31,11 +30,12 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const ManualOperation &>(comp); 
         // 拷贝关键点位置
-                    *Control = *(p.Control);
-                    return *this;
-                }
+        *Control = *(p.Control);
+        return *this;
+    }
     // 序列化，并记录已操作的
     void ManualOperation::serialize(json &j, std::vector<std::string> &processed) {
         // 父类序列化
@@ -46,9 +46,11 @@ namespace LewzenServer {
         // 父类反序列化
         Rectangle::operator=(j);
         // 注册关键点
-                    Control = corePoints["Control"];
-                    return *this;
-                }
+        Control = corePoints["Control"];
+
+        
+        return *this;
+    }
     //// Basics虚接口
     void ManualOperation::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
         double disY0 = Control->getY() - getY(); // 记录控制点到矩形上边的距离

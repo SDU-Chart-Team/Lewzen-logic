@@ -20,14 +20,14 @@ namespace LewzenServer
         Control0 = createCorePoint("Control0", getX() + getWidth() * 0.5, getY() + getHeight() * 0.75);
         Control0->setColor("orange");
         Control0->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                            {
+        {
             if (!corePointMoving)
                 return;
             if (ny < getY())
                 Control0->setY(getY()); // 不允许超过高度的一半
             if (ny > getY() + getHeight())
                 Control0->setY(getY() + getHeight()); // 不允许低于矩形的Y坐标
-                });
+        });
             corePoints[Control0->getId()] = Control0;
             // 绑定图形属性
             std::function<const std::string()> _getPath = std::bind(&OffPageConnector::getPath, this);
@@ -37,6 +37,7 @@ namespace LewzenServer
     {
             // 拷贝父类
             Rectangle::operator=(comp);
+
 
             auto &p = dynamic_cast<const OffPageConnector &>(comp);
             // 拷贝关键点位置
@@ -56,6 +57,8 @@ namespace LewzenServer
             Rectangle::operator=(j);
             // 注册关键点
             Control0 = corePoints["Control0"];
+
+            
             return *this;
     }
     //// Basics虚接口

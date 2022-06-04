@@ -68,6 +68,7 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control0 = corePoints["Control0"];
+        
         return *this;
     }
     //// Basics虚接口

@@ -49,6 +49,7 @@ namespace LewzenServer
     ComponentAbstract &Ellipse::operator=(const json &j)
     {
         Rectangle::operator=(j);
+
         return *this;
     }
 

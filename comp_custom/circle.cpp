@@ -24,16 +24,16 @@ namespace LewzenServer
         // 从动规律：R=RB;B=RB;L=LB;T=RT'
         // 更新函数，在set坐标和+=操作时都调用回调函数
         LT->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                      {
+                    {
                         if(!corePointMoving)
                             {return;}
                         LB->setX(nx); 
                         RT->setY(ny);
                         *L = (*LT + *LB) * 0.5;
                         *T = (*LT + *RT) * 0.5; 
-                        });
+                    });
         LB->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                      {
+                    {
                         if (!corePointMoving)
                         {
                             return;
@@ -42,9 +42,9 @@ namespace LewzenServer
                         RB->setY(ny);
                         *L = (*LT + *LB) * 0.5;
                         *B = (*LB + *RB) * 0.5; 
-                        });
+                    });
         RB->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                      {
+                    {
                         if(!corePointMoving)
                         {
                             return;
@@ -53,9 +53,9 @@ namespace LewzenServer
                         LB->setY(ny);
                         *R = (*RT + *RB) * 0.5;
                         *B = (*LB + *RB) * 0.5; 
-                        });
+                    });
         RT->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                      {
+                    {
                         if (!corePointMoving)
                         {
                             return;
@@ -64,40 +64,40 @@ namespace LewzenServer
                         LT->setY(ny);
                         *R = (*RT + *RB) * 0.5;
                         *T = (*LT + *RT) * 0.5; 
-                        });
+                    });
 
         R->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                     {
+                    {
                         if (!corePointMoving)
                         {
                             return;
                         }
                         // LT->setX(nx), LB->setX(nx); 
-                        });
+                    });
         B->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                     {
+                    {
                         if (!corePointMoving)
                         {
                             return;
                         }
                         // LB->setY(ny), RB->setY(ny); 
-                        });
+                    });
         L->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                     {
+                    {
                         if (!corePointMoving)
                         {
                             return;
                         }
                         // RT->setX(nx), RB->setX(nx); 
-                        });
+                    });
         T->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                     {
+                    {
                         if (!corePointMoving)
                         {
                             return;
                         }
                         // LT->setY(ny), RT->setY(ny); 
-                        });
+                    });
 
         // 绑定图形属性
         std::function<double()> _getCx = std::bind(&Circle::getCx, this);

@@ -39,6 +39,7 @@ namespace LewzenServer
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Display &>(comp);
+
         // 拷贝关键点位置
         *Control0 = *(p.Control0);
         return *this;
@@ -56,6 +57,8 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control0 = corePoints["Control0"];
+
+        
         return *this;
     }
     //// Basics虚接口

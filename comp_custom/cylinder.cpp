@@ -20,14 +20,14 @@ namespace LewzenServer
         Control = createCorePoint("Control", getX(), getY() + getHeight() * 0.25);
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                           {
-                               if (!corePointMoving)
-                                   return;
-                               if (ny < getY())
-                                   Control->setY(getY()); // 不允许超过高度的一半
-                               if (ny > getY() + getHeight() * 0.5)
-                                   Control->setY(getY() + getHeight() * 0.5); // 不允许低于矩形的Y坐标
-                           });
+                        {
+                            if (!corePointMoving)
+                                return;
+                            if (ny < getY())
+                                Control->setY(getY()); // 不允许超过高度的一半
+                            if (ny > getY() + getHeight() * 0.5)
+                                Control->setY(getY() + getHeight() * 0.5); // 不允许低于矩形的Y坐标
+                        });
         corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Cylinder::getPath, this);
@@ -56,6 +56,7 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control = corePoints["Control"];
+        
         return *this;
     }
     //// Basics虚接口
@@ -94,9 +95,11 @@ namespace LewzenServer
         ss << "M " << p0.get_x() << " " << p0.get_y() << " ";
         ss << "A " << getWidth() * 0.5 << " " << (Control->getY() - getY()) << " " << 0 << " " << 0 << " " << 1 << " " << p1.get_x() << " " << p1.get_y() << " ";
         ss << "A " << getWidth() * 0.5 << " " << (Control->getY() - getY()) << " " << 0 << " " << 0 << " " << 1 << " " << p2.get_x() << " " << p2.get_y() << " ";
+        ss << "M " << p0.get_x() << " " << p0.get_y() << " ";
         ss << "L " << p3.get_x() << " " << p3.get_y() << " ";
         ss << "A " << getWidth() * 0.5 << " " << (Control->getY() - getY()) << " " << 0 << " " << 0 << " " << 0 << " " << p4.get_x() << " " << p4.get_y() << " ";
         ss << "L " << p5.get_x() << " " << p5.get_y() << " ";
+        ss << "A " << getWidth() * 0.5 << " " << (Control->getY() - getY()) << " " << 0 << " " << 0 << " " << 1 << " " << p2.get_x() << " " << p2.get_y() << " ";
         return ss.str();
     }
 }

@@ -19,25 +19,25 @@ namespace LewzenServer {
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
             if (!corePointMoving) return;
-                double maxD = std::min(getWidth()*0.5,getHeight()*0.5);
-                                if(nx > maxD)
-                                {
-                                    *Control=createPoint(getX()+maxD,getY()+maxD);
-                                }
-                                if(nx < getX())
-                                {
-                                    *Control=createPoint(getX(),getY());
-                                }
-                                if(ny > maxD)
-                                {
-                                    *Control=createPoint(getX()+maxD,getY()+maxD);
-                                }
-                                if(ny < getY())
-                                {
-                                    *Control=createPoint(getX(),getY());
-                                }
+            double maxD = std::min(getWidth()*0.5,getHeight()*0.5);
+            if(nx > maxD)
+            {
+                *Control=createPoint(getX()+maxD,getY()+maxD);
+            }
+            if(nx < getX())
+            {
+                *Control=createPoint(getX(),getY());
+            }
+            if(ny > maxD)
+            {
+                *Control=createPoint(getX()+maxD,getY()+maxD);
+            }
+            if(ny < getY())
+            {
+                *Control=createPoint(getX(),getY());
+            }
         });
-                corePoints[Control->getId()] = Control;
+        corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Card::getPath, this);
         SVGIPath->D.bind(_getPath);
@@ -62,6 +62,7 @@ namespace LewzenServer {
         Rectangle::operator=(j);
         // 注册关键点
         Control = corePoints["Control"];
+        
         return *this;
     }
     //// Basics虚接口
@@ -75,7 +76,7 @@ namespace LewzenServer {
         } else { // 移动其他点
             Rectangle::moveCorePoint(id, dx, dy);
             if (getX()+disX > getX()+getWidth()*0.5) disX = getWidth()*0.5;
-            if ( getY()+disY > getY()+getHeight()*0.5) disY =getHeight()*0.5;
+            if (getY()+disY > getY()+getHeight()*0.5) disY =getHeight()*0.5;
             *Control = createPoint(getX()+disX, getY() + disY); // 设置新的坐标
         }
         onChanged(); // 更新事件

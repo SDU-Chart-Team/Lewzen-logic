@@ -17,19 +17,19 @@ namespace LewzenServer
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
-        Control0 = createCorePoint("Control0", getX() + getWidth() * 0.75, getY() + getHeight() * 0.35);
+        Control0 = createCorePoint("Control0", getX() + getWidth() * 0.25, getY() + getHeight() * 0.35);
         Control0->setColor("orange");
         Control0->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
                             {
                                 if (!corePointMoving)
                                     return;
-                                if (nx < (getX() + getWidth() * 0.5))
+                                if (nx < (getX()))
+                                {
+                                    Control0->setX(getX());
+                                }
+                                if (nx > getX() + getWidth() * 0.5)
                                 {
                                     Control0->setX(getX() + getWidth() * 0.5);
-                                }
-                                if (nx > getX() + getWidth())
-                                {
-                                    Control0->setX(getX() + getWidth());
                                 }
                                 if (ny < getY())
                                 {
@@ -66,8 +66,11 @@ namespace LewzenServer
     {
         // 父类反序列化
         Rectangle::operator=(j);
+        SVGIG->add(SVGIPath);
         // 注册关键点
         Control0 = corePoints["Control0"];
+
+        
         return *this;
     }
     //// Basics虚接口
@@ -85,8 +88,8 @@ namespace LewzenServer
         else
         {
             Rectangle::moveCorePoint(id, dx, dy);
-            if (getX() +disX0 > getX() + getWidth())
-                disX0 =  getWidth();
+            if (getX() +disX0 > getX() + getWidth() * 0.5)
+                disX0 =  getWidth() * 0.5;
             if ( getY() +disY0 > getY() + getHeight() * 0.5)
                 disY0 = getHeight() * 0.5;
             *Control0 = createPoint(getX() + disX0, getY() + disY0); // 设置新的坐标
@@ -98,15 +101,15 @@ namespace LewzenServer
     const std::string DoubleArrow::getPath() const
     {
         auto p0 = createPoint(getX(), getY() + getHeight() * 0.5);
-        auto p1 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY());
-        auto p2 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), Control0->getY());
-        auto p3 = createPoint(Control0->getX(), Control0->getY());
-        auto p4 = createPoint(Control0->getX(), getY());
+        auto p1 = createPoint(Control0->getX(), getY());
+        auto p2 = createPoint(Control0->getX(), Control0->getY());
+        auto p3 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), Control0->getY());
+        auto p4 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY());
         auto p5 = createPoint(getX() + getWidth(), getY() + getHeight() * 0.5);
-        auto p6 = createPoint(Control0->getX(), getY() + getHeight());
-        auto p7 = createPoint(Control0->getX(), getY() + getHeight() - (Control0->getY() - getY()));
-        auto p8 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY() + getHeight() - (Control0->getY() - getY()));
-        auto p9 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY() + getHeight());
+        auto p6 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY() + getHeight());
+        auto p7 = createPoint(getX() + getWidth() - (Control0->getX() - getX()), getY() + getHeight() - (Control0->getY() - getY()));
+        auto p8 = createPoint(Control0->getX(), getY() + getHeight() - (Control0->getY() - getY()));
+        auto p9 = createPoint(Control0->getX(), getY() + getHeight());
         auto p10 = createPoint(getX(), getY() + getHeight() * 0.5);
         std::stringstream ss;
         ss << "M " << p0.get_x() << " " << p0.get_y() << " ";

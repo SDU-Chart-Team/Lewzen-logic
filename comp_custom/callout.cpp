@@ -20,14 +20,14 @@ namespace LewzenServer
         Control = createCorePoint("Control", getX() + getWidth() * 0.2, getY() + getHeight());
         Control->setColor("orange");
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                           {
-                               if (!corePointMoving)
-                                   return;
-                               if (nx < getX())
-                                   Control->setX(getX()); //
-                               if (nx > getX() + getWidth())
-                                   Control->setX(getX() + getWidth()); //
-                           });
+            {
+                if (!corePointMoving)
+                    return;
+                if (nx < getX())
+                    Control->setX(getX()); //
+                if (nx > getX() + getWidth())
+                    Control->setX(getX() + getWidth()); //
+            });
         corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Callout::getPath, this);

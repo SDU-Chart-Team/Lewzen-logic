@@ -34,7 +34,9 @@ namespace LewzenServer {
     ComponentAbstract &Sort::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+
         return *this;
+
     }
     //// Basics虚接口
     void Sort::moveCorePoint(const std::string &id, const double &dx, const double &dy) {

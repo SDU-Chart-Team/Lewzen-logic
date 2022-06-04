@@ -18,7 +18,6 @@ namespace LewzenServer
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
 
-        //
         std::function<std::string()> _getD = std::bind(&Or::getD, this);
         SVGIPath->D.bind(_getD);
     }
@@ -44,6 +43,7 @@ namespace LewzenServer
     {
         //
         Rectangle::operator=(j);
+
         return *this;
     }
 

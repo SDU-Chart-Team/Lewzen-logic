@@ -24,6 +24,7 @@ namespace LewzenServer {
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Collate &>(comp); 
+
         return *this;
     }
     // 序列化，并记录已操作的
@@ -35,6 +36,7 @@ namespace LewzenServer {
     ComponentAbstract &Collate::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+
         return *this;
     }
     //// Basics虚接口

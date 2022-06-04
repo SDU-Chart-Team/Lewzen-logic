@@ -17,15 +17,6 @@ namespace LewzenServer
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
 
-        // 绑定属性
-        // std::function<double()> _getX = std::bind(&Envelope::getX, this);
-        // std::function<double()> _getY = std::bind(&Envelope::getY, this);
-        // std::function<double()> _getWidth = std::bind(&Envelope::getWidth, this);
-        // std::function<double()> _getHeight = std::bind(&Envelope::getHeight, this);
-        // SVGIRect->X.bind(_getX);
-        // SVGIRect->Y.bind(_getY);
-        // SVGIRect->Width.bind(_getWidth);
-        // SVGIRect->Height.bind(_getHeight);
         std::function<std::string()> _getD = std::bind(&Envelope::getD, this);
         SVGIPath->D.bind(_getD);
     }

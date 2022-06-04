@@ -19,16 +19,17 @@ namespace LewzenServer
         SVGIG->add(SVGIPath);
         Control = createCorePoint("Control", getX() + getWidth() * 0.5, getY() + getHeight() * 0.75);
         Control->setColor("orange");
+        
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny)
-                           {
-                               if (!corePointMoving)
-                                   return;
-                               if (ny < getY() + getHeight() * 0.5)
-                                   Control->setY(getY() + getHeight() * 0.5); // 不允许超过高度的一半
-                               if (ny > getY() + getHeight())
-                               // 不允许低于矩形的Y坐标 
-                                   Control->setY(getY() + getHeight()); 
-                            });
+                        {
+                            if (!corePointMoving)
+                                return;
+                            if (ny < getY() + getHeight() * 0.5)
+                                Control->setY(getY() + getHeight() * 0.5); // 不允许超过高度的一半
+                            if (ny > getY() + getHeight())
+                                // 不允许低于矩形的Y坐标 
+                                Control->setY(getY() + getHeight()); 
+                        });
         corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&Document::getPath, this);
@@ -38,6 +39,7 @@ namespace LewzenServer
     {
         // 拷贝父类
         Rectangle::operator=(comp);
+
 
         auto &p = dynamic_cast<const Document &>(comp);
         // 拷贝关键点位置
@@ -57,6 +59,8 @@ namespace LewzenServer
         Rectangle::operator=(j);
         // 注册关键点
         Control = corePoints["Control"];
+
+        
         return *this;
     }
     //// Basics虚接口

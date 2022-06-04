@@ -4,14 +4,14 @@ namespace LewzenServer {
     //// 通用虚接口
     // 非构造初始化
     void Tee::init() {
-
-        // 父类初始化
-        Rectangle::init();
         // 设置类型
         setType("tee");
 
+        // 父类初始化
+        Rectangle::init();
+
         // 维护图形SVG
-        SVGIG->children({});// 移除旧的图形
+        SVGIG->remove(SVGIRect); // 移除旧的图形
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
@@ -46,10 +46,10 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
+
         auto &p = dynamic_cast<const Tee &>(comp); 
         // 拷贝关键点位置
                     *Control0 = *(p.Control0);
-                    return *this;
                 }
     // 序列化，并记录已操作的
     void Tee::serialize(json &j, std::vector<std::string> &processed) {
@@ -61,25 +61,27 @@ namespace LewzenServer {
         // 父类反序列化
         Rectangle::operator=(j);
         // 注册关键点
-                    Control0 = corePoints["Control0"];
-                    return *this;
-                }
+        Control0 = corePoints["Control0"];
+    }
     //// Basics虚接口
     void Tee::moveCorePoint(const std::string &id, const double &dx, const double &dy) {
         double disY0 = Control0->getY() - getY(); // 记录控制点到矩形上边的距离
         double disX0 = Control0->getX() - getX();
+        double ptgX0 = ((Control0->getX() - getX()) / getWidth()) * getWidth();
+        double ptgY0 = ((Control0->getY() - getY()) / getHeight()) * getHeight();
         if (id == "Control0") { // 移动控制点
             corePointMoving = true; // 开启更新锁
-            *Control0 += createPoint(dx, dy);
+            *Control0 += createPoint(dx, 0);
+            *Control0 += createPoint(0, dy);
             corePointMoving = false;
         }
         else {
             Rectangle::moveCorePoint(id, dx, dy);
-            if (getX()+disX0 > getX()+getWidth()) disX0 = getX()+getWidth()-getX();
-            if (getX()+disX0 < getX()+getWidth()*0.5) disX0 = getX()+getWidth()*0.5-getX();
-            if ( getY()+disY0 > getY()+getHeight()) disY0 = getY()+getHeight()-getY();
-            if ( getY()+disY0 < getY()) disY0 = getY()-getY();
-            *Control0 = createPoint(getX()+disX0, getY() + disY0); // 设置新的坐标
+            if (getX()+ptgX0 > getX()+getWidth()) ptgX0 = getX()+getWidth()-getX();
+            if (getX()+ptgX0 < getX()+getWidth()*0.5) ptgX0 = getX()+getWidth()*0.5-getX();
+            if ( getY()+ptgY0 > getY()+getHeight()) ptgY0 = getY()+getHeight()-getY();
+            if ( getY()+ptgY0 < getY()) ptgY0 = getY()-getY();
+            *Control0 = createPoint(getX()+ptgX0, getY() + ptgY0); // 设置新的坐标
                     }
         onChanged(); // 更新事件
     }
