@@ -7,6 +7,7 @@ namespace LewzenServer {
     class Notes : virtual public Rectangle {
     protected:
         std::shared_ptr<Lewzen::SVGIPath> SVGIPath;
+//        std::shared_ptr<Lewzen::SVGIPath> SVGIPatht;
         double padding = 20;
         public:
         //// 通用虚接口
@@ -25,6 +26,7 @@ namespace LewzenServer {
         //// IsometricCube interface
         // 计算路径
         const std::string getPath() const;
+//        const std::string getPath1() const;
     };
 }
 #endif

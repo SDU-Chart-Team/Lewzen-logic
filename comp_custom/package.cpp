@@ -55,7 +55,26 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const Package &>(comp);
         // 拷贝关键点位置
         *Control = *(p.Control);
+        SVGIG->add(SVGIPath);
 
+        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx > getX() + getWidth()) {
+                Control->setX(getX() + getWidth()); // 不允许超过宽度的1/4
+            }
+
+            if (nx < getX()) {
+                Control->setX(getX()); // 不允许低于矩形的X坐标
+            }
+
+            if(ny > getY()+getHeight()){
+                Control->setY(getY()+getHeight());
+            }
+
+            if(ny < getY()){
+                Control->setY(getY());
+            }
+        });
         return *this;
     }
     // 序列化，并记录已操作的
@@ -70,7 +89,26 @@ namespace LewzenServer {
 
         // 注册关键点
         Control = corePoints["Control"];
+        SVGIG->add(SVGIPath);
 
+        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx > getX() + getWidth()) {
+                Control->setX(getX() + getWidth()); // 不允许超过宽度的1/4
+            }
+
+            if (nx < getX()) {
+                Control->setX(getX()); // 不允许低于矩形的X坐标
+            }
+
+            if(ny > getY()+getHeight()){
+                Control->setY(getY()+getHeight());
+            }
+
+            if(ny < getY()){
+                Control->setY(getY());
+            }
+        });
         return *this;
     }
 

@@ -68,13 +68,42 @@ namespace LewzenServer {
         // 拷贝关键点位置
         *ControlUp = *(p.ControlUp);
         *ControlDown = *(p.ControlDown);
+        SVGIG->add(SVGIPath);
+        // 初始化关键点
 
+
+        ControlUp->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if(ny < getY()){
+                ControlUp->setY(getY());
+            }
+            if(ny > getY()+getHeight()){
+                ControlUp->setY(getY()+getHeight());
+            }
+        });
+
+        ControlDown->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if(nx < getX()+getWidth()/2){
+                ControlDown->setX(getX()+getWidth()/2);
+            }
+            if(nx > getX()+getWidth()){
+                ControlDown->setX(getX()+getWidth());
+            }
+            if(ny > getY()+getHeight()){
+                ControlDown->setY(getY()+getHeight());
+            }
+            if(ny < getY()){
+                ControlDown->setY(getY());
+            }
+        });
         return *this;
     }
     // 序列化，并记录已操作的
     void ArrowDown::serialize(json &j, std::vector<std::string> &processed) {
         // 父类序列化
         Rectangle::serialize(j, processed);
+
     }
     // 反序列化
     ComponentAbstract &ArrowDown::operator=(const json &j) {
@@ -82,9 +111,39 @@ namespace LewzenServer {
         Rectangle::operator=(j);
 
         // 注册关键点
+
         ControlUp = corePoints["ControlUp"];
         ControlDown = corePoints["ControlDown"];
+        SVGIG->add(SVGIPath);
 
+        // 初始化关键点
+
+
+        ControlUp->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if(ny < getY()){
+                ControlUp->setY(getY());
+            }
+            if(ny > getY()+getHeight()){
+                ControlUp->setY(getY()+getHeight());
+            }
+        });
+
+        ControlDown->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if(nx < getX()+getWidth()/2){
+                ControlDown->setX(getX()+getWidth()/2);
+            }
+            if(nx > getX()+getWidth()){
+                ControlDown->setX(getX()+getWidth());
+            }
+            if(ny > getY()+getHeight()){
+                ControlDown->setY(getY()+getHeight());
+            }
+            if(ny < getY()){
+                ControlDown->setY(getY());
+            }
+        });
         return *this;
     }
 

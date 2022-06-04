@@ -7,6 +7,9 @@ namespace LewzenServer {
     class Frame : virtual public Rectangle {
     protected:
         std::shared_ptr<Lewzen::SVGIPath> SVGIPath;
+
+//        std::shared_ptr<Lewzen::SVGIPath> SVGIPathA = std::make_shared<Lewzen::SVGIPath>();
+
         std::shared_ptr<CorePoint> abc;
 
         public:

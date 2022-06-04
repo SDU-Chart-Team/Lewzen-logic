@@ -13,6 +13,7 @@ namespace LewzenServer {
         SVGIG->children({}); // 移除旧的图形
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
+//        SVGIPathA = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
         abc = createCorePoint("abc", getX() + getWidth() * 0.2, getY() + getHeight() * 0.2);
         abc->setColor("orange");
@@ -44,6 +45,24 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const Frame &>(comp);
         // 拷贝关键点位置
         *abc = *(p.abc);
+
+        SVGIG->add(SVGIPath);
+        abc->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx < (getX())) {
+                abc->setX(getX());
+            }
+            if (nx > getX() + getWidth()) {
+                abc->setX(getX() + getWidth());
+            }
+            if (ny < getY()) {
+                abc->setY(getY());
+            }
+            if (ny > getY() + getHeight()) {
+                abc->setY(getY() + getHeight());
+            }
+
+        });
         return *this;
     }
 
@@ -59,6 +78,25 @@ namespace LewzenServer {
         Rectangle::operator=(j);
         // 注册关键点
         abc = corePoints["abc"];
+
+        SVGIG->add(SVGIPath);
+
+        abc->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx < (getX())) {
+                abc->setX(getX());
+            }
+            if (nx > getX() + getWidth()) {
+                abc->setX(getX() + getWidth());
+            }
+            if (ny < getY()) {
+                abc->setY(getY());
+            }
+            if (ny > getY() + getHeight()) {
+                abc->setY(getY() + getHeight());
+            }
+
+        });
         return *this;
     }
 
@@ -90,15 +128,17 @@ namespace LewzenServer {
         auto p5 = createPoint(getX() + getWidth(), getY() + getHeight());
         auto p6 = createPoint(getX(), getY() + getHeight());
         std::stringstream ss;
-        ss << "M " << p0.get_x() << " " << p0.get_y() << " ";
-        ss << "L " << p1.get_x() << " " << p1.get_y() << " ";
-        ss << "L " << p2.get_x() << " " << p2.get_y() << " ";
+
         ss << "M " << p3.get_x() << " " << p3.get_y() << " ";
         ss << "L " << p4.get_x() << " " << p4.get_y() << " ";
         ss << "L " << p5.get_x() << " " << p5.get_y() << " ";
         ss << "L " << p6.get_x() << " " << p6.get_y() << " ";
         ss << "L " << p3.get_x() << " " << p3.get_y() << " ";
-
+        ss << "M " << p0.get_x() << " " << p0.get_y() << " ";
+        ss << "L " << p1.get_x() << " " << p1.get_y() << " ";
+        ss << "L " << p2.get_x() << " " << p2.get_y() << " ";
+        ss << "L " << p1.get_x() << " " << p1.get_y() << " ";
+        ss << "L " << p0.get_x() << " " << p0.get_y() << " ";
         return ss.str();
 
     }
