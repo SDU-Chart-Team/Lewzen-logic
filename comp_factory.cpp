@@ -253,6 +253,105 @@ namespace LewzenServer
 
 
 
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newSubTopic = [](){
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<SubTopic>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newPackage = [](){
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Package>());
+    };
+
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newSwimmingLane = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<SwimmingLane>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newFrame = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Frame>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newNotes = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Notes>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newInterfacesClasses = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Interfacesclasses>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newClasses = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Classes>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newActivities = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Activities>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newMultiInstanceClass = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<MultiInstanceClass>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newSendSignal = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<SendSignal>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newReceiveSignal = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<ReceiveSignal>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newTimeSignal = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<TimeSignal>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newDelete = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Delete>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newElement = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Element>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newLifeline = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Lifeline>());
+    };
+    std::function<std::shared_ptr<ComponentAbstract>()> newGeneralize = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Generalize>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newGeneralizeAll = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<GeneralizeAll>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newBind = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Bind>());
+    };
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newEntityCircle = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<EntityCircle>());
+    };
+
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newNode = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Node>());
+    };
+
     std::unordered_map<std::string, std::function<std::shared_ptr<ComponentAbstract>()>> ComponentFactory::newComponent = {
         {"rectangle", newRectangle},
         {"line", newLine},
@@ -315,6 +414,26 @@ namespace LewzenServer
         {"relation",newRelation},
         {"weak_relation",newWeakRelation},
 
+        {"sub_topic",newSubTopic},
+        {"package",newPackage},
+        {"swimming_lane",newSwimmingLane},
+        {"frame",newFrame},
+        {"notes",newNotes},
+        {"interfaces_classes",newInterfacesClasses},
+        {"classes",newClasses},
+        {"activities",newActivities},
+        {"multi_instance_class",newMultiInstanceClass},
+        {"send_signal",newSendSignal},
+        {"receive_signal",newReceiveSignal},
+        {"time_signal",newTimeSignal},
+        {"delete",newDelete},
+        {"element",newElement},
+        {"lifeline",newLifeline},
+        {"generalize",newGeneralize},
+        {"generalize_all",newGeneralizeAll},
+        {"bind",newBind},
+        {"entity_circle",newEntityCircle},
+        {"node",newNode},
 
     };
 

@@ -28,9 +28,11 @@ namespace LewzenServer {
         static std::multimap<int, std::shared_ptr<ComponentAbstract>> removed; // 暂存区
         static std::unordered_map<Lewzen::HASH_CODE, int> removed_layer; // 暂存区组件层级
 
-        // 层级、树形关系管理中的过程量
+        // 更新、层级、树形关系管理中的过程量
         static std::vector<std::string> added_comp_ids;
+        static std::set<std::string> updated_comp_ids;
         static std::vector<std::string> removed_comp_ids;
+        static std::vector<std::shared_ptr<ComponentAbstract>> toreadd_comps;
         static std::unordered_map<std::string, int> readded_layer_map;
         static std::vector<std::pair<std::string, std::string>> copied_comp_pairs;
     public:
@@ -60,12 +62,20 @@ namespace LewzenServer {
         static const json serialize();
         // 反序列化
         static void deserialize(const json &j);
+
+        // 添加被更新的组件
+        static void addUpdatedComponents(const std::string &id);
         // 获取被添加的组件信息
         static void getAddedComponents(std::vector<std::string> &ids, std::vector<std::string> &tops);
         // 获取被移除的组件信息
         static void getRemovedComponents(std::vector<std::string> &ids);
     
     //// 用于层级变化
+    protected:
+        static std::unordered_map<std::string, int> layer_map;
+        static std::unordered_map<std::string, int> last_layer_map;
+        // 更新层级
+        static void updateLayerMap();
     public:
         // 获取层级
         static int getLayer(const std::string &id);

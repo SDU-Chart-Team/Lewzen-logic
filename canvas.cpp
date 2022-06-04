@@ -9,9 +9,13 @@ namespace LewzenServer {
     std::multimap<int, std::shared_ptr<ComponentAbstract>> Canvas::removed = {}; // 暂存区
     std::unordered_map<Lewzen::HASH_CODE, int> Canvas::removed_layer; // 暂存区组件层级
     std::vector<std::string> Canvas::added_comp_ids = {}; // 被添加的组件id
+    std::set<std::string> Canvas::updated_comp_ids = {}; // 被更新的组件id
     std::vector<std::string> Canvas::removed_comp_ids = {}; // 被移出的组件id
+    std::vector<std::shared_ptr<ComponentAbstract>> Canvas::toreadd_comps = {}; // 将要重添加的组件id
     std::unordered_map<std::string, int> Canvas::readded_layer_map = {}; // 重添加组件的层级
     std::vector<std::pair<std::string, std::string>> Canvas::copied_comp_pairs = {}; // 复制组件对
+    std::unordered_map<std::string, int> Canvas::layer_map = {}; // 层级映射
+    std::unordered_map<std::string, int> Canvas::last_layer_map = {}; // 上次层级映射
 
     const std::string Canvas::init() {
         // DOM树
@@ -39,18 +43,15 @@ namespace LewzenServer {
     }
 
     const std::string Canvas::HTML() {
+        els->commit_this();
         return svg->outer_SVG();
     }
     
     //// 用于注册器
     void Canvas::_component_added(const std::shared_ptr<ComponentAbstract> &comp) {
         components[comp->getId()] = comp; // 将组件加入当前组件集合
-        added_comp_ids.push_back(comp->getId());
         if (auto el = comp->getSVGI().lock()) { // 将组件维护的SVGI加入DOM树
-            if (removed_layer.count(el->hash())) { // 加入特定层级
-                els->add(el, removed_layer[el->hash()]);
-                removed_layer.erase(el->hash());
-            } else els->add(el); // 加入到末尾
+            els->add(el); // 加入到末尾
         }
         for (auto &_def : comp->getDefs()) { // 维护Defs表
             if (auto def = _def.lock()) {
@@ -59,10 +60,10 @@ namespace LewzenServer {
                 defs_counter[hash]++;
             }
         }
+        updateLayerMap(); // 更新层级映射
     }
     void Canvas::_component_removed(const std::shared_ptr<ComponentAbstract> &comp) {
         components.erase(comp->getId()); // 将组件从当前组件集合移除
-        removed_comp_ids.push_back(comp->getId());
         if (auto el = comp->getSVGI().lock()) { // 将组件维护的SVGI从DOM树移除
             removed_layer[el->hash()] = getLayer(comp->getId()); // 记录层级
             els->remove(el); // 移除
@@ -74,11 +75,13 @@ namespace LewzenServer {
                 if (defs_counter[hash] == 0) defs_counter.erase(hash);
             }
         }
+        updateLayerMap(); // 更新层级映射
     }
     // 增加组件
     // 将组件添加进上下文
     void Canvas::add(std::weak_ptr<ComponentAbstract> comp) {
         if (auto c = comp.lock()) {
+            added_comp_ids.push_back(c->getId());
             _component_added(c); // 加入组件
         }
     }
@@ -105,8 +108,8 @@ namespace LewzenServer {
     // 将组件从上下文移出
     void Canvas::remove(std::weak_ptr<ComponentAbstract> comp, const int &time) {
         if (auto c = comp.lock()) {
+            removed_comp_ids.push_back(c->getId());
             readded_layer_map[c->getId()] = getLayer(c->getId()); // 记录层级
-            _component_removed(c); // 移除组件
             removed.insert({time, c}); // 将组件移动到暂存区
         }
     }
@@ -126,6 +129,9 @@ namespace LewzenServer {
                 comp->onRemoved(time); // 移除事件
             }
         });
+        for (auto &id : removed_comp_ids) {
+            if (components.count(id)) _component_removed(components[id]); // 移除组件
+        }
     }
     // 复制组件
     // 用组件复制组件
@@ -161,11 +167,7 @@ namespace LewzenServer {
     // 重添加一个组件
     void Canvas::readd(std::weak_ptr<ComponentAbstract> comp) {
         if (auto c = comp.lock()) {
-            Canvas::add(c);  // 添加进上下文
-            if (readded_layer_map.count(c->getId())) {
-                setLayer(c->getId(), readded_layer_map[c->getId()]); // 回到层级
-                readded_layer_map.erase(c->getId());
-            }
+            toreadd_comps.push_back(c);
         }
     }
     // 重添加所有最后时刻的所有组件
@@ -181,6 +183,17 @@ namespace LewzenServer {
             if (comp->getParent()) comp->getParent()->addChild(comp); // 添加父子关系
         }
         removed.erase(bound, removed.end());
+
+        // 进行重添加，改变层级
+        std::map<int, std::string> seq;
+        for (auto &comp : toreadd_comps) {
+            Canvas::add(comp);  // 添加进上下文
+            if (readded_layer_map.count(comp->getId())) seq[readded_layer_map[comp->getId()]] = comp->getId();
+            readded_layer_map.erase(comp->getId());
+            updateViewBox(comp);
+        }
+        for (auto &mp : seq) setLayer(mp.second, mp.first);
+        toreadd_comps.clear();
     }
     // 丢弃组件
     bool Canvas::discard(const int &time) {
@@ -224,8 +237,13 @@ namespace LewzenServer {
         auto o_els = els->children();
         for (int i = 0; i < idxs.size(); i++) n_els[idxs[i]] = o_els[i];
         els->children(n_els);
+        updateLayerMap(); // 更新层级映射
     }
 
+    // 添加被更新的组件
+    void Canvas::addUpdatedComponents(const std::string &id) {
+        updated_comp_ids.insert(id);
+    }
     // 获取被添加的组件信息
     void Canvas::getAddedComponents(std::vector<std::string> &ids, std::vector<std::string> &tops) {
         std::vector<std::shared_ptr<ComponentAbstract>> comps;
@@ -235,23 +253,21 @@ namespace LewzenServer {
         std::map<int, std::string> idx_map;
         for (auto &id : added_comp_ids) if (components.count(id)) idx_map[getLayer(id)] = id;
         for (auto &p : idx_map) ids.push_back(p.second); // 获取按层级排序的组件id表
-
-        added_comp_ids.clear();
     }
     // 获取被移除的组件信息
     void Canvas::getRemovedComponents(std::vector<std::string> &ids) {
         ids = removed_comp_ids;
-
-        removed_comp_ids.clear();
     }
     
     //// 用于层级变化
-    int Canvas::getLayer(const std::string &id) {
+    void Canvas::updateLayerMap() {
+        layer_map.clear();
         for (int i = 0; i < els->children().size(); i++) {
-            if (els->child(i)->Id.get() == id) {
-                return i;
-            }
+            layer_map[els->child(i)->Id.get()] = i;
         }
+    }
+    int Canvas::getLayer(const std::string &id) {
+        if (layer_map.count(id)) return layer_map[id];
         return -1;
     }
     bool Canvas::setLayer(const std::string &id, int layer) {
@@ -262,6 +278,7 @@ namespace LewzenServer {
             els->remove(el); // 首先移除
             els->add(el, layer);// 再加入到指定位置
         }
+        updateLayerMap(); // 更新层级映射
         return true;
     }
     // 向前
@@ -270,10 +287,7 @@ namespace LewzenServer {
         int idx = getLayer(id);
         if (idx == -1) return false;
         if (idx == els->children().size() - 1) return true; // 已经是最前
-        if (auto el = components[id]->getSVGI().lock()) {
-            els->remove(el); // 首先移除
-            els->add(el, idx + 1);// 再加入到指定位置
-        }
+        setLayer(id, idx + 1); //向前
         return true;
     }
     // 向后
@@ -282,10 +296,7 @@ namespace LewzenServer {
         int idx = getLayer(id);
         if (idx == -1) return false;
         if (idx == 0) return true; // 已经是最后
-        if (auto el = components[id]->getSVGI().lock()) {
-            els->remove(el); // 首先移除
-            els->add(el, idx - 1);// 再加入到指定位置
-        }
+        setLayer(id, idx - 1); //向后
         return true;
     }
     // 最前
@@ -293,10 +304,7 @@ namespace LewzenServer {
         if (!components.count(id)) return false;
         int idx = getLayer(id);
         if (idx == -1) return false;
-        if (auto el = components[id]->getSVGI().lock()) {
-            els->remove(el); // 首先移除
-            els->add(el);// 再加入到末尾
-        }
+        setLayer(id, -1); //最前
         return true;
     }
     // 最后
@@ -304,10 +312,7 @@ namespace LewzenServer {
         if (!components.count(id)) return false;
         int idx = getLayer(id);
         if (idx == -1) return false;
-        if (auto el = components[id]->getSVGI().lock()) {
-            els->remove(el); // 首先移除
-            els->add(el, 0);// 再加入到开头
-        }
+        setLayer(id, -1); //最后
         return true;
     }
     
@@ -356,7 +361,83 @@ namespace LewzenServer {
     //// 用于提交
     // 提交DOM Commands; 返回DOM Commands
     const std::string Canvas::commit() {
-        setCanvasTranslate();
-        return svg->commit();
+        std::stringstream ss;
+        setCanvasTranslate(); // 更新ViewBox
+
+        //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        // 处理子元素
+        if (removed_comp_ids.size() > 0 || added_comp_ids.size() > 0 || updated_comp_ids.size() > 0) {
+            ss << "child 3" << std::endl;
+            std::set<std::string> unupdated_comp_ids; for (auto &mp : last_layer_map) unupdated_comp_ids.insert(mp.first);
+            // 提取索引
+            std::vector<int> removal; for (auto &id : removed_comp_ids) removal.push_back(last_layer_map[id]), updated_comp_ids.erase(id), unupdated_comp_ids.erase(id);
+            std::vector<int> addition; for (auto &id : added_comp_ids) addition.push_back(layer_map[id]), updated_comp_ids.erase(id);
+            std::vector<std::pair<int, int>> changed; for (auto &id : updated_comp_ids) changed.push_back({layer_map[id], last_layer_map[id]}), unupdated_comp_ids.erase(id);
+            std::vector<std::pair<int, int>> unchanged; for (auto &id : unupdated_comp_ids) unchanged.push_back({layer_map[id], last_layer_map[id]});
+            // 处理删除的元素
+            // remove
+            int m = layer_map.size(), n = last_layer_map.size();
+            int *indices = new int[m], *_removed = new int[n];
+            std::fill(indices, indices + m, 0); std::fill(_removed, _removed + n, 0);
+            for (auto &r : removal) _removed[r] = 1;
+            for (int i = 1; i < n; i++) _removed[i] += _removed[i - 1];
+            for (auto &r : removal) ss << "remove " << r - (r > 0 ? _removed[r - 1] : 0) << std::endl;
+            // append
+            for (auto &a : addition) {
+                els->child(a)->commit();
+                auto svg = els->child(a)->outer_SVG();
+                ss << "append " << svg.size() << std::endl << svg << std::endl;
+            }
+            // change
+            for (auto &c : changed) {
+                auto &a = c.first; auto &b = c.second;
+                auto &s = els->child(a)->commit();
+                if (s == Lewzen::STR_NULL) continue;
+                ss << "child " << b - _removed[b] << std::endl;
+                ss << s;
+                ss << "parent" << std::endl;
+            }
+            // sort
+            for (auto &c : unchanged) {
+                auto &a = c.first; auto &b = c.second;
+                indices[b - _removed[b]] = a;
+            }
+            for (auto &c : changed) {
+                auto &a = c.first; auto &b = c.second;
+                indices[b - _removed[b]] = a;
+            }
+            for (int i = 0; i < addition.size(); i++) {
+                auto &a = addition[i];
+                indices[unchanged.size() + changed.size() + i] = a;
+            }
+            bool ordered = true;
+            for (int i = 0; i < m && ordered; i++) if (indices[i] != i) ordered = false;
+            if (!ordered) {
+                ss << "sort \"";
+                for (int i = 0; i < m; i++) {
+                    ss << indices[i];
+                    if (i < m - 1) ss << ",";
+                }
+                ss << "\"" << std::endl;
+            }
+            delete[] _removed; delete[] indices;
+
+            // 应用层级更新
+            added_comp_ids.clear();
+            removed_comp_ids.clear();
+            updated_comp_ids.clear();
+            last_layer_map = layer_map;
+        
+            ss << "parent" << std::endl;
+        }
+        //std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        //std::cout << "timer = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[us]" << std::endl;
+
+        ss << "child 0" << std::endl;
+        ss << defs->commit() << std::endl; // 更新预定义域
+        ss << "parent" << std::endl;
+        
+        ss << svg->commit_this() << std::endl; // 更新画布
+        return ss.str();
     }
 }

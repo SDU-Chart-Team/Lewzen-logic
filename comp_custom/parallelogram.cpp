@@ -42,7 +42,13 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const Parallelogram &>(comp);
         // 拷贝关键点位置
         *Control = *(p.Control);
+        SVGIG->add(SVGIPath);
 
+        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx > getX() + getWidth() / 4) Control->setX(getX() + getWidth()/4); // 不允许超过宽度的1/4
+            if (nx < getX()) Control->setX(getX()); // 不允许低于矩形的X坐标
+        });
         return *this;
     }
     // 序列化，并记录已操作的
@@ -57,7 +63,13 @@ namespace LewzenServer {
 
         // 注册关键点
         Control = corePoints["Control"];
+        SVGIG->add(SVGIPath);
 
+        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+            if (!corePointMoving) return;
+            if (nx > getX() + getWidth() / 4) Control->setX(getX() + getWidth()/4); // 不允许超过宽度的1/4
+            if (nx < getX()) Control->setX(getX()); // 不允许低于矩形的X坐标
+        });
         return *this;
     }
 
@@ -89,10 +101,10 @@ namespace LewzenServer {
 
         std::stringstream ss;
 
-        ss << "M" << bl.get_x()<<","<<bl.get_y()<<" ";
-        ss <<"L"<<tl.get_x()<<","<<tl.get_y()<<" ";
-        ss<<"L"<<tr.get_x()<<","<<tr.get_y()<<" ";
-        ss<<"L"<<br.get_x()<<","<<br.get_y()<<" ";
+        ss << "M " << bl.get_x()<<" "<<bl.get_y()<<" ";
+        ss <<"L "<<tl.get_x()<<" "<<tl.get_y()<<" ";
+        ss<<"L "<<tr.get_x()<<" "<<tr.get_y()<<" ";
+        ss<<"L "<<br.get_x()<<" "<<br.get_y()<<" ";
         ss<<"z";
         return ss.str();
     }

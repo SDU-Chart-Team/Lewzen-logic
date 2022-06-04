@@ -206,6 +206,7 @@ namespace LewzenServer {
     }
     void ComponentWritable::setSpacing(const Spacing &spacing) {
         _spacing = spacing;
+        onChanged();
     }
     // 对齐
     const ComponentWritable::Alignment ComponentWritable::getAlignment() const {
@@ -213,6 +214,7 @@ namespace LewzenServer {
     }
     void ComponentWritable::setAlignment(const Alignment &alignment) {
         _alignment = alignment;
+        onChanged();
     }
     // HTML内容
     const std::string ComponentWritable::getHTML() {
@@ -224,7 +226,7 @@ namespace LewzenServer {
         ss << std::to_string(rect.width - _spacing.left - _spacing.right - 2 * _spacing.global) << "px"; // 上边界
         ss << "; height: ";
         ss << "1px"; // 高度
-        ss << "; padding-top: ";
+        ss << "; position:relative; top: ";
         if (_alignment.vertical == 0) ss << std::to_string(rect.y + _spacing.top + _spacing.global) << "px"; // 上准线
         else if (_alignment.vertical == 1) ss << std::to_string(rect.y + rect.height / 2) << "px"; // 居中准线
         else if (_alignment.vertical == 2) ss << std::to_string(rect.y + rect.height - _spacing.bottom - _spacing.global) << "px"; // 下准线
@@ -249,5 +251,6 @@ namespace LewzenServer {
             if (_HTML != "" && !_fObjAdded) svgi->add(fObj), _fObjAdded = true;
             else if (_HTML == "") svgi->remove(fObj), _fObjAdded = false;
         }
+        onChanged();
     }    
 }
