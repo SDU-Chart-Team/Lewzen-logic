@@ -2238,7 +2238,7 @@ namespace LewzenServer {
         end_arrow->Id = "end_arrow";
         end_arrow->MarkerHeight = 13;
         end_arrow->MarkerWidth = 13;
-        end_arrow->RefX = 2;
+        end_arrow->RefX = 6;
         end_arrow->RefY = 3;
         end_arrow->Orient = "auto";
         arrowPath = std::make_shared<Lewzen::SVGIPath>();
@@ -2246,12 +2246,26 @@ namespace LewzenServer {
         arrowPath->Fill = "black";
         end_arrow->add(arrowPath);
 
+
+        start_arrow = std::make_shared<Lewzen::SVGIMarker>();
+        start_arrow->Id = "start_arrow";
+        start_arrow->MarkerHeight = 13;
+        start_arrow->MarkerWidth = 13;
+        start_arrow->RefX = 0;
+        start_arrow->RefY = 3;
+        start_arrow->Orient = "auto";
+        std::shared_ptr<Lewzen::SVGIPath> enda = std::make_shared<Lewzen::SVGIPath>();
+        enda->D = "M4,3 L6,0 L0,3 L6,6 L4,3";
+        enda->Fill = "black";
+        start_arrow->add(enda);
+
+
         start_arrow_circle = std::make_shared<Lewzen::SVGIMarker>();
         std::shared_ptr<Lewzen::SVGICircle> t = std::make_shared<Lewzen::SVGICircle>();
         start_arrow_circle->Id = "start_arrow_circle";
         start_arrow_circle->MarkerHeight = 13;
         start_arrow_circle->MarkerWidth = 13;
-        start_arrow_circle->RefX = 2;
+        start_arrow_circle->RefX = 0;
         start_arrow_circle->RefY = 3;
         start_arrow_circle->Orient = "auto";
         t->Cx = 2;
@@ -2264,7 +2278,7 @@ namespace LewzenServer {
         end_arrow_circle->Id = "end_arrow_circle";
         end_arrow_circle->MarkerHeight = 13;
         end_arrow_circle->MarkerWidth = 13;
-        end_arrow_circle->RefX = 2;
+        end_arrow_circle->RefX = 4;
         end_arrow_circle->RefY = 3;
         end_arrow_circle->Orient = "auto";
         std::shared_ptr<Lewzen::SVGICircle> t1 = std::make_shared<Lewzen::SVGICircle>();
@@ -2275,17 +2289,7 @@ namespace LewzenServer {
         end_arrow_circle->add(t1);
 
 
-        start_arrow = std::make_shared<Lewzen::SVGIMarker>();
-        start_arrow->Id = "start_arrow";
-        start_arrow->MarkerHeight = 13;
-        start_arrow->MarkerWidth = 13;
-        start_arrow->RefX = 2;
-        start_arrow->RefY = 3;
-        start_arrow->Orient = "auto";
-        std::shared_ptr<Lewzen::SVGIPath> enda = std::make_shared<Lewzen::SVGIPath>();
-        enda->D = "M4,3 L6,0 L0,3 L6,6 L4,3";
-        enda->Fill = "black";
-        start_arrow->add(enda);
+
 
         arrows["end_arrow"] = end_arrow;
         arrows["start_arrow"] = start_arrow;
@@ -2301,7 +2305,7 @@ namespace LewzenServer {
         end_arrow_tri->Id = "end_arrow_tri";
         end_arrow_tri->MarkerHeight = 13;
         end_arrow_tri->MarkerWidth = 13;
-        end_arrow_tri->RefX = 0;
+        end_arrow_tri->RefX = 6;
         end_arrow_tri->RefY = 3;
         end_arrow_tri->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> enda1 = std::make_shared<Lewzen::SVGIPath>();
@@ -2315,7 +2319,7 @@ namespace LewzenServer {
         start_arrow_tri->Id = "start_arrow_tri";
         start_arrow_tri->MarkerHeight = 13;
         start_arrow_tri->MarkerWidth = 13;
-        start_arrow_tri->RefX = 6;
+        start_arrow_tri->RefX = 0;
         start_arrow_tri->RefY = 3;
         start_arrow_tri->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> enda2 = std::make_shared<Lewzen::SVGIPath>();
@@ -2359,12 +2363,12 @@ namespace LewzenServer {
         end_arrow_tri_h->Id = "end_arrow_tri_h";
         end_arrow_tri_h->MarkerHeight = 13;
         end_arrow_tri_h->MarkerWidth = 13;
-        end_arrow_tri_h->RefX = 0;
+        end_arrow_tri_h->RefX = 6;
         end_arrow_tri_h->RefY = 3;
         end_arrow_tri_h->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> end2 = std::make_shared<Lewzen::SVGIPath>();
         end2->D = "M0,0 L0,6 L6,3 z";
-        end2->Fill = "none";
+        end2->Fill = "white";
         end2->Stroke = "black";
         end_arrow_tri_h->add(end2);
         arrows["end_arrow_tri_h"] = end_arrow_tri_h;
@@ -2374,12 +2378,12 @@ namespace LewzenServer {
         start_arrow_tri_h->Id = "start_arrow_tri_h";
         start_arrow_tri_h->MarkerHeight = 13;
         start_arrow_tri_h->MarkerWidth = 13;
-        start_arrow_tri_h->RefX = 6;
+        start_arrow_tri_h->RefX = 0;
         start_arrow_tri_h->RefY = 3;
         start_arrow_tri_h->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> end1 = std::make_shared<Lewzen::SVGIPath>();
         end1->D = "M6,0 L6,6 L0,3 z";
-        end1->Fill = "none";
+        end1->Fill = "white";
         end1->Stroke = "black";
         start_arrow_tri_h->add(end1);
         arrows["start_arrow_tri_h"] = start_arrow_tri_h;
@@ -2419,7 +2423,7 @@ namespace LewzenServer {
         end_arrow_tri_half->Id = "end_arrow_tri_half";
         end_arrow_tri_half->MarkerHeight = 13;
         end_arrow_tri_half->MarkerWidth = 13;
-        end_arrow_tri_half->RefX = 0;
+        end_arrow_tri_half->RefX = 6;
         end_arrow_tri_half->RefY = 3;
         end_arrow_tri_half->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> e1 = std::make_shared<Lewzen::SVGIPath>();
@@ -2435,7 +2439,7 @@ namespace LewzenServer {
         start_arrow_tri_half->Id = "start_arrow_tri_half";
         start_arrow_tri_half->MarkerHeight = 13;
         start_arrow_tri_half->MarkerWidth = 13;
-        start_arrow_tri_half->RefX = 6;
+        start_arrow_tri_half->RefX = 0;
         start_arrow_tri_half->RefY = 3;
         start_arrow_tri_half->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> e2 = std::make_shared<Lewzen::SVGIPath>();
@@ -2450,7 +2454,7 @@ namespace LewzenServer {
         end_arrow_two_tri->Id = "end_arrow_two_tri";
         end_arrow_two_tri->MarkerHeight = 13;
         end_arrow_two_tri->MarkerWidth = 13;
-        end_arrow_two_tri->RefX = 0;
+        end_arrow_two_tri->RefX = 10;
         end_arrow_two_tri->RefY = 3;
         end_arrow_two_tri->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> e3 = std::make_shared<Lewzen::SVGIPath>();
@@ -2465,7 +2469,7 @@ namespace LewzenServer {
         start_arrow_two_tri->Id = "start_arrow_two_tri";
         start_arrow_two_tri->MarkerHeight = 13;
         start_arrow_two_tri->MarkerWidth = 13;
-        start_arrow_two_tri->RefX = 10;
+        start_arrow_two_tri->RefX = 0;
         start_arrow_two_tri->RefY = 3;
         start_arrow_two_tri->Orient = "auto";
         std::shared_ptr<Lewzen::SVGIPath> e4 = std::make_shared<Lewzen::SVGIPath>();
