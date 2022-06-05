@@ -46,23 +46,6 @@ namespace LewzenServer {
         // 拷贝关键点位置
         *abc = *(p.abc);
 
-        SVGIG->add(SVGIPath);
-        abc->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if (nx < (getX())) {
-                abc->setX(getX());
-            }
-            if (nx > getX() + getWidth()) {
-                abc->setX(getX() + getWidth());
-            }
-            if (ny < getY()) {
-                abc->setY(getY());
-            }
-            if (ny > getY() + getHeight()) {
-                abc->setY(getY() + getHeight());
-            }
-
-        });
         return *this;
     }
 
@@ -79,24 +62,6 @@ namespace LewzenServer {
         // 注册关键点
         abc = corePoints["abc"];
 
-        SVGIG->add(SVGIPath);
-
-        abc->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if (nx < (getX())) {
-                abc->setX(getX());
-            }
-            if (nx > getX() + getWidth()) {
-                abc->setX(getX() + getWidth());
-            }
-            if (ny < getY()) {
-                abc->setY(getY());
-            }
-            if (ny > getY() + getHeight()) {
-                abc->setY(getY() + getHeight());
-            }
-
-        });
         return *this;
     }
 

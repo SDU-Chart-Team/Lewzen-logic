@@ -68,35 +68,7 @@ namespace LewzenServer {
         // 拷贝关键点位置
         *ControlUp = *(p.ControlUp);
         *ControlDown = *(p.ControlDown);
-        SVGIG->add(SVGIPath);
-        // 初始化关键点
 
-
-        ControlUp->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if(ny < getY()){
-                ControlUp->setY(getY());
-            }
-            if(ny > getY()+getHeight()){
-                ControlUp->setY(getY()+getHeight());
-            }
-        });
-
-        ControlDown->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if(nx < getX()+getWidth()/2){
-                ControlDown->setX(getX()+getWidth()/2);
-            }
-            if(nx > getX()+getWidth()){
-                ControlDown->setX(getX()+getWidth());
-            }
-            if(ny > getY()+getHeight()){
-                ControlDown->setY(getY()+getHeight());
-            }
-            if(ny < getY()){
-                ControlDown->setY(getY());
-            }
-        });
         return *this;
     }
     // 序列化，并记录已操作的
@@ -114,36 +86,7 @@ namespace LewzenServer {
 
         ControlUp = corePoints["ControlUp"];
         ControlDown = corePoints["ControlDown"];
-        SVGIG->add(SVGIPath);
 
-        // 初始化关键点
-
-
-        ControlUp->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if(ny < getY()){
-                ControlUp->setY(getY());
-            }
-            if(ny > getY()+getHeight()){
-                ControlUp->setY(getY()+getHeight());
-            }
-        });
-
-        ControlDown->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if(nx < getX()+getWidth()/2){
-                ControlDown->setX(getX()+getWidth()/2);
-            }
-            if(nx > getX()+getWidth()){
-                ControlDown->setX(getX()+getWidth());
-            }
-            if(ny > getY()+getHeight()){
-                ControlDown->setY(getY()+getHeight());
-            }
-            if(ny < getY()){
-                ControlDown->setY(getY());
-            }
-        });
         return *this;
     }
 

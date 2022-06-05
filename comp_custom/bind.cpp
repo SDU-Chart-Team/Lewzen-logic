@@ -23,7 +23,7 @@ namespace LewzenServer {
         Rectangle::operator=(comp);
 
         auto &p = dynamic_cast<const Bind &>(comp);
-        SVGIG->add(SVGIPath);
+
         return *this;
     }
     // 序列化，并记录已操作的
@@ -36,7 +36,7 @@ namespace LewzenServer {
     ComponentAbstract &Bind::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
-        SVGIG->add(SVGIPath);
+
         return *this;
     }
     //// Basics虚接口

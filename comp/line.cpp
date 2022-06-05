@@ -538,13 +538,15 @@ namespace LewzenServer {
             setEndArrow(p.endArrow);
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
-
+            pointList.clear();
+//            std::cout<<"pls "<<pointList.size()<<std::endl;
             for (int i = 0; i < (int) p.pointList.size(); i++) {
                 if (pointList.size() <= i) {
                     pointList.push_back(createCorePoint("tmp", 0, 0));
                 }
                 *pointList[i] = *(p.pointList[i]);
             }
+            setCorePoints(pointList);
 
             if(p.offset > 0)onOffset();
 
@@ -567,12 +569,13 @@ namespace LewzenServer {
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
+
             if(p.offset > 0)onOffset();
 
         } else if (type == verticalLine) {
             // 拷贝父类
 
-            std::cout<<"type vecttt\n\n\n";
+//            std::cout<<"type vecttt\n\n\n";
             setLineType(p.getLineType());
             setStartArrow(p.startArrow);
             setEndArrow(p.endArrow);
@@ -580,6 +583,7 @@ namespace LewzenServer {
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
+
             if(p.offset > 0)onOffset();
 
         } else if (type == curveTwo) {
@@ -593,6 +597,9 @@ namespace LewzenServer {
             *endPoint = *(p.endPoint);
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
+
+
+
         } else if (type == hallowLine) {
 
             // 拷贝父类
@@ -600,6 +607,8 @@ namespace LewzenServer {
             // 拷贝关键点位置
             *startPoint = *(p.startPoint);
             *endPoint = *(p.endPoint);
+
+
         } else if (type == complexLine) {
             setLineType(p.getLineType());
 
@@ -614,6 +623,7 @@ namespace LewzenServer {
 
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
+
         }
         else if(type == flexableLine){
             setLineType(p.getLineType());
@@ -625,15 +635,17 @@ namespace LewzenServer {
             *arrowPoint = *(p.arrowPoint);
             *arrowCPoint = *(p.arrowCPoint);
 
-
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
+            pointList.clear();
+//            std::cout<<"pls "<<pointList.size()<<std::endl;
             for (int i = 0; i < (int) p.pointList.size(); i++) {
                 if (pointList.size() <= i) {
                     pointList.push_back(createCorePoint("tmp", 0, 0));
                 }
                 *pointList[i] = *(p.pointList[i]);
             }
+            setCorePoints(pointList);
         }
 
 
@@ -2506,5 +2518,4 @@ namespace LewzenServer {
         Line::offset = offset;
     }
 }
-
 

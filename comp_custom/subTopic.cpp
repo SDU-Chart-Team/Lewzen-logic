@@ -37,9 +37,6 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const SubTopic &>(comp);
         // 拷贝关键点位置
         *startPoint = *(p.startPoint);
-        SVGIG->remove(SVGIRect);
-        SVGIG->add(SVGIPath);
-        SVGIG->add(SVGIRect);
         return *this;
     }
     // 序列化，并记录已操作的
@@ -54,9 +51,7 @@ namespace LewzenServer {
 
         // 注册关键点
         startPoint = corePoints["start"];
-        SVGIG->remove(SVGIRect);
-        SVGIG->add(SVGIPath);
-        SVGIG->add(SVGIRect);
+
         return *this;
     }
 
