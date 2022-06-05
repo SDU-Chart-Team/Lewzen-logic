@@ -166,9 +166,11 @@ namespace LewzenServer {
         fObj->Width = "100%";
         fObj->Height = "100%";
         fObj->Style = "overflow: visible; pointer-events: none; user-select: none";
+        fObj->Id = getId() + "_text";
         auto inner = std::make_shared<Lewzen::SVGIElement>(); // 实际外部对象
         inner->RawHTML.bind(std::bind(&ComponentWritable::getForeignHTML, this));
         fObj->add(inner);
+        fObj->commit();
     }
     // 拷贝
     ComponentAbstract &ComponentWritable::operator=(const ComponentAbstract &comp) {

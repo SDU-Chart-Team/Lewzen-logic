@@ -171,18 +171,11 @@ namespace LewzenServer {
     }
     // 序列化，并记录已操作的
     void ComponentRotatable::serialize(json &j, std::vector<std::string> &processed) {
-        // 取消此组件的父链接
-        auto p = getRotateBindParent();
-        if (p) p->removeChild(shared_from_this());
-
         // 父类序列化
         ComponentBasics::serialize(j, processed);
 
         // 序列化theta
         j["theta"] = getTheta();
-
-        // 将此组件重链接
-        if (p) p->addChild(shared_from_this());
     }
     // 反序列化
     ComponentAbstract &ComponentRotatable::operator=(const json &j) {
@@ -256,7 +249,7 @@ namespace LewzenServer {
     // 设置旋转角度
     void ComponentRotatable::setTheta(double theta) {
         // 应用旋转角度
-        Lewzen::ComponentRotatable::set_theta(std::fmod(theta, PI));
+        Lewzen::ComponentRotatable::set_theta(std::fmod(theta, 2 * PI));
         onRotateStatusChanged(); // 旋转状态改变
         onChanged(); // 更新事件
     }

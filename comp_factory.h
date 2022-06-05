@@ -5,6 +5,7 @@
 
 #include "comp_module/comp_abstract.h"
 #include "comp/rectangle.h"
+#include "comp/rectangle_scriptable.h"
 #include "comp/line.h"
 #include "comp_custom/isometric_cube.h"
 #include "comp_custom/trapezoid.h"

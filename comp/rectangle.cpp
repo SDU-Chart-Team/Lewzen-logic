@@ -176,7 +176,6 @@ namespace LewzenServer {
     // 拷贝
     ComponentAbstract &Rectangle::operator=(const ComponentAbstract &comp) {
         // 拷贝父类
-        
         ComponentRotatable::operator=(comp);
         ComponentWritable::operator=(comp);
         ComponentStylized::operator=(comp);

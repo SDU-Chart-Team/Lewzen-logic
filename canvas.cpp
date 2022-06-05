@@ -311,8 +311,8 @@ namespace LewzenServer {
     bool Canvas::back(const std::string &id) {
         if (!components.count(id)) return false;
         int idx = getLayer(id);
-        if (idx == -1) return false;
-        setLayer(id, -1); //最后
+        if (idx == 0) return false;
+        setLayer(id, 0); //最后
         return true;
     }
     
@@ -345,7 +345,7 @@ namespace LewzenServer {
         int lowerX = std::floor(infX.top()), upperX = std::ceil(supX.top());
         int lowerY = std::floor(infY.top()), upperY = std::ceil(supY.top());
         lowerX = lowerX-((lowerX%A4WIDTH)+A4WIDTH)%A4WIDTH;
-        upperX = upperX+(A4WIDTH-(upperX%A4HEIGHT))%A4HEIGHT;
+        upperX = upperX+(A4WIDTH-(upperX%A4WIDTH))%A4WIDTH;
         lowerY = lowerY-((lowerY%A4HEIGHT)+A4HEIGHT)%A4HEIGHT;
         upperY = upperY+(A4HEIGHT-(upperY%A4HEIGHT))%A4HEIGHT;
         

@@ -9,7 +9,7 @@ objs = register.o \
 	utils.o
 
 wasm: sub_all $(objs)
-	em++ $(flags) --bind -O3 -s ENVIRONMENT='web' -sALLOW_MEMORY_GROWTH -o wasm.js wasm.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
+	em++ $(flags) --bind -O3 -s ENVIRONMENT='web' -s TOTAL_MEMORY=1024MB -o wasm.js wasm.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)
 
 test: sub_all $(objs)
 	$(cc) $(flags) -o test.exe main.cpp $(shell dir . /S /b | findstr /i ".*\.o$") $(lib)

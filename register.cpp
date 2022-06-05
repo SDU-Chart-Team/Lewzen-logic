@@ -107,6 +107,13 @@ namespace LewzenServer {
             return param;
         });
         addEvent("load", [&](json &param){ // 反序列化
+            json cursors; cursors["command"] = "cursors";
+            std::vector<std::string> idss = {}; for (auto &wp : Canvas::components) idss.push_back(wp.first); cursors["ids"] = idss;
+            printf("%s\n", cursors.dump().c_str());
+            run(cursors.dump());
+
+            Canvas::remove(0);
+            Canvas::discard(-1);
             Canvas::deserialize(param["json"]);
 
             param["status"] = SUCCEED;

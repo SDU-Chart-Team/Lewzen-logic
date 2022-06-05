@@ -36,7 +36,8 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
-        auto &p = dynamic_cast<const IsometricCube &>(comp);        
+        auto &p = dynamic_cast<const IsometricCube &>(comp);
+        
         // 拷贝关键点位置
         *Control = *(p.Control);
 
