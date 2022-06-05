@@ -19,6 +19,9 @@ namespace LewzenServer {
         virtual void serialize(json &j, std::vector<std::string> &processed) override;
         // 反序列化
         virtual ComponentAbstract &operator=(const json &j) override;
+        
+        //// Writable虚接口
+        virtual const ComponentWritable::WriteArea getWriteArea() override;
 
         //// Basics virtual interface
         virtual void moveCorePoint(const std::string &id, const double &dx, const double &dy) override;

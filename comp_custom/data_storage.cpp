@@ -16,12 +16,13 @@ namespace LewzenServer {
         SVGIG->add(SVGIPath);
         Control = createCorePoint("Control", getX()+getWidth()*0.25, getY()+getHeight()*0.5);
         Control->setColor("orange");
-        Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
-            if (!corePointMoving) return;
-            if (nx < getX()) Control->setX(getX());  
-            if (nx > getX()+getWidth()) Control->setX(getX()+getWidth());
-        });
-        corePoints[Control->getId()] = Control;
+                    Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
+                        if (!corePointMoving) return;
+                        if (nx < getX()) Control->setX(getX());  
+                        if (nx > getX()+getWidth()) Control->setX(getX()+getWidth());
+            
+                        });
+                            corePoints[Control->getId()] = Control;
         // 绑定图形属性
         std::function<const std::string()> _getPath = std::bind(&DataStorage::getPath, this);
         SVGIPath->D.bind(_getPath);
@@ -29,12 +30,13 @@ namespace LewzenServer {
     ComponentAbstract &DataStorage::operator=(const ComponentAbstract &comp) {
         // 拷贝父类
         Rectangle::operator=(comp);
+        SVGIG->add(SVGIPath);
 
         auto &p = dynamic_cast<const DataStorage &>(comp); 
 
         // 拷贝关键点位置
-        *Control = *(p.Control);
-        return *this;
+                    *Control = *(p.Control);
+                    return *this;
     }
     // 序列化，并记录已操作的
     void DataStorage::serialize(json &j, std::vector<std::string> &processed) {
@@ -45,11 +47,20 @@ namespace LewzenServer {
     ComponentAbstract &DataStorage::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
-        // 注册关键点
-        Control = corePoints["Control"];
+        SVGIG->add(SVGIPath);
 
-        
-        return *this;
+        // 注册关键点
+                    Control = corePoints["Control"];
+                    return *this;
+    }
+    //// Writable虚接口
+    const ComponentWritable::WriteArea Rectangle::getWriteArea() {
+        return {
+            getX(),
+            getY(),
+            getWidth(),
+            getHeight()
+        };
     }
     //// Basics虚接口
     void DataStorage::moveCorePoint(const std::string &id, const double &dx, const double &dy) {

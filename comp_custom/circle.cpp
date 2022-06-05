@@ -143,19 +143,19 @@ namespace LewzenServer
         if (id == "L")
         {
             corePointMoving = true;
-            *LB += createPoint(dx, dx);
+            *LB += createPoint(dx, -dx);
             corePointMoving = false;
         }
         if (id == "R")
         {
             corePointMoving = true;
-            *RB += createPoint(dy, dy);
+            *RB += createPoint(dx, dx);
             corePointMoving = false;
         }
         if (id == "T")
         {
             corePointMoving = true;
-            *RT += createPoint(dy, dy);
+            *RT += createPoint(-dy, dy);
             corePointMoving = false;
         }
         if (id == "B")
@@ -164,9 +164,29 @@ namespace LewzenServer
             *RB += createPoint(dy, dy);
             corePointMoving = false;
         }
-        else
+        if (id == "LT")
         {
-            Rectangle::moveCorePoint(id, dx, dy);
+            corePointMoving = true;
+            *LT += createPoint(dx, dx);
+            corePointMoving = false;
+        }
+        if (id == "RT")
+        {
+            corePointMoving = true;
+            *RT += createPoint(-dy, dy);
+            corePointMoving = false;
+        }
+        if (id == "LB")
+        {
+            corePointMoving = true;
+            *LB += createPoint(dx, -dx);
+            corePointMoving = false;
+        }
+        if (id == "RB")
+        {
+            corePointMoving = true;
+            *RB += createPoint(dy, dy);
+            corePointMoving = false;
         }
         onChanged();
     }
