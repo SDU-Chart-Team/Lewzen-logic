@@ -529,25 +529,32 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const Line &>(comp);
         setDotLine(p.getDotType());
         std::string type = p.getLineType();
-        std::cout<<"copy linetype\n"<<type<<std::endl;
+//        std::cout<<"copy linetype\n"<<type<<std::endl;
         if (type == straightLine) {
             // 拷贝父类
             // 拷贝关键点位置
-            setLineType(type);
+//            setLineType(type);
+
             setStartArrow(p.startArrow);
             setEndArrow(p.endArrow);
-            *startPoint = *(p.startPoint);
-            *endPoint = *(p.endPoint);
-            pointList.clear();
+//            *startPoint = *(p.startPoint);
+//            *endPoint = *(p.endPoint);
 //            std::cout<<"pls "<<pointList.size()<<std::endl;
             for (int i = 0; i < (int) p.pointList.size(); i++) {
                 if (pointList.size() <= i) {
                     pointList.push_back(createCorePoint("tmp", 0, 0));
                 }
+//                std::cout<<pointList[i]->getId()<<" "<<pointList[i]->getX()<<" "<<pointList[i]->getY()<<std::endl;
+
                 *pointList[i] = *(p.pointList[i]);
+                if(pointList[i]->getId() == "start"){
+                    startPoint = pointList[i];
+                }
+                if(pointList[i]->getId() == "end"){
+                    endPoint = pointList[i];
+                }
             }
             setCorePoints(pointList);
-
             if(p.offset > 0)onOffset();
 
 
@@ -626,29 +633,41 @@ namespace LewzenServer {
 
         }
         else if(type == flexableLine){
-            setLineType(p.getLineType());
+            SVGIG->children({});
+            set_line_type(type);
+            corePoints.clear();
+            pointList.clear();
 
-            // 拷贝关键点位置
-            *startPoint = *(p.startPoint);
-            *endPoint = *(p.endPoint);
-
+//            *startPoint = *(p.startPoint);
+//            *endPoint = *(p.endPoint);
             *arrowPoint = *(p.arrowPoint);
             *arrowCPoint = *(p.arrowCPoint);
 
             *midPoint = *(p.midPoint);
             *midCPoint = *(p.midCPoint);
+
+            // 拷贝关键点位置
             pointList.clear();
+//            corePoints.clear();
 //            std::cout<<"pls "<<pointList.size()<<std::endl;
             for (int i = 0; i < (int) p.pointList.size(); i++) {
                 if (pointList.size() <= i) {
                     pointList.push_back(createCorePoint("tmp", 0, 0));
                 }
                 *pointList[i] = *(p.pointList[i]);
+                if(pointList[i]->getId() == "start"){
+                    startPoint = pointList[i];
+                }
+                if(pointList[i]->getId() == "end"){
+                    endPoint = pointList[i];
+                }
             }
+
             setCorePoints(pointList);
+            setCorePoints({midPoint,midCPoint,arrowPoint,arrowCPoint});
+            SVGIG->add(SVGIFlexableLine);
+            SVGIG->add(SVGIFlexableLineHide);
         }
-
-
         return *this;
     }
 
