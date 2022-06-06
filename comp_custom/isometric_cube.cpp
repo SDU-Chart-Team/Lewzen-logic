@@ -95,11 +95,17 @@ namespace LewzenServer {
         ss << "L " << c.get_x() << " " << c.get_y() << " ";
         ss << "L " << b.get_x() << " " << b.get_y() << " ";
 
+        ss << "L " << br.get_x() << " " << br.get_y() << " ";
+        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
+        ss << "L " << c.get_x() << " " << c.get_y() << " ";
+
         ss << "M " << tl.get_x() << " " << tl.get_y() << " ";
         ss << "L " << bl.get_x() << " " << bl.get_y() << " ";
         ss << "L " << b.get_x() << " " << b.get_y() << " ";
-        ss << "L " << br.get_x() << " " << br.get_y() << " ";
-        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
+        ss << "L " << c.get_x() << " " << c.get_y() << " ";
+        ss << "L " << tl.get_x() << " " << tl.get_y() << " ";
+//        ss << "L " << br.get_x() << " " << br.get_y() << " ";
+//        ss << "L " << tr.get_x() << " " << tr.get_y() << " ";
 
         return ss.str();
     }
