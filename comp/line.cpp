@@ -447,7 +447,7 @@ namespace LewzenServer {
         // 注册关键点
         setCorePoints(pointList);
         // 默认样式
-        setStyle("stroke: black; fill: none; stroke-width: 2px;");
+        setStyle("stroke: black; fill: none; stroke-width: 1px;");
         // 绑定属性
         std::function<std::string()> _getD = std::bind(&Line::getD, this);
         SVGILine->D.bind(_getD);
@@ -2238,11 +2238,12 @@ namespace LewzenServer {
         end_arrow->Id = "end_arrow";
         end_arrow->MarkerHeight = 13;
         end_arrow->MarkerWidth = 13;
-        end_arrow->RefX = 6;
-        end_arrow->RefY = 3;
+        end_arrow->RefX = 12;
+        end_arrow->RefY = 6;
         end_arrow->Orient = "auto";
+        end_arrow->MarkerUnits = "userSpaceOnUse";
         arrowPath = std::make_shared<Lewzen::SVGIPath>();
-        arrowPath->D = "M0,0 L6,3 L0,6 L2,3 L0,0";
+        arrowPath->D = "M0,0 L12,6 L0,12 L4,6 L0,0";
         arrowPath->Fill = "black";
         end_arrow->add(arrowPath);
 
@@ -2252,10 +2253,11 @@ namespace LewzenServer {
         start_arrow->MarkerHeight = 13;
         start_arrow->MarkerWidth = 13;
         start_arrow->RefX = 0;
-        start_arrow->RefY = 3;
+        start_arrow->RefY = 6;
         start_arrow->Orient = "auto";
+        start_arrow->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> enda = std::make_shared<Lewzen::SVGIPath>();
-        enda->D = "M4,3 L6,0 L0,3 L6,6 L4,3";
+        enda->D = "M8,6 L12,0 L0,6 L12,12 L8,6";
         enda->Fill = "black";
         start_arrow->add(enda);
 
@@ -2266,11 +2268,12 @@ namespace LewzenServer {
         start_arrow_circle->MarkerHeight = 13;
         start_arrow_circle->MarkerWidth = 13;
         start_arrow_circle->RefX = 0;
-        start_arrow_circle->RefY = 3;
+        start_arrow_circle->RefY = 6;
         start_arrow_circle->Orient = "auto";
-        t->Cx = 2;
-        t->Cy = 3;
-        t->R = 2;
+        start_arrow_circle->MarkerUnits = "userSpaceOnUse";
+        t->Cx = 4;
+        t->Cy = 6;
+        t->R = 4;
         t->Fill = "black";
         start_arrow_circle->add(t);
 
@@ -2278,13 +2281,14 @@ namespace LewzenServer {
         end_arrow_circle->Id = "end_arrow_circle";
         end_arrow_circle->MarkerHeight = 13;
         end_arrow_circle->MarkerWidth = 13;
-        end_arrow_circle->RefX = 4;
-        end_arrow_circle->RefY = 3;
+        end_arrow_circle->RefX = 8;
+        end_arrow_circle->RefY = 6;
         end_arrow_circle->Orient = "auto";
+        end_arrow_circle->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGICircle> t1 = std::make_shared<Lewzen::SVGICircle>();
-        t1->Cx = 2;
-        t1->Cy = 3;
-        t1->R = 2;
+        t1->Cx = 4;
+        t1->Cy = 6;
+        t1->R = 4;
         t1->Fill = "black";
         end_arrow_circle->add(t1);
 
@@ -2305,11 +2309,12 @@ namespace LewzenServer {
         end_arrow_tri->Id = "end_arrow_tri";
         end_arrow_tri->MarkerHeight = 13;
         end_arrow_tri->MarkerWidth = 13;
-        end_arrow_tri->RefX = 6;
-        end_arrow_tri->RefY = 3;
+        end_arrow_tri->RefX = 12;
+        end_arrow_tri->RefY = 6;
         end_arrow_tri->Orient = "auto";
+        end_arrow_tri->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> enda1 = std::make_shared<Lewzen::SVGIPath>();
-        enda1->D = "M0,0 L0,6 L6,3 z";
+        enda1->D = "M0,0 L0,12 L12,6 z";
         enda1->Fill = "black";
         end_arrow_tri->add(enda1);
         arrows["end_arrow_tri"] = end_arrow_tri;
@@ -2320,24 +2325,26 @@ namespace LewzenServer {
         start_arrow_tri->MarkerHeight = 13;
         start_arrow_tri->MarkerWidth = 13;
         start_arrow_tri->RefX = 0;
-        start_arrow_tri->RefY = 3;
+        start_arrow_tri->RefY = 6;
         start_arrow_tri->Orient = "auto";
+        start_arrow_tri->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> enda2 = std::make_shared<Lewzen::SVGIPath>();
-        enda2->D = "M6,0 L6,6 L0,3 z";
+        enda2->D = "M12,0 L12,12 L0,6 z";
         enda2->Fill = "black";
         start_arrow_tri->add(enda2);
         arrows["start_arrow_tri"] = start_arrow_tri;
         Defs.push_back(start_arrow_tri);
-
+//wwwwwwwwwwwwwwwwwwwwww
         end_arrow_line = std::make_shared<Lewzen::SVGIMarker>();
         end_arrow_line->Id = "end_arrow_line";
         end_arrow_line->MarkerHeight = 13;
         end_arrow_line->MarkerWidth = 13;
-        end_arrow_line->RefX = 6;
-        end_arrow_line->RefY = 3;
+        end_arrow_line->RefX = 12;
+        end_arrow_line->RefY = 6;
         end_arrow_line->Orient = "auto";
+        end_arrow_line->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> enda3 = std::make_shared<Lewzen::SVGIPath>();
-        enda3->D = "M0,0  L6,3 L 0,6 ";
+        enda3->D = "M0,0  L12,6 L 0,12 ";
         enda3->Fill = "none";
         enda3->Stroke = "black";
         end_arrow_line->add(enda3);
@@ -2349,10 +2356,11 @@ namespace LewzenServer {
         start_arrow_line->MarkerHeight = 13;
         start_arrow_line->MarkerWidth = 13;
         start_arrow_line->RefX = 0;
-        start_arrow_line->RefY = 3;
+        start_arrow_line->RefY = 6;
         start_arrow_line->Orient = "auto";
+        start_arrow_line->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> end3 = std::make_shared<Lewzen::SVGIPath>();
-        end3->D = "M6,0  L0,3 L 6,6 ";
+        end3->D = "M12,0  L0,6 L 12,12 ";
         end3->Fill = "none";
         end3->Stroke = "black";
         start_arrow_line->add(end3);
@@ -2363,11 +2371,12 @@ namespace LewzenServer {
         end_arrow_tri_h->Id = "end_arrow_tri_h";
         end_arrow_tri_h->MarkerHeight = 13;
         end_arrow_tri_h->MarkerWidth = 13;
-        end_arrow_tri_h->RefX = 6;
-        end_arrow_tri_h->RefY = 3;
+        end_arrow_tri_h->RefX = 12;
+        end_arrow_tri_h->RefY = 6;
         end_arrow_tri_h->Orient = "auto";
+        end_arrow_tri_h->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> end2 = std::make_shared<Lewzen::SVGIPath>();
-        end2->D = "M0,0 L0,6 L6,3 z";
+        end2->D = "M0,0 L0,12 L12,6 z";
         end2->Fill = "white";
         end2->Stroke = "black";
         end_arrow_tri_h->add(end2);
@@ -2379,10 +2388,11 @@ namespace LewzenServer {
         start_arrow_tri_h->MarkerHeight = 13;
         start_arrow_tri_h->MarkerWidth = 13;
         start_arrow_tri_h->RefX = 0;
-        start_arrow_tri_h->RefY = 3;
+        start_arrow_tri_h->RefY = 6;
         start_arrow_tri_h->Orient = "auto";
+        start_arrow_tri_h->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> end1 = std::make_shared<Lewzen::SVGIPath>();
-        end1->D = "M6,0 L6,6 L0,3 z";
+        end1->D = "M12,0 L12,12 L0,6 z";
         end1->Fill = "white";
         end1->Stroke = "black";
         start_arrow_tri_h->add(end1);
@@ -2394,11 +2404,12 @@ namespace LewzenServer {
         end_arrow_vline->MarkerHeight = 13;
         end_arrow_vline->MarkerWidth = 13;
         end_arrow_vline->RefX = 0;
-        end_arrow_vline->RefY = 3;
+        end_arrow_vline->RefY = 6;
         end_arrow_vline->Orient = "auto";
+        end_arrow_vline->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> end0 = std::make_shared<Lewzen::SVGIPath>();
-        end0->D = "M0,0 L0,6 L1,6 L1,0 z";
-        end0->Fill = "none";
+        end0->D = "M0,0 L0,12 L2,12 L2,0 z";
+        end0->Fill = "black";
         end0->Stroke = "black";
         end_arrow_vline->add(end0);
         arrows["end_arrow_vline"] = end_arrow_vline;
@@ -2408,12 +2419,13 @@ namespace LewzenServer {
         start_arrow_vline->Id = "start_arrow_vline";
         start_arrow_vline->MarkerHeight = 13;
         start_arrow_vline->MarkerWidth = 13;
-        start_arrow_vline->RefX = 1;
-        start_arrow_vline->RefY = 3;
+        start_arrow_vline->RefX = 2;
+        start_arrow_vline->RefY = 6;
         start_arrow_vline->Orient = "auto";
+        start_arrow_vline->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> e0 = std::make_shared<Lewzen::SVGIPath>();
-        e0->D = "M1,0 L1,6 L0,6 L0,0 z";
-        e0->Fill = "none";
+        e0->D = "M2,0 L2,12 L0,12 L0,0 z";
+        e0->Fill = "black";
         e0->Stroke = "black";
         start_arrow_vline->add(e0);
         arrows["start_arrow_vline"] = start_arrow_vline;
@@ -2423,11 +2435,12 @@ namespace LewzenServer {
         end_arrow_tri_half->Id = "end_arrow_tri_half";
         end_arrow_tri_half->MarkerHeight = 13;
         end_arrow_tri_half->MarkerWidth = 13;
-        end_arrow_tri_half->RefX = 6;
-        end_arrow_tri_half->RefY = 3;
+        end_arrow_tri_half->RefX = 12;
+        end_arrow_tri_half->RefY = 6;
         end_arrow_tri_half->Orient = "auto";
+        end_arrow_tri_half->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> e1 = std::make_shared<Lewzen::SVGIPath>();
-        e1->D = "M0,0 L0,3 L6,3 z";
+        e1->D = "M0,0 L0,6 L12,6 z";
         e1->Fill = "black";
         e1->Stroke = "black";
         end_arrow_tri_half->add(e1);
@@ -2440,10 +2453,11 @@ namespace LewzenServer {
         start_arrow_tri_half->MarkerHeight = 13;
         start_arrow_tri_half->MarkerWidth = 13;
         start_arrow_tri_half->RefX = 0;
-        start_arrow_tri_half->RefY = 3;
+        start_arrow_tri_half->RefY = 6;
         start_arrow_tri_half->Orient = "auto";
+        start_arrow_tri_half->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> e2 = std::make_shared<Lewzen::SVGIPath>();
-        e2->D = "M6,0 L6,3 L0,3 z";
+        e2->D = "M12,0 L12,6 L0,6 z";
         e2->Fill = "black";
         e2->Stroke = "black";
         start_arrow_tri_half->add(e2);
@@ -2452,13 +2466,14 @@ namespace LewzenServer {
 
         end_arrow_two_tri = std::make_shared<Lewzen::SVGIMarker>();
         end_arrow_two_tri->Id = "end_arrow_two_tri";
-        end_arrow_two_tri->MarkerHeight = 13;
-        end_arrow_two_tri->MarkerWidth = 13;
-        end_arrow_two_tri->RefX = 10;
-        end_arrow_two_tri->RefY = 3;
+        end_arrow_two_tri->MarkerHeight = 23;
+        end_arrow_two_tri->MarkerWidth = 23;
+        end_arrow_two_tri->RefX = 20;
+        end_arrow_two_tri->RefY = 6;
         end_arrow_two_tri->Orient = "auto";
+        end_arrow_two_tri->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> e3 = std::make_shared<Lewzen::SVGIPath>();
-        e3->D = "M0,1 L4,3 L0,5 z M4,0 L10,3 L4,6 z";
+        e3->D = "M0,2 L8,6 L0,10 z M8,0 L20,6 L8,12 z";
         e3->Fill = "black";
         e3->Stroke = "black";
         end_arrow_two_tri->add(e3);
@@ -2467,13 +2482,14 @@ namespace LewzenServer {
 
         start_arrow_two_tri = std::make_shared<Lewzen::SVGIMarker>();
         start_arrow_two_tri->Id = "start_arrow_two_tri";
-        start_arrow_two_tri->MarkerHeight = 13;
-        start_arrow_two_tri->MarkerWidth = 13;
+        start_arrow_two_tri->MarkerHeight = 23;
+        start_arrow_two_tri->MarkerWidth = 23;
         start_arrow_two_tri->RefX = 0;
-        start_arrow_two_tri->RefY = 3;
+        start_arrow_two_tri->RefY = 6;
         start_arrow_two_tri->Orient = "auto";
+        start_arrow_two_tri->MarkerUnits = "userSpaceOnUse";
         std::shared_ptr<Lewzen::SVGIPath> e4 = std::make_shared<Lewzen::SVGIPath>();
-        e4->D = "M10,1 L6,3 L10,5 z M6,0 L0,3 L6,6 z";
+        e4->D = "M20,2 L12,6 L20,10 z M12,0 L0,6 L12,12 z";
         e4->Fill = "black";
         e4->Stroke = "black";
         start_arrow_two_tri->add(e4);
