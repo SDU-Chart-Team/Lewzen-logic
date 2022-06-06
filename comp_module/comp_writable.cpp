@@ -242,7 +242,7 @@ namespace LewzenServer {
         if (_alignment.horizental == 0) ss << "flex-start"; // 上对齐
         else if (_alignment.horizental == 1) ss << "center"; // 居中
         else if (_alignment.horizental == 2) ss << "flex-end"; // 下对齐
-        ss << R"("><div style="display: inline-block; pointer-events: all">)";
+        ss << R"("><div style="display: inline-block; pointer-events: none">)";
         ss << _HTML;
         ss << "</div></div>";
         return ss.str();

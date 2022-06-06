@@ -54,7 +54,7 @@ namespace LewzenServer {
                     return *this;
     }
     //// Writable虚接口
-    const ComponentWritable::WriteArea Rectangle::getWriteArea() {
+    const ComponentWritable::WriteArea DataStorage::getWriteArea() {
         return {
             getX(),
             getY(),

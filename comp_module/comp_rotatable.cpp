@@ -165,7 +165,9 @@ namespace LewzenServer {
 
         auto &p = dynamic_cast<const ComponentRotatable &>(comp);     
         // 拷贝theta
-        setTheta(p.getTheta());
+        Lewzen::ComponentRotatable::set_theta(p.getTheta());
+        Lewzen::ComponentRotatable::set_rotate_center(p.getRotateCenter());
+        Lewzen::ComponentRotatable::update_transform();
 
         return *this;
     }
