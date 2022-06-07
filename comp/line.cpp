@@ -517,6 +517,9 @@ namespace LewzenServer {
         SVGIHallowLine->MarkerEnd = "url(#null)";
         SVGIComplexLine->MarkerEnd = "url(#null)";
         SVGIFlexableLine->MarkerEnd = "url(#null)";
+        SVGIHallowLine->MarkerStart = "url(#null)";
+        SVGIComplexLine->MarkerStart = "url(#null)";
+        SVGIFlexableLine->MarkerStart = "url(#null)";
 
 //        scale(2.0,2.0);
 //        flip(0,1,-200);
@@ -556,7 +559,6 @@ namespace LewzenServer {
             }
             setCorePoints(pointList);
             if(p.offset > 0)onOffset();
-
 
         } else if (type == curve) {
             setLineType(p.getLineType());
