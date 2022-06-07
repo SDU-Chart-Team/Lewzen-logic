@@ -75,9 +75,9 @@ namespace LewzenServer {
             auto s = *startPoint;
             auto m = createPoint((s.getX()+e.get_x())/2,(s.getY()+e.get_y())/2);
             std::stringstream ss;
-            ss<<"M "<<s.getX()<<" "<<s.getY()<<" ";
-            ss<<"Q "<<s.getX()+10<<" "<<s.getY()<<" "<<m.get_x()<<" "<<m.get_y();
-            ss<<"Q "<<e.get_x()-10<<" "<<e.get_y()<<" "<<e.get_x()<<" "<<e.get_y();
+            ss<<" M "<<s.getX()<<" "<<s.getY()<<" ";
+            ss<<" Q "<<s.getX()+10<<" "<<s.getY()<<" "<<m.get_x()<<" "<<m.get_y();
+            ss<<" Q "<<e.get_x()-10<<" "<<e.get_y()<<" "<<e.get_x()<<" "<<e.get_y();
             return ss.str();
         }
         else{
@@ -85,7 +85,7 @@ namespace LewzenServer {
             auto s = *startPoint;
             auto m = createPoint((s.getX()+e.get_x())/2,(s.getY()+e.get_y())/2);
             std::stringstream ss;
-            ss<<"M "<<s.getX()<<" "<<s.getY()<<" ";
+            ss<<" M "<<s.getX()<<" "<<s.getY()<<" ";
             ss<<" Q "<<e.get_x()+10<<" "<<s.getY()<<" "<<e.get_x()+10<<" "<<m.get_y();
             ss<<" Q "<<e.get_x()+10<<" "<<e.get_y()<<" "<<e.get_x()<<" "<<e.get_y();
             return ss.str();
