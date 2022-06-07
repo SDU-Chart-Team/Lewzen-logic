@@ -288,7 +288,7 @@ namespace LewzenServer
 
     std::function<std::shared_ptr<ComponentAbstract>()> newClasses = []()
     {
-        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Classes>());
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<ClassA>());
     };
 
     std::function<std::shared_ptr<ComponentAbstract>()> newActivities = []()

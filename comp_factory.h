@@ -73,7 +73,7 @@
 #include "comp_custom/frame.h"
 #include "comp_custom/notes.h"
 #include "comp_custom/interfacesClasses.h"
-#include "comp_custom/classes.h"
+#include "comp_custom/classA.h"
 #include "comp_custom/activities.h"
 #include "comp_custom/multi_instance_class.h"
 #include "comp_custom/send_signal.h"
