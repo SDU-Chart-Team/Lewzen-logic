@@ -356,6 +356,11 @@ namespace LewzenServer
         return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<Node>());
     };
 
+
+    std::function<std::shared_ptr<ComponentAbstract>()> newRectangleText = []()
+    {
+        return std::dynamic_pointer_cast<ComponentAbstract>(std::make_shared<RectangleText>());
+    };
     std::unordered_map<std::string, std::function<std::shared_ptr<ComponentAbstract>()>> ComponentFactory::newComponent = {
         {"rectangle", newRectangle},
         {"rectangle_scriptable", newRectangleScriptable},
@@ -439,7 +444,7 @@ namespace LewzenServer
         {"bind",newBind},
         {"entity_circle",newEntityCircle},
         {"node",newNode},
-
+        {"rectangle_text",newRectangleText},
     };
 
     std::shared_ptr<ComponentAbstract> ComponentFactory::createComponent(const std::string &type)

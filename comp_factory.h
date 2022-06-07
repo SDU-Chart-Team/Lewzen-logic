@@ -88,7 +88,7 @@
 #include "comp_custom/bind.h"
 #include "comp_custom/entity_circle.h"
 #include "comp_custom/node.h"
-
+#include "comp_custom/rectangle_text.h"
 namespace LewzenServer {
     class ComponentAbstract;
     class ComponentFactory {
