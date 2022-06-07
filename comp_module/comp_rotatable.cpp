@@ -163,7 +163,8 @@ namespace LewzenServer {
         // 拷贝父类
         ComponentBasics::operator=(comp);
 
-        auto &p = dynamic_cast<const ComponentRotatable &>(comp);     
+        auto &p = dynamic_cast<const ComponentRotatable &>(comp);
+        rotateBinded = p.rotateBinded;
         // 拷贝theta
         Lewzen::ComponentRotatable::set_theta(p.getTheta());
         Lewzen::ComponentRotatable::set_rotate_center(p.getRotateCenter());
@@ -178,6 +179,7 @@ namespace LewzenServer {
 
         // 序列化theta
         j["theta"] = getTheta();
+        j["rotate_binded"] = rotateBinded;
     }
     // 反序列化
     ComponentAbstract &ComponentRotatable::operator=(const json &j) {
@@ -186,7 +188,7 @@ namespace LewzenServer {
 
         // 反序列化theta
         setTheta(j["theta"]);
-
+        rotateBinded = j["rotate_binded"];
         return *this;
     }
     // 事件

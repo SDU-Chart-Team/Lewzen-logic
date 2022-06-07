@@ -377,6 +377,7 @@ namespace LewzenServer {
         auto &p = dynamic_cast<const ComponentBasics &>(comp);
         auto chd = getChildren(); for (auto &c : chd) removeChild(c); // 移除现有链接
         for (auto c : p.getChildren()) addChild(c->clone()); // 复制子节点
+        moveBinded = p.moveBinded;
         return *this;
     }
     // 克隆
@@ -399,6 +400,7 @@ namespace LewzenServer {
             j["core_points"][p.first] = {};
             p.second->serialize(j["core_points"][p.first]);
         }
+        j["move_binded"] = moveBinded;
     }
     // 反序列化
     ComponentAbstract &ComponentBasics::operator=(const json &j) {
@@ -410,6 +412,7 @@ namespace LewzenServer {
             corePoints[k] = p;
         }
         for (auto c : j["children"]) addChild(deserialize(c)); // 复制子节点
+        moveBinded = j["move_binded"];
         return *this;
     }
     //// 事件

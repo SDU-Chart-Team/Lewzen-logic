@@ -180,7 +180,8 @@ namespace LewzenServer {
         ComponentWritable::operator=(comp);
         ComponentStylized::operator=(comp);
         
-        auto &p = dynamic_cast<const Rectangle &>(comp);        
+        auto &p = dynamic_cast<const Rectangle &>(comp);
+        scaleBinded = p.scaleBinded;
         // 拷贝关键点位置
         *LT = *(p.LT),
         *L = *(p.L),
@@ -201,6 +202,7 @@ namespace LewzenServer {
         ComponentStylized::serialize(j, processed);
 
         // (无额外私有内容)
+        j["scale_binded"] = scaleBinded;
     }
     // 反序列化
     ComponentAbstract &Rectangle::operator=(const json &j) {
@@ -208,6 +210,7 @@ namespace LewzenServer {
         ComponentStylized::operator=(j);
         ComponentWritable::operator=(j);
         ComponentRotatable::operator=(j);
+        scaleBinded = j["scale_binded"];
 
         // 注册关键点
         LT = corePoints["LT"],

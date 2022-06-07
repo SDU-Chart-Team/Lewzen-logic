@@ -1,4 +1,5 @@
 <!doctype html>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <html>
   <div id="svg-parent"></div>
   <script>
@@ -38,10 +39,10 @@
                     break;
                 case 'remove':
                     index = Number(next_parameter(i));
-                    current.removeChild(current.childNodes[index]);
+                    current.removeChild(current.children[index]);
                     break;
                 case 'append':
-                    xml = next_string(Number(next_parameter(i)));
+                    xml = unescape(next_string(Number(next_parameter(i))));
                     current.insertAdjacentHTML('beforeend', xml);
                     break;
                 case 'sort':
@@ -145,7 +146,7 @@
     }
     var set_html = (comp_id, html) => {
       Module.server_run("{\"command\": \"cursor\", \"id\": \"" + comp_id + "\"}");
-      var ret = JSON.parse(Module.server_run("{\"command\": \"set_html\", \"html\": \"" + html + "\"}"));
+      var ret = JSON.parse(Module.server_run("{\"command\": \"set_html\", \"html\": \"" + escape(html) + "\"}"));
       var cmd = ret["domcmd"];
       interpret(document.svg, cmd);
     }
@@ -288,6 +289,7 @@
         });
 
         move_component(document.comp_ids[0], 100, 100);
+        set_html(document.comp_ids[0], "<p>我</p>");
         //move_point(document.comp_ids[0], "Control", 100, 4);
         move_point(document.comp_ids[0], "Control", -20, 0);
         //move_point(document.comp_ids[0], "LB", -30, -10);
