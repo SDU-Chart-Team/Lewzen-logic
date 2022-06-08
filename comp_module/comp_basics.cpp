@@ -407,9 +407,12 @@ namespace LewzenServer {
         if (j["type"] != getType()) return *this; // 要求组件类型一致
         auto &jc = j["core_points"];
         for (auto& [k, v] : jc.items()) { // json转关键点列表
-            auto p = createCorePoint(k);
-            p->deserialize(v);
-            corePoints[k] = p;
+            if (corePoints.count(k)) corePoints[k]->deserialize(v);
+            else {
+                auto p = createCorePoint(k);
+                p->deserialize(v);
+                corePoints[k] = p;
+            }
         }
         for (auto c : j["children"]) addChild(deserialize(c)); // 复制子节点
         moveBinded = j["move_binded"];

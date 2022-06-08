@@ -8,12 +8,9 @@ namespace LewzenServer {
         Rectangle::init();
         // 设置类型
         setType("rectangle_text");
-
         // 维护图形SVG
-        std::vector<int>tmp{3,3};
-        SVGIRect->StrokeDasharray=tmp;
-        SVGIRect->Stroke="none";
-        SVGIRect->Fill="none";
+//        SVGIRect->Fill="white";
+        SVGIRect->Opacity=0;
         setHTML("<p>Text</p>");
         Rectangle::moveCorePoint("RB", -100, -50); // 将区域变更为方形
 
@@ -34,6 +31,7 @@ namespace LewzenServer {
     ComponentAbstract &RectangleText::operator=(const json &j) {
         // 父类反序列化
         Rectangle::operator=(j);
+        return *this;
     }
 //
 //    //// Writable虚接口
