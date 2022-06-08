@@ -13,6 +13,7 @@ namespace LewzenServer {
         std::vector<int>tmp{3,3};
         SVGIRect->StrokeDasharray=tmp;
         SVGIRect->Stroke="none";
+        SVGIRect->Fill="none";
         setHTML("<p>Text</p>");
         Rectangle::moveCorePoint("RB", -100, -50); // 将区域变更为方形
 
@@ -21,7 +22,8 @@ namespace LewzenServer {
         // 拷贝父类
         Rectangle::operator=(comp);
 
-        auto &p = dynamic_cast<const RectangleText &>(comp); 
+        auto &p = dynamic_cast<const RectangleText &>(comp);
+        return *this;
     }
     // 序列化，并记录已操作的
     void RectangleText::serialize(json &j, std::vector<std::string> &processed) {
