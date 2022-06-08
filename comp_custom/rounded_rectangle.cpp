@@ -26,9 +26,9 @@ namespace LewzenServer
                                 {
                                     Control->setX(getX());
                                 }
-                                if(nx > maxR)
+                                if(nx > getX() + maxR)
                                 {
-                                    Control->setX(maxR);
+                                    Control->setX( getX() +maxR);
                                 }
                             });
         // 注册关键点

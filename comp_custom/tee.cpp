@@ -15,15 +15,15 @@ namespace LewzenServer {
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
-        Control0 = createCorePoint("Control0", getX()+getWidth()*0.6, getY()+getHeight()*0.2);
+        Control0 = createCorePoint("Control0", getX()+getWidth()*0.4, getY()+getHeight()*0.2);
         Control0->setColor("orange");
                     Control0->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
                         if (!corePointMoving) return;
-                                    if(nx < (getX()+getWidth()*0.5))
+                                    if(nx < (getX()))
                                     {
-                                        Control0->setX(getX()+getWidth()*0.5);
+                                        Control0->setX(getX());
                                     }
-                                    if(nx > getX()+getWidth())
+                                    if(nx > getX()+getWidth()*0.5)
                                     {
                                         Control0->setX(getX()+getWidth());
                                     }
@@ -71,14 +71,13 @@ namespace LewzenServer {
         double ptgY0 = ((Control0->getY() - getY()) / getHeight()) * getHeight();
         if (id == "Control0") { // 移动控制点
             corePointMoving = true; // 开启更新锁
-            *Control0 += createPoint(dx, 0);
-            *Control0 += createPoint(0, dy);
+            *Control0 += createPoint(dx, dy);
             corePointMoving = false;
         }
         else {
             Rectangle::moveCorePoint(id, dx, dy);
-            if (getX()+ptgX0 > getX()+getWidth()) ptgX0 = getX()+getWidth()-getX();
-            if (getX()+ptgX0 < getX()+getWidth()*0.5) ptgX0 = getX()+getWidth()*0.5-getX();
+            if (getX()+ptgX0 > getX()+getWidth()*0.5) ptgX0 = getX()+getWidth()-getX();
+            if (getX()+ptgX0 < getX()) ptgX0 = 0;
             if ( getY()+ptgY0 > getY()+getHeight()) ptgY0 = getY()+getHeight()-getY();
             if ( getY()+ptgY0 < getY()) ptgY0 = getY()-getY();
             *Control0 = createPoint(getX()+ptgX0, getY() + ptgY0); // 设置新的坐标
@@ -91,10 +90,10 @@ namespace LewzenServer {
         auto p0 = createPoint(getX(), getY());
         auto p1 = createPoint(getX()+getWidth(), getY());
         auto p2 = createPoint(getX()+getWidth(), Control0->getY());
-        auto p3 = createPoint(Control0->getX(), Control0->getY());
-        auto p4 = createPoint(Control0->getX(), getY()+getHeight());
-        auto p5 = createPoint(getX()+getWidth()-(Control0->getX() - getX()), getY()+getHeight());
-        auto p6 = createPoint(getX()+getWidth()-(Control0->getX() - getX()), Control0->getY());
+        auto p3 = createPoint(getX()+getWidth()-(Control0->getX() - getX()), Control0->getY());
+        auto p4 = createPoint(getX()+getWidth()-(Control0->getX() - getX()), getY()+getHeight());
+        auto p5 = createPoint(Control0->getX(), getY()+getHeight());
+        auto p6 = createPoint(Control0->getX(), Control0->getY());
         auto p7 = createPoint(getX(), Control0->getY());
         auto p8 = createPoint(getX(), getY());
         std::stringstream ss;

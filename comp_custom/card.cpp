@@ -20,7 +20,7 @@ namespace LewzenServer {
         Control->on_update([&](const double &x, const double &y, const double &nx, const double &ny) {
             if (!corePointMoving) return;
             double maxD = std::min(getWidth()*0.5,getHeight()*0.5);
-            if(nx > maxD)
+            if(nx > getX() + maxD)
             {
                 *Control=createPoint(getX()+maxD,getY()+maxD);
             }
@@ -28,7 +28,7 @@ namespace LewzenServer {
             {
                 *Control=createPoint(getX(),getY());
             }
-            if(ny > maxD)
+            if(ny > getY() + maxD)
             {
                 *Control=createPoint(getX()+maxD,getY()+maxD);
             }
