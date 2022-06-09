@@ -250,8 +250,10 @@ namespace LewzenServer {
     void ComponentWritable::setHTML(const std::string &HTML) {
         _HTML = HTML;
         if (auto svgi = getSVGI().lock()) { // 非空则添加
+            _fObjAdded = false;
+            for (auto &p : svgi->children()) if (p->Id.get() == getId() + "_text") _fObjAdded = true;
             if (_HTML != "" && !_fObjAdded) svgi->add(fObj), _fObjAdded = true;
-            else if (_HTML == "") svgi->remove(fObj), _fObjAdded = false;
+            else if (_HTML == "" && _fObjAdded) svgi->remove(fObj), _fObjAdded = false;
         }
         onChanged();
     }    

@@ -48,6 +48,7 @@ namespace LewzenServer {
         for (auto &p : config["points"]) {
             std::string pid = p["pid"];
             double pos_x = p["pos"]["x"], pos_y = p["pos"]["y"];
+            pos_x += getX(), pos_y += getY();
             auto point = createCorePoint(pid, pos_x, pos_y);
             point->setColor(p["color"]);
             customCallbacks[point->getId()] = p["callback"];
