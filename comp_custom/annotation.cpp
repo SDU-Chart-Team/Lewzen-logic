@@ -11,7 +11,7 @@ namespace LewzenServer {
         // 设置类型
         setType("annotation");
         // 维护图形SVG
-        SVGIG->children({}); // 移除旧的图形
+        // SVGIG->children({}); // 移除旧的图形
         Rectangle::moveCorePoint("RB", -100, 0); // 将区域变更为方形
         SVGIPath = std::make_shared<Lewzen::SVGIPath>();
         SVGIG->add(SVGIPath);
@@ -57,9 +57,14 @@ namespace LewzenServer {
         ss << "L " << p1.get_x() << " " << p1.get_y() << " ";
         ss << "L " << p2.get_x() << " " << p2.get_y() << " ";
         ss << "L " << p3.get_x() << " " << p3.get_y() << " ";
+        ss << "L " << p2.get_x() << " " << p2.get_y() << " ";
+        ss << "L " << p1.get_x() << " " << p1.get_y() << " ";
+        ss << "L " << p0.get_x() << " " << p0.get_y() << " ";
         ss << "M " << p4.get_x() << " " << p4.get_y() << " ";
         ss << "L " << p5.get_x() << " " << p5.get_y() << " ";
         ss << "L " << p6.get_x() << " " << p6.get_y() << " ";
+        ss << "L " << p5.get_x() << " " << p5.get_y() << " ";
+        ss << "L " << p4.get_x() << " " << p4.get_y() << " ";
         return ss.str();
 
     }

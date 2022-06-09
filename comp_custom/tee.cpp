@@ -25,7 +25,7 @@ namespace LewzenServer {
                                     }
                                     if(nx > getX()+getWidth()*0.5)
                                     {
-                                        Control0->setX(getX()+getWidth());
+                                        Control0->setX(getX()+getWidth()*0.5);
                                     }
                                     if(ny < getY())
                                     {
